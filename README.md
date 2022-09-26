@@ -1,2 +1,26 @@
 # FsCli
-Execute CLI commands with F# style
+Execute CLI commands in your F# code in F# style!
+
+### Usage
+
+For example:
+```
+open FsCli
+
+cli {
+    CLI CMD
+    Command "echo Hello World!"
+}
+|> Command.execute
+```
+that starts `CMD.exe` as CLI and `echo Hello World!` is the command to execute.
+
+#### Implementations
+
+Currently provided CLI's:
+- `cmd.exe` as `CMD`
+- `pwsh.exe` as `PWSH`
+- ... more are coming soon
+
+### Inspiration
+Use CE's for command line interface commands came in mind while using [FsHttp](https://github.com/fsprojects/FsHttp).

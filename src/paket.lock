@@ -1,0 +1,13 @@
+RESTRICTION: == net6.0
+NUGET
+  remote: https://api.nuget.org/v3/index.json
+    FSharp.Core (6.0.6)
+    FsUnit (5.0.4)
+      FSharp.Core (>= 5.0.2)
+      NUnit (>= 3.13.3 < 3.14)
+    Microsoft.NETCore.Platforms (6.0.5)
+    NETStandard.Library (2.0.3)
+      Microsoft.NETCore.Platforms (>= 1.1)
+    NUnit (3.13.3)
+      NETStandard.Library (>= 2.0)
+    NUnit3TestAdapter (4.2.1)
