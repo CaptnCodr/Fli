@@ -4,14 +4,26 @@ module FsCli.Domain
 type ICommandContext<'a> =
     abstract member Self: 'a
 
-type Config = { Cli: Cli; Command: string }
+type CliConfig = { Cli: Cli; Command: string }
 
 and Cli =
     | CMD
     | PWSH
 
-type CommandContext =
-    { config: Config }
+type ProgramConfig = { Program: string; Arguments: string }
 
-    interface ICommandContext<CommandContext> with
+type Config =
+    { CliConfig: CliConfig
+      ProgramConfig: ProgramConfig }
+
+type CliContext =
+    { config: CliConfig }
+
+    interface ICommandContext<CliContext> with
+        member this.Self = this
+
+type ProgramContext =
+    { config: ProgramConfig }
+
+    interface ICommandContext<ProgramContext> with
         member this.Self = this

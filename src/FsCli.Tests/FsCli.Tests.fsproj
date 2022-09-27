@@ -6,8 +6,10 @@
     <GenerateProgramFile>false</GenerateProgramFile>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="CommandExecuteTests.fs" />
-    <Compile Include="CommandToStringTests.fs" />
+    <Compile Include="ProgramContext\ProgramCommandToStringTests.fs" />
+    <Compile Include="ProgramContext\ProgramCommandExecuteTests.fs" />
+    <Compile Include="CommandContext\CliCommandExecuteTests.fs" />
+    <Compile Include="CommandContext\CliCommandToStringTests.fs" />
     <None Include="paket.references" />
   </ItemGroup>
   <ItemGroup>

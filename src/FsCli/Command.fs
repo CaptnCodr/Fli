@@ -1,4 +1,5 @@
-﻿module FsCli.Command
+﻿[<AutoOpen>]
+module FsCli.Command
 
 open System.Diagnostics
 
@@ -9,17 +10,26 @@ let private cliToProc =
     | CMD -> "cmd.exe", "/C"
     | PWSH -> "pwsh.exe", "-Command"
 
-let execute (context: CommandContext) =
-    let (proc, flag) = context.config.Cli |> cliToProc
-
-    let info = ProcessStartInfo(proc, $"{flag} {context.config.Command}")
+let private startProcess (``process``: string) (argumentString: string) =
+    let info = ProcessStartInfo(``process``, argumentString)
     info.WindowStyle <- ProcessWindowStyle.Hidden
     info.CreateNoWindow <- true
+    info.UseShellExecute <- false
     info.RedirectStandardOutput <- true
-    info.RedirectStandardError <- true
 
     Process.Start(info).StandardOutput.ReadToEnd()
 
-let toString (context: CommandContext) =
-    let (proc, flag) = context.config.Cli |> cliToProc
-    $"{proc} {flag} {context.config.Command}"
+type Command =
+    static member execute(context: CliContext) =
+        let (proc, flag) = context.config.Cli |> cliToProc
+        (proc, $"{flag} {context.config.Command}") ||> startProcess
+
+    static member toString(context: CliContext) =
+        let (proc, flag) = context.config.Cli |> cliToProc
+        $"{proc} {flag} {context.config.Command}"
+
+    static member execute(context: ProgramContext) =
+        (context.config.Program, context.config.Arguments) ||> startProcess
+
+    static member toString(context: ProgramContext) =
+        $"{context.config.Program} {context.config.Arguments}"

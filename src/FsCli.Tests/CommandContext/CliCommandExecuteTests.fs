@@ -1,4 +1,4 @@
-module FsCli.CommandExecuteTests
+module FsCli.CliCommandExecuteTests
 
 open NUnit.Framework
 open FsUnit
