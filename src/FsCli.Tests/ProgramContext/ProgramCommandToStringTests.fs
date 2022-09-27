@@ -36,7 +36,14 @@ let ``Hello World with an argument array`` () =
 let ``Hello World with an argument seq`` () =
     cli {
         Exec "cmd"
-        Arguments (seq { "/C"; "echo"; "Hello World!" })
+
+        Arguments(
+            seq {
+                "/C"
+                "echo"
+                "Hello World!"
+            }
+        )
     }
     |> Command.toString
     |> should equal "cmd /C echo Hello World!"

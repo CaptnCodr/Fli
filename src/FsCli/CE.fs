@@ -10,6 +10,7 @@ type ICommandContext<'a> with
 
     member this.Yield(_) = this
 
+
 let private defaults =
     { CliConfig = { Cli = CMD; Command = "" }
       ProgramConfig = { Program = ""; Arguments = "" } }
@@ -24,6 +25,8 @@ type StartingContext =
 
 let cli = { config = None }
 
+
+/// Extensions for CLI context
 type ICommandContext<'a> with
 
     [<CustomOperation("CLI")>]
@@ -32,6 +35,7 @@ type ICommandContext<'a> with
     [<CustomOperation("Command")>]
     member this.Command(context: ICommandContext<CliContext>, command) = Cli.command command context.Self
 
+/// Extensions for Exec context
 type ICommandContext<'a> with
 
     [<CustomOperation("Exec")>]
@@ -48,4 +52,5 @@ type ICommandContext<'a> with
             | :? array<string> as a -> a |> Array.map (fun aa -> aa |> string) |> String.concat " "
             | :? IEnumerable as e -> e |> Seq.cast |> Seq.map (fun ea -> ea |> string) |> String.concat " "
             | _ -> failwith "Cannot convert arguments to a string!"
+
         Program.arguments args context.Self

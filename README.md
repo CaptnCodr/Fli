@@ -1,7 +1,9 @@
 # FsCli
+[![build](https://github.com/CaptnCodr/FsCli/actions/workflows/build.yml/badge.svg)](https://github.com/CaptnCodr/FsCli/actions/workflows/build.yml)
+
 Execute CLI commands in your F# code in F# style!
 
-### Usage
+### Getting Started
 Just `open FsCli` and start ...
 
 For example:
