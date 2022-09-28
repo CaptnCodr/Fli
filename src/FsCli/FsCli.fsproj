@@ -1,9 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net6.0</TargetFrameworks>
+    <AssemblyVersion>0.0.0.3</AssemblyVersion>
+    <FileVersion>0.0.0.3</FileVersion>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+  </PropertyGroup>
+  <PropertyGroup>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <Version>0.0.0.3</Version>
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\FsCli.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PackageId>FsCli</PackageId>
+    <Description>An F# library to run CLI commands and processes in F# (CE) style.</Description>
+    <PackageLicenseUrl>https://github.com/CaptnCodr/FsCli/blob/main/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/CaptnCodr/FsCli</PackageProjectUrl>
+    <PackageTags>fsharp cli shell process computation-expression</PackageTags>
+    <Copyright>Copyright © 2022</Copyright>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Domain.fs" />
@@ -13,6 +26,9 @@
     <None Include="paket.references" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
+  <ItemGroup>
+    <PackageReference Include="FSharp.Core" Version="6.0.6" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="..\..\README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
