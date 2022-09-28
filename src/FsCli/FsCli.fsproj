@@ -25,11 +25,11 @@
     <Compile Include="Command.fs" />
     <None Include="paket.references" />
   </ItemGroup>
-  <Import Project="..\..\.paket\Paket.Restore.targets" />
   <ItemGroup>
     <PackageReference Include="FSharp.Core" Version="6.0.6" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
+  <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

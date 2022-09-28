@@ -3,9 +3,11 @@
 open NUnit.Framework
 open FsUnit
 open FsCli.CE
+open System.Runtime.Versioning
 
 
 [<Test>]
+[<SupportedOSPlatform("windows")>]
 let ``CMD command toString returns full line`` () =
     cli {
         CLI CMD
@@ -15,6 +17,7 @@ let ``CMD command toString returns full line`` () =
     |> should equal "cmd.exe /C echo Hello World!"
 
 [<Test>]
+[<SupportedOSPlatform("windows")>]
 let ``PWSH command toString returns full line`` () =
     cli {
         CLI PWSH
@@ -22,3 +25,13 @@ let ``PWSH command toString returns full line`` () =
     }
     |> Command.toString
     |> should equal "pwsh.exe -Command Write-Host Hello World!"
+
+[<Test>]
+[<SupportedOSPlatform("linux")>]
+let ``Bash command toString returns full line`` () =
+    cli {
+        CLI Bash
+        Command "\"echo Hello World!\""
+    }
+    |> Command.toString
+    |> should equal "bash -c \"echo Hello World!\""

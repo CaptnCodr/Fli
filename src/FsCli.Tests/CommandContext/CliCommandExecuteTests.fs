@@ -3,9 +3,11 @@ module FsCli.CliCommandExecuteTests
 open NUnit.Framework
 open FsUnit
 open FsCli
+open System.Runtime.Versioning
 
 
 [<Test>]
+[<SupportedOSPlatform("windows")>]
 let ``Hello World with CMD`` () =
     cli {
         CLI CMD
@@ -15,6 +17,7 @@ let ``Hello World with CMD`` () =
     |> should equal "Hello World!\r\n"
 
 [<Test>]
+[<SupportedOSPlatform("windows")>]
 let ``Hello World with PWSH`` () =
     cli {
         CLI PWSH
@@ -22,3 +25,13 @@ let ``Hello World with PWSH`` () =
     }
     |> Command.execute
     |> should equal "Hello World!\r\n"
+
+[<Test>]
+[<SupportedOSPlatform("linux")>]
+let ``Hello World with Bash`` () =
+    cli {
+        CLI Bash
+        Command "\"echo Hello World!\""
+    }
+    |> Command.execute
+    |> should equal "Hello World!\n"
