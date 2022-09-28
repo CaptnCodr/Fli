@@ -3,11 +3,9 @@
 open NUnit.Framework
 open FsUnit
 open FsCli
-open System.Runtime.Versioning
 
 
 [<Test>]
-[<SupportedOSPlatform("windows")>]
 let ``Hello World with executing program`` () =
     cli {
         Exec "cmd.exe"
@@ -17,7 +15,6 @@ let ``Hello World with executing program`` () =
     |> should equal "cmd.exe /C echo Hello World!"
 
 [<Test>]
-[<SupportedOSPlatform("windows")>]
 let ``Hello World with an argument list`` () =
     cli {
         Exec "cmd.exe"
@@ -27,7 +24,6 @@ let ``Hello World with an argument list`` () =
     |> should equal "cmd.exe /C echo Hello World!"
 
 [<Test>]
-[<SupportedOSPlatform("windows")>]
 let ``Hello World with an argument array`` () =
     cli {
         Exec "cmd.exe"
@@ -37,7 +33,6 @@ let ``Hello World with an argument array`` () =
     |> should equal "cmd.exe /C echo Hello World!"
 
 [<Test>]
-[<SupportedOSPlatform("windows")>]
 let ``Hello World with an argument seq`` () =
     cli {
         Exec "cmd.exe"
