@@ -15,6 +15,15 @@ let ``CMD command toString returns full line`` () =
     |> should equal "cmd.exe /C echo Hello World!"
 
 [<Test>]
+let ``PS command toString returns full line`` () =
+    cli {
+        CLI PS
+        Command "Write-Host Hello World!"
+    }
+    |> Command.toString
+    |> should equal "powershell.exe -Command Write-Host Hello World!"
+
+[<Test>]
 let ``PWSH command toString returns full line`` () =
     cli {
         CLI PWSH
@@ -24,9 +33,9 @@ let ``PWSH command toString returns full line`` () =
     |> should equal "pwsh.exe -Command Write-Host Hello World!"
 
 [<Test>]
-let ``Bash command toString returns full line`` () =
+let ``BASH command toString returns full line`` () =
     cli {
-        CLI Bash
+        CLI BASH
         Command "\"echo Hello World!\""
     }
     |> Command.toString

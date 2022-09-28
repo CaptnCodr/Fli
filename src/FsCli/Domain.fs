@@ -8,8 +8,9 @@ type CliConfig = { Cli: Cli; Command: string }
 
 and Cli =
     | CMD
+    | PS
     | PWSH
-    | Bash
+    | BASH
 
 type ProgramConfig = { Program: string; Arguments: string }
 

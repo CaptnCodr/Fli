@@ -8,8 +8,9 @@ open FsCli
 let private cliToProc =
     function
     | CMD -> "cmd.exe", "/C"
+    | PS -> "powershell.exe", "-Command"
     | PWSH -> "pwsh.exe", "-Command"
-    | Bash -> "bash", "-c"
+    | BASH -> "bash", "-c"
 
 let private startProcess (``process``: string) (argumentString: string) =
     let info = ProcessStartInfo(``process``, argumentString)

@@ -19,6 +19,18 @@ let ``Hello World with CMD`` () =
         Assert.Pass()
 
 [<Test>]
+let ``Hello World with PS`` () =
+    if OperatingSystem.IsWindows() then
+        cli {
+            CLI PS
+            Command "Write-Host Hello World!"
+        }
+        |> Command.execute
+        |> should equal "Hello World!\n"
+    else
+        Assert.Pass()
+
+[<Test>]
 let ``Hello World with PWSH`` () =
     if OperatingSystem.IsWindows() then
         cli {
@@ -31,10 +43,10 @@ let ``Hello World with PWSH`` () =
         Assert.Pass()
 
 [<Test>]
-let ``Hello World with Bash`` () =
+let ``Hello World with BASH`` () =
     if OperatingSystem.IsWindows() |> not then
         cli {
-            CLI Bash
+            CLI BASH
             Command "\"echo Hello World!\""
         }
         |> Command.execute

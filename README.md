@@ -38,7 +38,9 @@ cli {
 
 Currently provided CLI's:
 - `cmd.exe` as `CMD`
+- `powershell.exe` as `PS`
 - `pwsh.exe` as `PWSH`
+- `bash` as `BASH`
 - ... more are coming soon
 
 ### Inspiration
