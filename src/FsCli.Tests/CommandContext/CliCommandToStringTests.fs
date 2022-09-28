@@ -22,3 +22,12 @@ let ``PWSH command toString returns full line`` () =
     }
     |> Command.toString
     |> should equal "pwsh.exe -Command Write-Host Hello World!"
+
+[<Test>]
+let ``Bash command toString returns full line`` () =
+    cli {
+        CLI Bash
+        Command "\"echo Hello World!\""
+    }
+    |> Command.toString
+    |> should equal "bash -c \"echo Hello World!\""

@@ -8,34 +8,34 @@ open FsCli
 [<Test>]
 let ``Hello World with executing program`` () =
     cli {
-        Exec "cmd"
+        Exec "cmd.exe"
         Arguments "/C echo Hello World!"
     }
     |> Command.toString
-    |> should equal "cmd /C echo Hello World!"
+    |> should equal "cmd.exe /C echo Hello World!"
 
 [<Test>]
 let ``Hello World with an argument list`` () =
     cli {
-        Exec "cmd"
+        Exec "cmd.exe"
         Arguments [ "/C"; "echo"; "Hello World!" ]
     }
     |> Command.toString
-    |> should equal "cmd /C echo Hello World!"
+    |> should equal "cmd.exe /C echo Hello World!"
 
 [<Test>]
 let ``Hello World with an argument array`` () =
     cli {
-        Exec "cmd"
+        Exec "cmd.exe"
         Arguments [| "/C"; "echo"; "Hello World!" |]
     }
     |> Command.toString
-    |> should equal "cmd /C echo Hello World!"
+    |> should equal "cmd.exe /C echo Hello World!"
 
 [<Test>]
 let ``Hello World with an argument seq`` () =
     cli {
-        Exec "cmd"
+        Exec "cmd.exe"
 
         Arguments(
             seq {
@@ -46,4 +46,4 @@ let ``Hello World with an argument seq`` () =
         )
     }
     |> Command.toString
-    |> should equal "cmd /C echo Hello World!"
+    |> should equal "cmd.exe /C echo Hello World!"

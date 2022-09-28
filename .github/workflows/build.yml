@@ -13,8 +13,10 @@ jobs:
 
     strategy:
       fail-fast: false
-
-    runs-on: [windows-latest]
+      matrix:
+        os: [windows-latest, macOS-latest, ubuntu-latest]
+        dotnet: [6.0.401]
+    runs-on: ${{ matrix.os }}
 
     steps:
     - uses: actions/checkout@v1
@@ -22,7 +24,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 6.0.x
+        dotnet-version: ${{ matrix.dotnet }}
 
     - name: Install local tools
       run: dotnet tool restore

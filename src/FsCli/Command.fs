@@ -9,6 +9,7 @@ let private cliToProc =
     function
     | CMD -> "cmd.exe", "/C"
     | PWSH -> "pwsh.exe", "-Command"
+    | Bash -> "bash", "-c"
 
 let private startProcess (``process``: string) (argumentString: string) =
     let info = ProcessStartInfo(``process``, argumentString)
