@@ -2,7 +2,7 @@
 
 open NUnit.Framework
 open FsUnit
-open FsCli.CE
+open FsCli
 
 
 [<Test>]
