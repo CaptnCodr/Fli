@@ -32,9 +32,12 @@ let ``Hello World with PWSH`` () =
 
 [<Test>]
 let ``Hello World with Bash`` () =
-    cli {
-        CLI Bash
-        Command "\"echo Hello World!\""
-    }
-    |> Command.execute
-    |> should equal "Hello World!\n"
+    if OperatingSystem.IsWindows() |> not then
+        cli {
+            CLI Bash
+            Command "\"echo Hello World!\""
+        }
+        |> Command.execute
+        |> should equal "Hello World!\n"
+    else
+        Assert.Pass()
