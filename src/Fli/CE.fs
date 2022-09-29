@@ -1,7 +1,7 @@
-﻿namespace FsCli
+﻿namespace Fli
 
 [<AutoOpen>]
-module CE = 
+module CE =
 
     open Domain
     open System.Collections
@@ -12,16 +12,16 @@ module CE =
 
 
     let private defaults =
-        { CliConfig = { Cli = CMD; Command = "" }
+        { ShellConfig = { Shell = CMD; Command = "" }
           ProgramConfig = { Program = ""; Arguments = "" } }
 
     type StartingContext =
         { config: Config option }
 
-        member this.ActualConfig = this.config |> Option.defaultValue defaults
+        member this.CurrentConfig = this.config |> Option.defaultValue defaults
 
         interface ICommandContext<StartingContext> with
-            member this.Self = this
+            member this.Context = this
 
     let cli = { config = None }
 
@@ -29,18 +29,19 @@ module CE =
     /// Extensions for CLI context
     type ICommandContext<'a> with
 
-        [<CustomOperation("CLI")>]
-        member this.Cli(context: ICommandContext<StartingContext>, cli) = Cli.cli cli context.Self.ActualConfig
+        [<CustomOperation("Shell")>]
+        member this.Cli(context: ICommandContext<StartingContext>, shell) =
+            Cli.shell shell context.Context.CurrentConfig
 
         [<CustomOperation("Command")>]
-        member this.Command(context: ICommandContext<CliContext>, command) = Cli.command command context.Self
+        member this.Command(context: ICommandContext<ShellContext>, command) = Cli.command command context.Context
 
     /// Extensions for Exec context
     type ICommandContext<'a> with
 
         [<CustomOperation("Exec")>]
         member this.Exec(context: ICommandContext<StartingContext>, program) =
-            Program.program program context.Self.ActualConfig
+            Program.program program context.Context.CurrentConfig
 
         [<CustomOperation("Arguments")>]
         member this.Arguments(context: ICommandContext<ProgramContext>, arguments) =
@@ -53,4 +54,4 @@ module CE =
                 | :? IEnumerable as e -> e |> Seq.cast |> Seq.map (fun ea -> ea |> string) |> String.concat " "
                 | _ -> failwith "Cannot convert arguments to a string!"
 
-            Program.arguments args context.Self
+            Program.arguments args context.Context

@@ -1,8 +1,8 @@
-﻿module FsCli.ProgramCommandToStringTests
+﻿module Fli.ProgramCommandToStringTests
 
 open NUnit.Framework
 open FsUnit
-open FsCli
+open Fli
 
 
 [<Test>]

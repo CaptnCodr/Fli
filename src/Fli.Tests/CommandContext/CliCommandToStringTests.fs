@@ -1,14 +1,14 @@
-﻿module FsCli.CliCommandToStringTests
+﻿module Fli.CliCommandToStringTests
 
 open NUnit.Framework
 open FsUnit
-open FsCli
+open Fli
 
 
 [<Test>]
 let ``CMD command toString returns full line`` () =
     cli {
-        CLI CMD
+        Shell CMD
         Command "echo Hello World!"
     }
     |> Command.toString
@@ -17,7 +17,7 @@ let ``CMD command toString returns full line`` () =
 [<Test>]
 let ``PS command toString returns full line`` () =
     cli {
-        CLI PS
+        Shell PS
         Command "Write-Host Hello World!"
     }
     |> Command.toString
@@ -26,7 +26,7 @@ let ``PS command toString returns full line`` () =
 [<Test>]
 let ``PWSH command toString returns full line`` () =
     cli {
-        CLI PWSH
+        Shell PWSH
         Command "Write-Host Hello World!"
     }
     |> Command.toString
@@ -35,7 +35,7 @@ let ``PWSH command toString returns full line`` () =
 [<Test>]
 let ``BASH command toString returns full line`` () =
     cli {
-        CLI BASH
+        Shell BASH
         Command "\"echo Hello World!\""
     }
     |> Command.toString

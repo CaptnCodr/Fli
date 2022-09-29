@@ -1,8 +1,8 @@
-module FsCli.CliCommandExecuteTests
+module Fli.CliCommandExecuteTests
 
 open NUnit.Framework
 open FsUnit
-open FsCli
+open Fli
 open System
 
 
@@ -10,7 +10,7 @@ open System
 let ``Hello World with CMD`` () =
     if OperatingSystem.IsWindows() then
         cli {
-            CLI CMD
+            Shell CMD
             Command "echo Hello World!"
         }
         |> Command.execute
@@ -22,7 +22,7 @@ let ``Hello World with CMD`` () =
 let ``Hello World with PS`` () =
     if OperatingSystem.IsWindows() then
         cli {
-            CLI PS
+            Shell PS
             Command "Write-Host Hello World!"
         }
         |> Command.execute
@@ -34,7 +34,7 @@ let ``Hello World with PS`` () =
 let ``Hello World with PWSH`` () =
     if OperatingSystem.IsWindows() then
         cli {
-            CLI PWSH
+            Shell PWSH
             Command "Write-Host Hello World!"
         }
         |> Command.execute
@@ -46,7 +46,7 @@ let ``Hello World with PWSH`` () =
 let ``Hello World with BASH`` () =
     if OperatingSystem.IsWindows() |> not then
         cli {
-            CLI BASH
+            Shell BASH
             Command "\"echo Hello World!\""
         }
         |> Command.execute

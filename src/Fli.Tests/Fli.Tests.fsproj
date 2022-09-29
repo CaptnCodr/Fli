@@ -20,7 +20,7 @@
     <PackageReference Include="coverlet.collector" Version="3.1.2" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FsCli\FsCli.fsproj" />
+    <ProjectReference Include="..\Fli\Fli.fsproj" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

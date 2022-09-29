@@ -1,14 +1,14 @@
 type file
 id
-    FsCli
+    Fli
 owners
     Constantin Tews
 authors
     Constantin Tews
 version
-    0.0.1.0
+    0.0.2.0
 projectUrl
-    https://github.com/CaptnCodr/FsCli
+    https://github.com/CaptnCodr/Fli
 licenseExpression
     MIT
 requireLicenseAcceptance

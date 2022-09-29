@@ -6,11 +6,11 @@
     <TargetFrameworks>netstandard2.0;netstandard2.1;net6.0</TargetFrameworks>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Configurations>Debug;Release</Configurations>
-    <Version>0.0.1.0</Version>
+    <Version>0.0.2.0</Version>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\FsCli.xml</DocumentationFile>
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\Fli.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
     <Authors>Constantin Tews</Authors>

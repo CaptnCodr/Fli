@@ -1,8 +1,8 @@
-﻿module FsCli.ProgramCommandExecuteTests
+﻿module Fli.ProgramCommandExecuteTests
 
 open NUnit.Framework
 open FsUnit
-open FsCli
+open Fli
 open System
 
 

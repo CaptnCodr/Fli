@@ -1,13 +1,13 @@
-﻿namespace FsCli
+﻿namespace Fli
 
 open Domain
 
 module Cli =
 
-    let cli (cli: Cli) (config: Config) : CliContext =
-        { config = { config.CliConfig with Cli = cli } }
+    let shell (shell: Shells) (config: Config) : ShellContext =
+        { config = { config.ShellConfig with Shell = shell } }
 
-    let command (command: string) (context: CliContext) : CliContext =
+    let command (command: string) (context: ShellContext) : ShellContext =
         { context with config = { context.config with Command = command } }
 
 module Program =

@@ -1,12 +1,12 @@
-﻿namespace FsCli
+﻿namespace Fli
 
 [<AutoOpen>]
-module Command = 
+module Command =
 
     open Domain
     open System.Diagnostics
 
-    let private cliToProc =
+    let private shellToProcess =
         function
         | CMD -> "cmd.exe", "/C"
         | PS -> "powershell.exe", "-Command"
@@ -23,12 +23,12 @@ module Command =
         Process.Start(info).StandardOutput.ReadToEnd()
 
     type Command =
-        static member execute(context: CliContext) =
-            let (proc, flag) = context.config.Cli |> cliToProc
+        static member execute(context: ShellContext) =
+            let (proc, flag) = context.config.Shell |> shellToProcess
             (proc, $"{flag} {context.config.Command}") ||> startProcess
 
-        static member toString(context: CliContext) =
-            let (proc, flag) = context.config.Cli |> cliToProc
+        static member toString(context: ShellContext) =
+            let (proc, flag) = context.config.Shell |> shellToProcess
             $"{proc} {flag} {context.config.Command}"
 
         static member execute(context: ProgramContext) =
