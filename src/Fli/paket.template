@@ -11,18 +11,22 @@ projectUrl
     https://github.com/CaptnCodr/Fli
 licenseExpression
     MIT
+licenseUrl
+    https://licenses.nuget.org/MIT
 requireLicenseAcceptance
     false
 copyright
-    Copyright © 2022
+    Copyright 2022
 tags
     fsharp cli shell process computation-expression
 description
-    An F# library to run CLI commands and processes in F# (CE) style.
+    F# library to run CLI commands and processes in F# (CE) style.
+summary
+    F# library to run CLI commands and processes in F# (CE) style.
 files
-    /bin/Release/net6.0/FsCli.* ==> lib/net6.0
-    /bin/Release/netstandard2.0/FsCli.* ==> lib/netstandard2.0
-    /bin/Release/netstandard2.1/FsCli.* ==> lib/netstandard2.1
+    /bin/Release/net6.0/Fli.* ==> lib/net6.0
+    /bin/Release/netstandard2.0/Fli.* ==> lib/netstandard2.0
+    /bin/Release/netstandard2.1/Fli.* ==> lib/netstandard2.1
     ../install.ps1 ==> tools
 dependencies
     FSharp.Core >= LOCKEDVERSION

@@ -1,5 +1,6 @@
 # Fli
 [![build](https://github.com/CaptnCodr/Fli/actions/workflows/build.yml/badge.svg)](https://github.com/CaptnCodr/Fli/actions/workflows/build.yml)
+[![Nuget](https://img.shields.io/nuget/v/fli?color=33cc56)](https://www.nuget.org/packages/Fli/)
 
 Execute CLI commands from your F# code in F# style!
 
