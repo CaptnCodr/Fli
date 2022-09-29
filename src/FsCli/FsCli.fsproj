@@ -4,9 +4,9 @@
     <ProjectType>Library</ProjectType>
     <OutputType>Library</OutputType>
     <TargetFrameworks>netstandard2.0;netstandard2.1;net6.0</TargetFrameworks>
-    <AssemblyVersion>0.0.0.5</AssemblyVersion>
-    <FileVersion>0.0.0.5</FileVersion>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <Configurations>Debug;Release</Configurations>
+    <Version>0.0.1.0</Version>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -14,13 +14,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <Authors>Constantin Tews</Authors>
-    <PackageId>FsCli</PackageId>
     <Description>An F# library to run CLI commands and processes in F# (CE) style.</Description>
-    <PackageLicenseUrl>https://github.com/CaptnCodr/FsCli/blob/main/LICENSE</PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/CaptnCodr/FsCli</PackageProjectUrl>
-    <PackageTags>fsharp cli shell process computation-expression</PackageTags>
-    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Copyright>Copyright © 2022</Copyright>
   </PropertyGroup>
   <ItemGroup>
@@ -29,6 +23,7 @@
     <Compile Include="CE.fs" />
     <Compile Include="Command.fs" />
     <None Include="paket.references" />
+    <None Include="paket.template" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="FSharp.Core" Version="6.0.6" />
