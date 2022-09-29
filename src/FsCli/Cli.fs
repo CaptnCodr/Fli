@@ -1,4 +1,6 @@
-﻿module FsCli.Cli
+﻿namespace FsCli
+
+open Domain
 
 module Cli =
 

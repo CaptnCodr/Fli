@@ -1,31 +1,33 @@
-﻿[<AutoOpen>]
-module FsCli.Domain
+﻿namespace FsCli
 
-type ICommandContext<'a> =
-    abstract member Self: 'a
+[<AutoOpen>]
+module Domain = 
 
-type CliConfig = { Cli: Cli; Command: string }
+    type ICommandContext<'a> =
+        abstract member Self: 'a
 
-and Cli =
-    | CMD
-    | PS
-    | PWSH
-    | BASH
+    type CliConfig = { Cli: Cli; Command: string }
 
-type ProgramConfig = { Program: string; Arguments: string }
+    and Cli =
+        | CMD
+        | PS
+        | PWSH
+        | BASH
 
-type Config =
-    { CliConfig: CliConfig
-      ProgramConfig: ProgramConfig }
+    type ProgramConfig = { Program: string; Arguments: string }
 
-type CliContext =
-    { config: CliConfig }
+    type Config =
+        { CliConfig: CliConfig
+          ProgramConfig: ProgramConfig }
 
-    interface ICommandContext<CliContext> with
-        member this.Self = this
+    type CliContext =
+        { config: CliConfig }
 
-type ProgramContext =
-    { config: ProgramConfig }
+        interface ICommandContext<CliContext> with
+            member this.Self = this
 
-    interface ICommandContext<ProgramContext> with
-        member this.Self = this
+    type ProgramContext =
+        { config: ProgramConfig }
+
+        interface ICommandContext<ProgramContext> with
+            member this.Self = this
