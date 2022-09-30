@@ -6,7 +6,7 @@ module Domain =
     type ICommandContext<'a> =
         abstract member Context: 'a
 
-    type ShellConfig = { Shell: Shells; Command: string }
+    type ShellConfig = { Shell: Shells; Command: string; WorkingDirectory: string option }
 
     and Shells =
         | CMD
@@ -14,7 +14,7 @@ module Domain =
         | PWSH
         | BASH
 
-    type ProgramConfig = { Program: string; Arguments: string }
+    type ProgramConfig = { Program: string; Arguments: string; WorkingDirectory: string option }
 
     type Config =
         { ShellConfig: ShellConfig
