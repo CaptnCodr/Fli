@@ -15,13 +15,14 @@ module Command =
 
     let private createProcess (executable: string) (argumentString: string) (workingDirectory: string option) =
         ProcessStartInfo(
-            FileName = executable, 
-            Arguments = argumentString, 
+            FileName = executable,
+            Arguments = argumentString,
             WorkingDirectory = (workingDirectory |> Option.defaultValue ""),
-            WindowStyle = ProcessWindowStyle.Hidden, 
+            WindowStyle = ProcessWindowStyle.Hidden,
             CreateNoWindow = true,
             UseShellExecute = false,
-            RedirectStandardOutput = true)
+            RedirectStandardOutput = true
+        )
 
     let private startProcess (psi: ProcessStartInfo) =
         Process.Start(psi).StandardOutput.ReadToEnd()
@@ -29,7 +30,9 @@ module Command =
     type Command =
         static member execute(context: ShellContext) =
             let (proc, flag) = context.config.Shell |> shellToProcess
-            (proc, $"{flag} {context.config.Command}", context.config.WorkingDirectory) |||> createProcess
+
+            (proc, $"{flag} {context.config.Command}", context.config.WorkingDirectory)
+            |||> createProcess
             |> startProcess
 
         static member toString(context: ShellContext) =
@@ -37,7 +40,8 @@ module Command =
             $"{proc} {flag} {context.config.Command}"
 
         static member execute(context: ProgramContext) =
-            (context.config.Program, context.config.Arguments, context.config.WorkingDirectory) |||> createProcess
+            (context.config.Program, context.config.Arguments, context.config.WorkingDirectory)
+            |||> createProcess
             |> startProcess
 
         static member toString(context: ProgramContext) =

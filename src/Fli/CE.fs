@@ -12,8 +12,14 @@ module CE =
 
 
     let private defaults =
-        { ShellConfig = { Shell = CMD; Command = ""; WorkingDirectory = None }
-          ProgramConfig = { Program = ""; Arguments = ""; WorkingDirectory = None } }
+        { ShellConfig =
+            { Shell = CMD
+              Command = ""
+              WorkingDirectory = None }
+          ProgramConfig =
+            { Program = ""
+              Arguments = ""
+              WorkingDirectory = None } }
 
     type StartingContext =
         { config: Config option }

@@ -10,7 +10,7 @@ module Cli =
     let command (command: string) (context: ShellContext) =
         { context with config = { context.config with Command = command } }
 
-    let workingDirectory (workingDirectory: string) (context: ShellContext) = 
+    let workingDirectory (workingDirectory: string) (context: ShellContext) =
         { context with config = { context.config with WorkingDirectory = Some workingDirectory } }
 
 module Program =
@@ -21,5 +21,5 @@ module Program =
     let arguments (arguments: string) (context: ProgramContext) =
         { context with config = { context.config with Arguments = arguments } }
 
-    let workingDirectory (workingDirectory: string) (context: ProgramContext) = 
+    let workingDirectory (workingDirectory: string) (context: ProgramContext) =
         { context with config = { context.config with WorkingDirectory = Some workingDirectory } }
