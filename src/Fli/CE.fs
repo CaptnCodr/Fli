@@ -12,8 +12,14 @@ module CE =
 
 
     let private defaults =
-        { ShellConfig = { Shell = CMD; Command = "" }
-          ProgramConfig = { Program = ""; Arguments = "" } }
+        { ShellConfig =
+            { Shell = CMD
+              Command = ""
+              WorkingDirectory = None }
+          ProgramConfig =
+            { Program = ""
+              Arguments = ""
+              WorkingDirectory = None } }
 
     type StartingContext =
         { config: Config option }
@@ -36,6 +42,10 @@ module CE =
         [<CustomOperation("Command")>]
         member this.Command(context: ICommandContext<ShellContext>, command) = Cli.command command context.Context
 
+        [<CustomOperation("WorkingDirectory")>]
+        member this.WorkingDirectory(context: ICommandContext<ShellContext>, workingDirectory) =
+            Cli.workingDirectory workingDirectory context.Context
+
     /// Extensions for Exec context
     type ICommandContext<'a> with
 
@@ -55,3 +65,7 @@ module CE =
                 | _ -> failwith "Cannot convert arguments to a string!"
 
             Program.arguments args context.Context
+
+        [<CustomOperation("WorkingDirectory")>]
+        member this.WorkingDirectory(context: ICommandContext<ProgramContext>, workingDirectory) =
+            Program.workingDirectory workingDirectory context.Context
