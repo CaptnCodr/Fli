@@ -22,6 +22,7 @@ module Domain =
         { Program: string
           Arguments: string
           WorkingDirectory: string option
+          Verb: string option
           Credentials: System.Net.NetworkCredential option }
 
     type Config =
@@ -50,4 +51,5 @@ module Domain =
             { Program = ""
               Arguments = ""
               WorkingDirectory = None
+              Verb = None
               Credentials = None } }

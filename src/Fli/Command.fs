@@ -6,6 +6,7 @@ open System.Net
 module Command =
 
     open Domain
+    open System
     open System.Diagnostics
 
     let private shellToProcess =
@@ -15,9 +16,10 @@ module Command =
         | PWSH -> "pwsh.exe", "-Command"
         | BASH -> "bash", "-c"
 
-    let private createProcess (executable: string) (argumentString: string) (workingDirectory: string option) (credentials: NetworkCredential option) =
+    let private createProcess executable argumentString workingDirectory verb =
         ProcessStartInfo(
             FileName = executable,
+            Verb = (verb |> Option.defaultValue null),
             Arguments = argumentString,
             WorkingDirectory = (workingDirectory |> Option.defaultValue ""),
             Domain = (if credentials.IsSome then credentials.Value.Domain else ""),
@@ -33,11 +35,19 @@ module Command =
     let private startProcess (psi: ProcessStartInfo) =
         Process.Start(psi).StandardOutput.ReadToEnd()
 
+    let private checkVerb (verb: string) (executable: string) =
+        let verbs = ProcessStartInfo(executable).Verbs
+
+        if not (verbs |> Array.contains verb) then
+            $"""Unknown verb '{verb}'. Possible verbs on '{executable}': {verbs |> String.concat ", "}."""
+            |> ArgumentException
+            |> raise
+
     type Command =
         static member execute(context: ShellContext) =
             let (proc, flag) = context.config.Shell |> shellToProcess
 
-            (createProcess proc $"{flag} {context.config.Command}" context.config.WorkingDirectory context.config.Credentials)
+            (createProcess proc $"{flag} {context.config.Command}" context.config.WorkingDirectory None)
             |> startProcess
 
         static member toString(context: ShellContext) =
@@ -45,7 +55,15 @@ module Command =
             $"{proc} {flag} {context.config.Command}"
 
         static member execute(context: ProgramContext) =
-            (createProcess context.config.Program context.config.Arguments context.config.WorkingDirectory context.config.Credentials)
+            match context.config.Verb with
+            | Some (verb) -> checkVerb verb context.config.Program
+            | None -> ()
+
+            (createProcess
+                context.config.Program
+                context.config.Arguments
+                context.config.WorkingDirectory
+                context.config.Verb)
             |> startProcess
 
         static member toString(context: ProgramContext) =

@@ -26,6 +26,9 @@ module Program =
 
     let workingDirectory (workingDirectory: string) (context: ProgramContext) =
         { context with config = { context.config with WorkingDirectory = Some workingDirectory } }
+
+    let verb (verb: string) (context: ProgramContext) =
+        { context with config = { context.config with Verb = Some verb } }
         
     let credentials (credentials: System.Net.NetworkCredential) (context: ProgramContext) =
         { context with config = { context.config with Credentials = Some credentials } }

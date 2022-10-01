@@ -14,7 +14,6 @@ module CE =
 
         member this.Yield(_) = this
 
-
     type StartingContext =
         { config: Config option }
 
@@ -75,6 +74,9 @@ module CE =
         [<CustomOperation("WorkingDirectory")>]
         member this.WorkingDirectory(context: ICommandContext<ProgramContext>, workingDirectory) =
             Program.workingDirectory workingDirectory context.Context
+
+        [<CustomOperation("Verb")>]
+        member this.Verb(context: ICommandContext<ProgramContext>, verb) = Program.verb verb context.Context
 
         [<CustomOperation("Credentials")>]
         member this.Credentials(context: ICommandContext<ProgramContext>, credentials) =
