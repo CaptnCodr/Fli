@@ -19,7 +19,8 @@ module CE =
           ProgramConfig =
             { Program = ""
               Arguments = ""
-              WorkingDirectory = None } }
+              WorkingDirectory = None
+              Verb = None } }
 
     type StartingContext =
         { config: Config option }
@@ -69,3 +70,6 @@ module CE =
         [<CustomOperation("WorkingDirectory")>]
         member this.WorkingDirectory(context: ICommandContext<ProgramContext>, workingDirectory) =
             Program.workingDirectory workingDirectory context.Context
+
+        [<CustomOperation("Verb")>]
+        member this.Verb(context: ICommandContext<ProgramContext>, verb) = Program.verb verb context.Context

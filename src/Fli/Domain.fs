@@ -20,7 +20,8 @@ module Domain =
     type ProgramConfig =
         { Program: string
           Arguments: string
-          WorkingDirectory: string option }
+          WorkingDirectory: string option
+          Verb: string option }
 
     type Config =
         { ShellConfig: ShellConfig
