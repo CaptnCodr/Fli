@@ -35,6 +35,15 @@ cli {
 |> Command.execute
 ```
 
+Add a verb to your executing program:
+```
+cli {
+    Exec "cmd.exe"
+    Verb "runas"
+}
+|> Command.execute
+```
+
 #### Implementations
 
 Currently provided Shells:

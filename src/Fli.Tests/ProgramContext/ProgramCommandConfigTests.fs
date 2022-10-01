@@ -4,6 +4,7 @@ open NUnit.Framework
 open FsUnit
 open Fli
 open System
+open NUnit.Framework.Internal
 
 
 [<Test>]
@@ -49,3 +50,12 @@ let ``Check working directory config for executing program`` () =
         |> should equal (Some @"C:\Users")
     else
         Assert.Pass()
+
+[<Test>]
+let ``Check Verb config for executing program`` () =
+    cli {
+        Exec "cmd.exe"
+        Verb "runas"
+    }
+    |> fun c -> c.config.Verb
+    |> should equal (Some "runas")
