@@ -1,9 +1,5 @@
 ﻿namespace Fli
 
-open System.Net
-open System.Security
-open Program
-
 [<AutoOpen>]
 module CE =
 
@@ -24,16 +20,7 @@ module CE =
 
     let cli = { config = None }
 
-    let private matchCredentials credentials = 
-        match box (credentials) with
-        | :? (string * string) as (user, password) -> NetworkCredential(user, password)
-        | :? (string * SecureString) as (user, password) -> NetworkCredential(user, password)
-        | :? (string * string * string) as (user, password, domain) -> NetworkCredential(user, password, domain)
-        | :? (string * SecureString * string) as (user, password, domain) -> NetworkCredential(user, password, domain)
-        | :? NetworkCredential as networkCredentials -> networkCredentials
-        | _ -> failwith "Cannot identify credentials."
-
-    let private matchArguments arguments = 
+    let private matchArguments arguments =
         match box (arguments) with
         | :? string as s -> s
         | :? seq<string> as s -> s |> Seq.map (fun sa -> sa |> string) |> String.concat " "
@@ -55,10 +42,6 @@ module CE =
         [<CustomOperation("WorkingDirectory")>]
         member this.WorkingDirectory(context: ICommandContext<ShellContext>, workingDirectory) =
             Cli.workingDirectory workingDirectory context.Context
-            
-        [<CustomOperation("Credentials")>]
-        member this.Credentials(context: ICommandContext<ShellContext>, credentials) =
-            Cli.credentials (matchCredentials credentials) context.Context
 
     /// Extensions for Exec context
     type ICommandContext<'a> with
@@ -78,6 +61,6 @@ module CE =
         [<CustomOperation("Verb")>]
         member this.Verb(context: ICommandContext<ProgramContext>, verb) = Program.verb verb context.Context
 
-        [<CustomOperation("Credentials")>]
-        member this.Credentials(context: ICommandContext<ProgramContext>, credentials) =
-            Program.credentials (matchCredentials credentials) context.Context
+        [<CustomOperation("Username")>]
+        member this.UserName(context: ICommandContext<ProgramContext>, userName) =
+            Program.userName userName context.Context

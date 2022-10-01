@@ -9,8 +9,7 @@ module Domain =
     type ShellConfig =
         { Shell: Shells
           Command: string
-          WorkingDirectory: string option
-          Credentials: System.Net.NetworkCredential option }
+          WorkingDirectory: string option }
 
     and Shells =
         | CMD
@@ -20,10 +19,10 @@ module Domain =
 
     type ProgramConfig =
         { Program: string
-          Arguments: string
+          Arguments: string option
           WorkingDirectory: string option
           Verb: string option
-          Credentials: System.Net.NetworkCredential option }
+          UserName: string option }
 
     type Config =
         { ShellConfig: ShellConfig
@@ -45,11 +44,10 @@ module Domain =
         { ShellConfig =
             { Shell = CMD
               Command = ""
-              WorkingDirectory = None
-              Credentials = None }
+              WorkingDirectory = None }
           ProgramConfig =
             { Program = ""
-              Arguments = ""
+              Arguments = None
               WorkingDirectory = None
               Verb = None
-              Credentials = None } }
+              UserName = None } }

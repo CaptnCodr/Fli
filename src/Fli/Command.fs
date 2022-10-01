@@ -1,7 +1,5 @@
 ﻿namespace Fli
 
-open System.Net
-
 [<AutoOpen>]
 module Command =
 
@@ -16,16 +14,13 @@ module Command =
         | PWSH -> "pwsh.exe", "-Command"
         | BASH -> "bash", "-c"
 
-    let private createProcess executable argumentString workingDirectory verb =
+    let private createProcess executable argumentString workingDirectory verb userName =
         ProcessStartInfo(
             FileName = executable,
             Verb = (verb |> Option.defaultValue null),
             Arguments = argumentString,
+            UserName = (userName |> Option.defaultValue ""),
             WorkingDirectory = (workingDirectory |> Option.defaultValue ""),
-            Domain = (if credentials.IsSome then credentials.Value.Domain else ""),
-            UserName = (if credentials.IsSome then credentials.Value.UserName else ""),
-            Password = (if credentials.IsSome then credentials.Value.SecurePassword else null),
-            PasswordInClearText = (if credentials.IsSome then credentials.Value.Password else null),
             WindowStyle = ProcessWindowStyle.Hidden,
             CreateNoWindow = true,
             UseShellExecute = false,
@@ -47,7 +42,7 @@ module Command =
         static member execute(context: ShellContext) =
             let (proc, flag) = context.config.Shell |> shellToProcess
 
-            (createProcess proc $"{flag} {context.config.Command}" context.config.WorkingDirectory None)
+            (createProcess proc $"{flag} {context.config.Command}" context.config.WorkingDirectory None None)
             |> startProcess
 
         static member toString(context: ShellContext) =
@@ -61,9 +56,10 @@ module Command =
 
             (createProcess
                 context.config.Program
-                context.config.Arguments
+                (context.config.Arguments |> Option.defaultValue "")
                 context.config.WorkingDirectory
-                context.config.Verb)
+                context.config.Verb
+                context.config.UserName)
             |> startProcess
 
         static member toString(context: ProgramContext) =
