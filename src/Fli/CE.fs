@@ -10,28 +10,24 @@ module CE =
 
         member this.Yield(_) = this
 
-
-    let private defaults =
-        { ShellConfig =
-            { Shell = CMD
-              Command = ""
-              WorkingDirectory = None }
-          ProgramConfig =
-            { Program = ""
-              Arguments = ""
-              WorkingDirectory = None
-              Verb = None } }
-
     type StartingContext =
         { config: Config option }
 
-        member this.CurrentConfig = this.config |> Option.defaultValue defaults
+        member this.CurrentConfig = this.config |> Option.defaultValue Defaults
 
         interface ICommandContext<StartingContext> with
             member this.Context = this
 
     let cli = { config = None }
 
+    let private matchArguments arguments =
+        match box (arguments) with
+        | :? string as s -> s
+        | :? seq<string> as s -> s |> Seq.map (fun sa -> sa |> string) |> String.concat " "
+        | :? list<string> as l -> l |> List.map (fun la -> la |> string) |> String.concat " "
+        | :? array<string> as a -> a |> Array.map (fun aa -> aa |> string) |> String.concat " "
+        | :? IEnumerable as e -> e |> Seq.cast |> Seq.map (fun ea -> ea |> string) |> String.concat " "
+        | _ -> failwith "Cannot convert arguments to a string!"
 
     /// Extensions for CLI context
     type ICommandContext<'a> with
@@ -56,16 +52,7 @@ module CE =
 
         [<CustomOperation("Arguments")>]
         member this.Arguments(context: ICommandContext<ProgramContext>, arguments) =
-            let args =
-                match box (arguments) with
-                | :? string as s -> s
-                | :? seq<string> as s -> s |> Seq.map (fun sa -> sa |> string) |> String.concat " "
-                | :? list<string> as l -> l |> List.map (fun la -> la |> string) |> String.concat " "
-                | :? array<string> as a -> a |> Array.map (fun aa -> aa |> string) |> String.concat " "
-                | :? IEnumerable as e -> e |> Seq.cast |> Seq.map (fun ea -> ea |> string) |> String.concat " "
-                | _ -> failwith "Cannot convert arguments to a string!"
-
-            Program.arguments args context.Context
+            Program.arguments (matchArguments arguments) context.Context
 
         [<CustomOperation("WorkingDirectory")>]
         member this.WorkingDirectory(context: ICommandContext<ProgramContext>, workingDirectory) =
@@ -73,3 +60,7 @@ module CE =
 
         [<CustomOperation("Verb")>]
         member this.Verb(context: ICommandContext<ProgramContext>, verb) = Program.verb verb context.Context
+
+        [<CustomOperation("Username")>]
+        member this.UserName(context: ICommandContext<ProgramContext>, userName) =
+            Program.userName userName context.Context

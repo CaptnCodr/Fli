@@ -19,10 +19,13 @@ module Program =
         { config = { config.ProgramConfig with Program = program } }
 
     let arguments (arguments: string) (context: ProgramContext) =
-        { context with config = { context.config with Arguments = arguments } }
+        { context with config = { context.config with Arguments = Some arguments } }
 
     let workingDirectory (workingDirectory: string) (context: ProgramContext) =
         { context with config = { context.config with WorkingDirectory = Some workingDirectory } }
 
     let verb (verb: string) (context: ProgramContext) =
         { context with config = { context.config with Verb = Some verb } }
+
+    let userName (userName: string) (context: ProgramContext) =
+        { context with config = { context.config with UserName = Some userName } }

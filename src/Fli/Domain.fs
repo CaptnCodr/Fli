@@ -19,9 +19,10 @@ module Domain =
 
     type ProgramConfig =
         { Program: string
-          Arguments: string
+          Arguments: string option
           WorkingDirectory: string option
-          Verb: string option }
+          Verb: string option
+          UserName: string option }
 
     type Config =
         { ShellConfig: ShellConfig
@@ -38,3 +39,15 @@ module Domain =
 
         interface ICommandContext<ProgramContext> with
             member this.Context = this
+
+    let Defaults =
+        { ShellConfig =
+            { Shell = CMD
+              Command = ""
+              WorkingDirectory = None }
+          ProgramConfig =
+            { Program = ""
+              Arguments = None
+              WorkingDirectory = None
+              Verb = None
+              UserName = None } }

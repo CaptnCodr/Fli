@@ -3,6 +3,7 @@ module Fli.CliCommandConfigTests
 open NUnit.Framework
 open FsUnit
 open Fli
+open System.Net
 
 
 [<Test>]
