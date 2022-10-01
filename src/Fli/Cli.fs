@@ -13,6 +13,9 @@ module Cli =
     let workingDirectory (workingDirectory: string) (context: ShellContext) =
         { context with config = { context.config with WorkingDirectory = Some workingDirectory } }
 
+    let credentials (credentials: System.Net.NetworkCredential) (context: ShellContext) =
+        { context with config = { context.config with Credentials = Some credentials } }
+
 module Program =
 
     let program (program: string) (config: Config) : ProgramContext =
@@ -23,3 +26,6 @@ module Program =
 
     let workingDirectory (workingDirectory: string) (context: ProgramContext) =
         { context with config = { context.config with WorkingDirectory = Some workingDirectory } }
+        
+    let credentials (credentials: System.Net.NetworkCredential) (context: ProgramContext) =
+        { context with config = { context.config with Credentials = Some credentials } }

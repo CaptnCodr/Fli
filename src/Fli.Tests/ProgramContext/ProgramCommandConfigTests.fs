@@ -4,6 +4,7 @@ open NUnit.Framework
 open FsUnit
 open Fli
 open System
+open System.Net
 
 
 [<Test>]
@@ -47,5 +48,33 @@ let ``Check working directory config for executing program`` () =
         }
         |> fun c -> c.config.WorkingDirectory
         |> should equal (Some @"C:\Users")
+    else
+        Assert.Pass()
+
+[<Test>]
+let ``Check credentials config for executing program`` () =
+    if OperatingSystem.IsWindows() then
+        cli {
+            Exec "cmd.exe"
+            WorkingDirectory @"C:\Users"
+            Credentials ("user", "password", "domain")
+        }
+        |> fun c -> c.config.Credentials.Value
+        |> fun creds -> (creds.UserName, creds.Password, creds.Domain)
+        |> should equal ("user", "password", "domain")
+    else
+        Assert.Pass()
+
+[<Test>]
+let ``Check credentials config for executing program with NetworkCredentials`` () =
+    if OperatingSystem.IsWindows() then
+        cli {
+            Exec "cmd.exe"
+            WorkingDirectory @"C:\Users"
+            Credentials (NetworkCredential("user", "password", "domain"))
+        }
+        |> fun c -> c.config.Credentials.Value
+        |> fun creds -> (creds.UserName, creds.Password, creds.Domain)
+        |> should equal ("user", "password", "domain")
     else
         Assert.Pass()

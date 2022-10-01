@@ -9,7 +9,8 @@ module Domain =
     type ShellConfig =
         { Shell: Shells
           Command: string
-          WorkingDirectory: string option }
+          WorkingDirectory: string option
+          Credentials: System.Net.NetworkCredential option }
 
     and Shells =
         | CMD
@@ -20,7 +21,8 @@ module Domain =
     type ProgramConfig =
         { Program: string
           Arguments: string
-          WorkingDirectory: string option }
+          WorkingDirectory: string option
+          Credentials: System.Net.NetworkCredential option }
 
     type Config =
         { ShellConfig: ShellConfig
@@ -37,3 +39,15 @@ module Domain =
 
         interface ICommandContext<ProgramContext> with
             member this.Context = this
+
+    let Defaults =
+        { ShellConfig =
+            { Shell = CMD
+              Command = ""
+              WorkingDirectory = None
+              Credentials = None }
+          ProgramConfig =
+            { Program = ""
+              Arguments = ""
+              WorkingDirectory = None
+              Credentials = None } }

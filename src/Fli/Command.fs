@@ -1,5 +1,7 @@
 ﻿namespace Fli
 
+open System.Net
+
 [<AutoOpen>]
 module Command =
 
@@ -13,11 +15,15 @@ module Command =
         | PWSH -> "pwsh.exe", "-Command"
         | BASH -> "bash", "-c"
 
-    let private createProcess (executable: string) (argumentString: string) (workingDirectory: string option) =
+    let private createProcess (executable: string) (argumentString: string) (workingDirectory: string option) (credentials: NetworkCredential option) =
         ProcessStartInfo(
             FileName = executable,
             Arguments = argumentString,
             WorkingDirectory = (workingDirectory |> Option.defaultValue ""),
+            Domain = (if credentials.IsSome then credentials.Value.Domain else ""),
+            UserName = (if credentials.IsSome then credentials.Value.UserName else ""),
+            Password = (if credentials.IsSome then credentials.Value.SecurePassword else null),
+            PasswordInClearText = (if credentials.IsSome then credentials.Value.Password else null),
             WindowStyle = ProcessWindowStyle.Hidden,
             CreateNoWindow = true,
             UseShellExecute = false,
@@ -31,8 +37,7 @@ module Command =
         static member execute(context: ShellContext) =
             let (proc, flag) = context.config.Shell |> shellToProcess
 
-            (proc, $"{flag} {context.config.Command}", context.config.WorkingDirectory)
-            |||> createProcess
+            (createProcess proc $"{flag} {context.config.Command}" context.config.WorkingDirectory context.config.Credentials)
             |> startProcess
 
         static member toString(context: ShellContext) =
@@ -40,8 +45,7 @@ module Command =
             $"{proc} {flag} {context.config.Command}"
 
         static member execute(context: ProgramContext) =
-            (context.config.Program, context.config.Arguments, context.config.WorkingDirectory)
-            |||> createProcess
+            (createProcess context.config.Program context.config.Arguments context.config.WorkingDirectory context.config.Credentials)
             |> startProcess
 
         static member toString(context: ProgramContext) =
