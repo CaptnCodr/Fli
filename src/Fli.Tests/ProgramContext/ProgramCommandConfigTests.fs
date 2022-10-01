@@ -17,7 +17,7 @@ let ``Check arguments config for executing program`` () =
         Arguments "echo Hello World!"
     }
     |> fun c -> c.config.Arguments
-    |> should equal "echo Hello World!"
+    |> should equal (Some "echo Hello World!")
 
 
 [<Test>]
@@ -27,7 +27,7 @@ let ``Check arguments list config for executing program`` () =
         Arguments [ "echo"; "Hello World!" ]
     }
     |> fun c -> c.config.Arguments
-    |> should equal "echo Hello World!"
+    |> should equal (Some "echo Hello World!")
 
 [<Test>]
 let ``Check working directory config for executing program`` () =

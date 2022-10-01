@@ -63,4 +63,4 @@ module Command =
             |> startProcess
 
         static member toString(context: ProgramContext) =
-            $"{context.config.Program} {context.config.Arguments}"
+            $"""{context.config.Program} {context.config.Arguments |> Option.defaultValue ""}"""
