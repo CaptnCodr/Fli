@@ -5,6 +5,8 @@
 Execute CLI commands from your F# code in F# style!
 
 ### Getting Started
+Get it from Nuget: `dotnet add package Fli`
+
 Just `open Fli` and start ...
 
 For example:
@@ -36,10 +38,19 @@ cli {
 ```
 
 Add a verb to your executing program:
-```
+```fsharp
 cli {
     Exec "cmd.exe"
     Verb "runas"
+}
+|> Command.execute
+```
+
+Add environment variables for the executing program e.g.:
+```fsharp
+cli {
+    Exec "git"
+    EnvironmentVariables [("GIT_AUTHOR_NAME", "Jon Doe");("GIT_AUTHOR_EMAIL", "jon.doe@domain.com")]
 }
 |> Command.execute
 ```

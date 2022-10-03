@@ -38,11 +38,19 @@ module Command =
             |> ArgumentException
             |> raise
 
+    let private addEnvironmentVariables (variables: (string * string) list option) (psi: ProcessStartInfo) =
+        match variables with
+        | Some (v) -> v |> List.iter (psi.Environment.Add)
+        | None -> ()
+
+        psi
+
     type Command =
         static member execute(context: ShellContext) =
             let (proc, flag) = context.config.Shell |> shellToProcess
 
             (createProcess proc $"{flag} {context.config.Command}" context.config.WorkingDirectory None None)
+            |> addEnvironmentVariables context.config.EnvironmentVariables
             |> startProcess
 
         static member toString(context: ShellContext) =
@@ -60,6 +68,7 @@ module Command =
                 context.config.WorkingDirectory
                 context.config.Verb
                 context.config.UserName)
+            |> addEnvironmentVariables context.config.EnvironmentVariables
             |> startProcess
 
         static member toString(context: ProgramContext) =

@@ -9,7 +9,8 @@ module Domain =
     type ShellConfig =
         { Shell: Shells
           Command: string
-          WorkingDirectory: string option }
+          WorkingDirectory: string option
+          EnvironmentVariables: (string * string) list option }
 
     and Shells =
         | CMD
@@ -22,7 +23,8 @@ module Domain =
           Arguments: string option
           WorkingDirectory: string option
           Verb: string option
-          UserName: string option }
+          UserName: string option
+          EnvironmentVariables: (string * string) list option }
 
     type Config =
         { ShellConfig: ShellConfig
@@ -44,10 +46,12 @@ module Domain =
         { ShellConfig =
             { Shell = CMD
               Command = ""
-              WorkingDirectory = None }
+              WorkingDirectory = None
+              EnvironmentVariables = None }
           ProgramConfig =
             { Program = ""
               Arguments = None
               WorkingDirectory = None
               Verb = None
-              UserName = None } }
+              UserName = None
+              EnvironmentVariables = None } }

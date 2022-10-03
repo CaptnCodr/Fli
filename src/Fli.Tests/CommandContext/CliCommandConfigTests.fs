@@ -27,3 +27,21 @@ let ``Check WorkingDirectory config`` () =
     }
     |> fun c -> c.config.WorkingDirectory
     |> should equal (Some @"C:\Users")
+
+[<Test>]
+let ``Check EnvironmentVariables with single KeyValue config`` () =
+    cli {
+        Shell BASH
+        EnvironmentVariable("user", "admin")
+    }
+    |> fun c -> c.config.EnvironmentVariables.Value
+    |> should equal [ ("user", "admin") ]
+
+[<Test>]
+let ``Check EnvironmentVariables with multiple KeyValues config`` () =
+    cli {
+        Shell BASH
+        EnvironmentVariables [ ("user", "admin"); ("path", "path/to/file") ]
+    }
+    |> fun c -> c.config.EnvironmentVariables.Value
+    |> should equal [ ("user", "admin"); ("path", "path/to/file") ]
