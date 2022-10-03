@@ -93,10 +93,3 @@ let ``Check Credentials with domain, username and password`` () =
     } 
     |> fun c -> c.config.Credentials.Value
     |> should equal (Credentials ("domain", "user", "password123"))
-
-let ``Test`` () =
-    cli {
-        Exec "cmd.exe"
-        EnvironmentVariable("user", "admin")
-    }
-    |> Command.getPsi
