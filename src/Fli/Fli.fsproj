@@ -21,6 +21,7 @@
     <Compile Include="Domain.fs" />
     <Compile Include="Cli.fs" />
     <Compile Include="CE.fs" />
+    <Compile Include="Helpers.fs" />
     <Compile Include="Command.fs" />
     <None Include="paket.references" />
     <None Include="paket.template" />

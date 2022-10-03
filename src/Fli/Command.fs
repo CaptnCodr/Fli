@@ -4,8 +4,10 @@
 module Command =
 
     open Domain
+    open Helpers
     open System
     open System.Diagnostics
+    open System.Runtime.InteropServices
 
     let private shellToProcess =
         function
@@ -45,6 +47,18 @@ module Command =
 
         psi
 
+    let private addCredentials (credentials: Credentials option) (psi: ProcessStartInfo) =
+        match credentials with 
+        | Some(Credentials(domain, username, password)) -> 
+            psi.UserName <- username
+            if RuntimeInformation.IsOSPlatform(OSPlatform.Windows) then 
+                psi.Domain <- domain
+                psi.Password <- (password |> toSecureString)
+        | None -> ()
+
+        psi
+
+
     type Command =
         static member execute(context: ShellContext) =
             let (proc, flag) = context.config.Shell |> shellToProcess
@@ -69,6 +83,7 @@ module Command =
                 context.config.Verb
                 context.config.UserName)
             |> addEnvironmentVariables context.config.EnvironmentVariables
+            |> addCredentials context.config.Credentials
             |> startProcess
 
         static member toString(context: ProgramContext) =

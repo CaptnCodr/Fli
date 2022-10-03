@@ -24,7 +24,10 @@ module Domain =
           WorkingDirectory: string option
           Verb: string option
           UserName: string option
+          Credentials: Credentials option
           EnvironmentVariables: (string * string) list option }
+
+    and Credentials = Credentials of Domain: string * UserName: string * Password: string
 
     type Config =
         { ShellConfig: ShellConfig
@@ -54,4 +57,5 @@ module Domain =
               WorkingDirectory = None
               Verb = None
               UserName = None
+              Credentials = None
               EnvironmentVariables = None } }

@@ -73,6 +73,11 @@ module CE =
         member this.UserName(context: ICommandContext<ProgramContext>, userName) =
             Program.userName userName context.Context
 
+        [<CustomOperation("Credentials")>]
+        member this.Credentials(context: ICommandContext<ProgramContext>, credentials) = 
+            let (domain, user, pw) = credentials
+            Program.credentials (Credentials (domain, user, pw)) context.Context
+
         [<CustomOperation("EnvironmentVariable")>]
         member this.EnvironmentVariable(context: ICommandContext<ProgramContext>, environmentVariable) =
             Program.environmentVariables [ environmentVariable ] context.Context

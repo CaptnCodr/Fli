@@ -84,3 +84,19 @@ let ``Check EnvironmentVariables with multiple KeyValues config`` () =
     }
     |> fun c -> c.config.EnvironmentVariables.Value
     |> should equal [ ("user", "admin"); ("path", "path/to/file") ]
+
+[<Test>]
+let ``Check Credentials with domain, username and password`` () =
+    cli {
+        Exec "cmd.exe"
+        Credentials ("domain", "user", "password123")
+    } 
+    |> fun c -> c.config.Credentials.Value
+    |> should equal (Credentials ("domain", "user", "password123"))
+
+let ``Test`` () =
+    cli {
+        Exec "cmd.exe"
+        EnvironmentVariable("user", "admin")
+    }
+    |> Command.getPsi

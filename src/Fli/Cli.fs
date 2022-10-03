@@ -33,5 +33,8 @@ module Program =
     let userName (userName: string) (context: ProgramContext) =
         { context with config = { context.config with UserName = Some userName } }
 
+    let credentials (credentials: Credentials) (context: ProgramContext) =
+        { context with config = { context.config with Credentials = Some credentials } }
+
     let environmentVariables (variables: (string * string) list) (context: ProgramContext) =
         { context with config = { context.config with EnvironmentVariables = Some variables } }
