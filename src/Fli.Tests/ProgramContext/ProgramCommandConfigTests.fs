@@ -66,3 +66,21 @@ let ``Check credentials config for executing program with NetworkCredentials`` (
     }
     |> fun c -> c.config.UserName.Value
     |> should equal "admin@company"
+
+[<Test>]
+let ``Check EnvironmentVariables with single KeyValue config`` () =
+    cli {
+        Exec "cmd.exe"
+        EnvironmentVariable("user", "admin")
+    }
+    |> fun c -> c.config.EnvironmentVariables.Value
+    |> should equal [ ("user", "admin") ]
+
+[<Test>]
+let ``Check EnvironmentVariables with multiple KeyValues config`` () =
+    cli {
+        Exec "cmd.exe"
+        EnvironmentVariables [ ("user", "admin"); ("path", "path/to/file") ]
+    }
+    |> fun c -> c.config.EnvironmentVariables.Value
+    |> should equal [ ("user", "admin"); ("path", "path/to/file") ]

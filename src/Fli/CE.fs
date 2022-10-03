@@ -43,6 +43,14 @@ module CE =
         member this.WorkingDirectory(context: ICommandContext<ShellContext>, workingDirectory) =
             Cli.workingDirectory workingDirectory context.Context
 
+        [<CustomOperation("EnvironmentVariable")>]
+        member this.EnvironmentVariable(context: ICommandContext<ShellContext>, environmentVariable) =
+            Cli.environmentVariables [ environmentVariable ] context.Context
+
+        [<CustomOperation("EnvironmentVariables")>]
+        member this.EnvironmentVariables(context: ICommandContext<ShellContext>, environmentVariables) =
+            Cli.environmentVariables environmentVariables context.Context
+
     /// Extensions for Exec context
     type ICommandContext<'a> with
 
@@ -64,3 +72,11 @@ module CE =
         [<CustomOperation("Username")>]
         member this.UserName(context: ICommandContext<ProgramContext>, userName) =
             Program.userName userName context.Context
+
+        [<CustomOperation("EnvironmentVariable")>]
+        member this.EnvironmentVariable(context: ICommandContext<ProgramContext>, environmentVariable) =
+            Program.environmentVariables [ environmentVariable ] context.Context
+
+        [<CustomOperation("EnvironmentVariables")>]
+        member this.EnvironmentVariables(context: ICommandContext<ProgramContext>, environmentVariables) =
+            Program.environmentVariables environmentVariables context.Context
