@@ -1,9 +1,8 @@
-﻿module Fli.ProgramCommandConfigTests
+﻿module Fli.ProgramContext.ProgramCommandConfigTests
 
 open NUnit.Framework
 open FsUnit
 open Fli
-open System
 
 
 [<Test>]
@@ -89,7 +88,7 @@ let ``Check EnvironmentVariables with multiple KeyValues config`` () =
 let ``Check Credentials with domain, username and password`` () =
     cli {
         Exec "cmd.exe"
-        Credentials ("domain", "user", "password123")
-    } 
+        Credentials("domain", "user", "password123")
+    }
     |> fun c -> c.config.Credentials.Value
-    |> should equal (Credentials ("domain", "user", "password123"))
+    |> should equal (Credentials("domain", "user", "password123"))

@@ -6,12 +6,14 @@
     <GenerateProgramFile>false</GenerateProgramFile>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="CommandContext\CliCommandConfigTests.fs" />
-    <Compile Include="ProgramContext\ProgramCommandConfigTests.fs" />
-    <Compile Include="ProgramContext\ProgramCommandToStringTests.fs" />
+    <Compile Include="ShellContext\ShellConfigTests.fs" />
+    <Compile Include="ProgramContext\ProgramConfigTests.fs" />
     <Compile Include="ProgramContext\ProgramCommandExecuteTests.fs" />
-    <Compile Include="CommandContext\CliCommandExecuteTests.fs" />
-    <Compile Include="CommandContext\CliCommandToStringTests.fs" />
+    <Compile Include="ProgramContext\ProgramCommandConfigureTests.fs" />
+    <Compile Include="ProgramContext\ProgramCommandToStringTests.fs" />
+    <Compile Include="ShellContext\ShellCommandExecuteTests.fs" />
+    <Compile Include="ShellContext\ShellCommandConfigureTests.fs" />
+    <Compile Include="ShellContext\ShellCommandToStringTests.fs" />
     <None Include="paket.references" />
   </ItemGroup>
   <ItemGroup>

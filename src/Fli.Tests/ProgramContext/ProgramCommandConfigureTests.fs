@@ -1,0 +1,139 @@
+﻿module Fli.ProgramContext.ProgramCommandConfigureTests
+
+open NUnit.Framework
+open FsUnit
+open Fli
+open System
+open System.Collections.Generic
+
+[<Test>]
+let ``Check FileName in ProcessStartInfo Exec program`` () =
+    cli { Exec "cmd.exe" }
+    |> Command.configureProcess
+    |> (fun p -> p.FileName)
+    |> should equal "cmd.exe"
+
+[<Test>]
+let ``Check Arguments in ProcessStartInfo with Arguments`` () =
+    cli {
+        Exec "cmd.exe"
+        Arguments "-c echo Hello World!"
+    }
+    |> Command.configureProcess
+    |> (fun p -> p.Arguments)
+    |> should equal "-c echo Hello World!"
+
+[<Test>]
+let ``Check WorkingDirectory in ProcessStartInfo with WorkingDirectory`` () =
+    cli {
+        Exec "cnd.exe"
+        WorkingDirectory @"C:\Users"
+    }
+    |> Command.configureProcess
+    |> (fun p -> p.WorkingDirectory)
+    |> should equal @"C:\Users"
+
+[<Test>]
+let ``Check Verb in ProcessStartInfo with Verb`` () =
+    if OperatingSystem.IsWindows() then
+        cli {
+            Exec "cmd.exe"
+            Verb "open"
+        }
+        |> Command.configureProcess
+        |> (fun p -> p.Verb)
+        |> should equal "open"
+    else
+        Assert.Pass()
+
+[<Test>]
+let ``Check UserName in ProcessStartInfo with Username`` () =
+    cli {
+        Exec "cmd.exe"
+        Username "admin"
+    }
+    |> Command.configureProcess
+    |> (fun p -> p.UserName)
+    |> should equal "admin"
+
+[<Test>]
+let ``Check Domain, UserName, Password in ProcessStartInfo with Credentials for windows (overwrites Username)`` () =
+    if OperatingSystem.IsWindows() then
+        let config =
+            cli {
+                Exec "cmd.exe"
+                Username "admin"
+                Credentials("domain", "user", "password")
+            }
+            |> Command.configureProcess
+
+        config.Domain |> should equal "domain"
+        config.UserName |> should equal "user"
+        config.Password |> should not' (equal "password") // stored as SecureString
+
+[<Test>]
+let ``Check Environment in ProcessStartInfo with single environment variable`` () =
+    cli {
+        Exec "cmd.exe"
+        EnvironmentVariable("Fli", "test")
+    }
+    |> Command.configureProcess
+    |> (fun p -> p.Environment.Contains(KeyValuePair("Fli", "test")))
+    |> should be True
+
+[<Test>]
+let ``Check Environment in ProcessStartInfo with multiple environment variables`` () =
+    let config =
+        cli {
+            Exec "cmd.exe"
+            EnvironmentVariables [ ("Fli", "test"); ("Fli.Test", "test") ]
+        }
+        |> Command.configureProcess
+
+    config.Environment.Contains(KeyValuePair("Fli", "test")) |> should be True
+    config.Environment.Contains(KeyValuePair("Fli.Test", "test")) |> should be True
+
+[<Test>]
+let ``Check all possible values in ProcessStartInfo for windows`` () =
+    if OperatingSystem.IsWindows() then
+        let config =
+            cli {
+                Exec "cmd.exe"
+                Arguments "--help"
+                WorkingDirectory @"C:\Users"
+                Verb "open"
+                Username "admin"
+                Credentials("domain", "admin", "password")
+                EnvironmentVariable("Fli", "test")
+                EnvironmentVariables [ ("Fli.Test", "test") ]
+            }
+            |> Command.configureProcess
+
+        config.FileName |> should equal "cmd.exe"
+        config.Arguments |> should equal "--help"
+        config.WorkingDirectory |> should equal @"C:\Users"
+        config.Verb |> should equal "open"
+        config.Domain |> should equal "domain"
+        config.UserName |> should equal "admin"
+        config.Password |> should not' (equal "password")
+        config.Environment.Contains(KeyValuePair("Fli", "test")) |> should be True
+        config.Environment.Contains(KeyValuePair("Fli.Test", "test")) |> should be True
+    else
+        let config =
+            cli {
+                Exec "bash"
+                Arguments "--help"
+                WorkingDirectory "./Users"
+                Username "admin"
+                EnvironmentVariable("Fli", "test")
+                EnvironmentVariables [ ("Fli.Test", "test") ]
+            }
+            |> Command.configureProcess
+
+        config.FileName |> should equal "bash"
+        config.Arguments |> should equal "--help"
+        config.WorkingDirectory |> should equal "./Users"
+        config.Verb |> should equal String.Empty
+        config.UserName |> should equal "admin"
+        config.Environment.Contains(KeyValuePair("Fli", "test")) |> should be True
+        config.Environment.Contains(KeyValuePair("Fli.Test", "test")) |> should be True

@@ -1,4 +1,4 @@
-module Fli.CliCommandExecuteTests
+module Fli.ShellContext.ShellCommandExecuteTests
 
 open NUnit.Framework
 open FsUnit

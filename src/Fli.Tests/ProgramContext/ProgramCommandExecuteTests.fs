@@ -1,4 +1,4 @@
-﻿module Fli.ProgramCommandExecuteTests
+﻿module Fli.ProgramContext.ProgramCommandExecuteTests
 
 open NUnit.Framework
 open FsUnit
@@ -43,6 +43,6 @@ let ``Hello World with executing program throws exception with unknown Verb`` ()
             |> ignore
         with :? ArgumentException as ex ->
             ex.Message
-            |> should equal ("Unknown verb 'print'. Possible verbs on 'cmd.exe': open, runas, runasuser.")
+            |> should equal ("Unknown verb 'print'. Possible verbs on 'cmd.exe': open, runas, runasuser")
     else
         Assert.Pass()

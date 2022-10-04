@@ -10,9 +10,16 @@ module Helpers =
     let toSecureString (unsureString: string) =
         if isNull unsureString then
             raise <| System.ArgumentNullException("s")
-        let gcHandle = GCHandle.Alloc(unsureString,  GCHandleType.Pinned)
+
+        let gcHandle = GCHandle.Alloc(unsureString, GCHandleType.Pinned)
+
         try
-            let secureString = new SecureString(NativeInterop.NativePtr.ofNativeInt (gcHandle.AddrOfPinnedObject()), unsureString.Length)
+            let secureString =
+                new SecureString(
+                    NativeInterop.NativePtr.ofNativeInt (gcHandle.AddrOfPinnedObject()),
+                    unsureString.Length
+                )
+
             secureString.MakeReadOnly()
             secureString
         finally

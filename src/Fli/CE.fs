@@ -74,9 +74,8 @@ module CE =
             Program.userName userName context.Context
 
         [<CustomOperation("Credentials")>]
-        member this.Credentials(context: ICommandContext<ProgramContext>, credentials) = 
-            let (domain, user, pw) = credentials
-            Program.credentials (Credentials (domain, user, pw)) context.Context
+        member this.Credentials(context: ICommandContext<ProgramContext>, credentials) =
+            let (domain, user, pw) = credentials in Program.credentials (Credentials(domain, user, pw)) context.Context
 
         [<CustomOperation("EnvironmentVariable")>]
         member this.EnvironmentVariable(context: ICommandContext<ProgramContext>, environmentVariable) =
