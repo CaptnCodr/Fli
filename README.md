@@ -50,7 +50,7 @@ Add environment variables for the executing program e.g.:
 ```fsharp
 cli {
     Exec "git"
-    EnvironmentVariables [("GIT_AUTHOR_NAME", "Jon Doe");("GIT_AUTHOR_EMAIL", "jon.doe@domain.com")]
+    EnvironmentVariables [("GIT_AUTHOR_NAME", "Jon Doe"); ("GIT_AUTHOR_EMAIL", "jon.doe@domain.com")]
 }
 |> Command.execute
 ```

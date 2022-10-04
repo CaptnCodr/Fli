@@ -1,9 +1,8 @@
-module Fli.CliCommandConfigTests
+module Fli.ShellContext.ShellConfigTests
 
 open NUnit.Framework
 open FsUnit
 open Fli
-open System.Net
 
 
 [<Test>]
@@ -14,10 +13,10 @@ let ``Check Shell config with CMD`` () =
 let ``Check Command config`` () =
     cli {
         Shell PS
-        Command "-Command test"
+        Command "echo test"
     }
     |> fun c -> c.config.Command
-    |> should equal "-Command test"
+    |> should equal "echo test"
 
 [<Test>]
 let ``Check WorkingDirectory config`` () =

@@ -14,7 +14,12 @@ module Cli =
         { context with config = { context.config with WorkingDirectory = Some workingDirectory } }
 
     let environmentVariables (variables: (string * string) list) (context: ShellContext) =
-        { context with config = { context.config with EnvironmentVariables = Some variables } }
+        let vars =
+            match context.config.EnvironmentVariables with
+            | Some (vs) -> vs @ variables
+            | None -> variables
+
+        { context with config = { context.config with EnvironmentVariables = Some vars } }
 
 module Program =
 
@@ -37,4 +42,9 @@ module Program =
         { context with config = { context.config with Credentials = Some credentials } }
 
     let environmentVariables (variables: (string * string) list) (context: ProgramContext) =
-        { context with config = { context.config with EnvironmentVariables = Some variables } }
+        let vars =
+            match context.config.EnvironmentVariables with
+            | Some (vs) -> vs @ variables
+            | None -> variables
+
+        { context with config = { context.config with EnvironmentVariables = Some vars } }

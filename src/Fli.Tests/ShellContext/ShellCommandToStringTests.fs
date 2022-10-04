@@ -1,4 +1,4 @@
-﻿module Fli.CliCommandToStringTests
+﻿module Fli.ShellContext.ShellCommandToStringTests
 
 open NUnit.Framework
 open FsUnit
