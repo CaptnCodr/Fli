@@ -70,7 +70,7 @@ module Command =
 
 
     type Command =
-        static member internal configureProcess(context: ShellContext) =
+        static member internal buildProcess(context: ShellContext) =
             let (proc, flag) = context.config.Shell |> shellToProcess
 
             (createProcess proc $"{flag} {context.config.Command}")
@@ -78,13 +78,13 @@ module Command =
             |> addEnvironmentVariables context.config.EnvironmentVariables
 
         static member execute(context: ShellContext) =
-            context |> (Command.configureProcess >> startProcess)
+            context |> (Command.buildProcess >> startProcess)
 
         static member toString(context: ShellContext) =
             let (proc, flag) = context.config.Shell |> shellToProcess
             $"{proc} {flag} {context.config.Command}"
 
-        static member internal configureProcess(context: ProgramContext) =
+        static member internal buildProcess(context: ExecContext) =
             match context.config.Verb with
             | Some (verb) -> checkVerb verb context.config.Program
             | None -> ()
@@ -96,8 +96,8 @@ module Command =
             |> addEnvironmentVariables context.config.EnvironmentVariables
             |> addCredentials context.config.Credentials
 
-        static member execute(context: ProgramContext) =
-            context |> (Command.configureProcess >> startProcess)
+        static member execute(context: ExecContext) =
+            context |> (Command.buildProcess >> startProcess)
 
-        static member toString(context: ProgramContext) =
+        static member toString(context: ExecContext) =
             $"""{context.config.Program} {context.config.Arguments |> Option.defaultValue ""}"""

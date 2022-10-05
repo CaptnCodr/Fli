@@ -26,7 +26,6 @@ summary
 files
     /bin/Release/net6.0/Fli.* ==> lib/net6.0
     /bin/Release/netstandard2.0/Fli.* ==> lib/netstandard2.0
-    /bin/Release/netstandard2.1/Fli.* ==> lib/netstandard2.1
     ../install.ps1 ==> tools
 dependencies
     FSharp.Core >= LOCKEDVERSION

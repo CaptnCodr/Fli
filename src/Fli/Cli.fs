@@ -23,25 +23,25 @@ module Cli =
 
 module Program =
 
-    let program (program: string) (config: Config) : ProgramContext =
-        { config = { config.ProgramConfig with Program = program } }
+    let program (program: string) (config: Config) : ExecContext =
+        { config = { config.ExecConfig with Program = program } }
 
-    let arguments (arguments: string) (context: ProgramContext) =
+    let arguments (arguments: string) (context: ExecContext) =
         { context with config = { context.config with Arguments = Some arguments } }
 
-    let workingDirectory (workingDirectory: string) (context: ProgramContext) =
+    let workingDirectory (workingDirectory: string) (context: ExecContext) =
         { context with config = { context.config with WorkingDirectory = Some workingDirectory } }
 
-    let verb (verb: string) (context: ProgramContext) =
+    let verb (verb: string) (context: ExecContext) =
         { context with config = { context.config with Verb = Some verb } }
 
-    let userName (userName: string) (context: ProgramContext) =
+    let userName (userName: string) (context: ExecContext) =
         { context with config = { context.config with UserName = Some userName } }
 
-    let credentials (credentials: Credentials) (context: ProgramContext) =
+    let credentials (credentials: Credentials) (context: ExecContext) =
         { context with config = { context.config with Credentials = Some credentials } }
 
-    let environmentVariables (variables: (string * string) list) (context: ProgramContext) =
+    let environmentVariables (variables: (string * string) list) (context: ExecContext) =
         let vars =
             match context.config.EnvironmentVariables with
             | Some (vs) -> vs @ variables

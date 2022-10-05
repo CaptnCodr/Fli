@@ -28,9 +28,6 @@
     <None Include="paket.template" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="FSharp.Core" Version="6.0.6" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="..\..\README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />

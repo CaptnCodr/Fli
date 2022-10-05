@@ -9,7 +9,7 @@ open System.Collections.Generic
 [<Test>]
 let ``Check FileName in ProcessStartInfo with CMD Shell`` () =
     cli { Shell CMD }
-    |> Command.configureProcess
+    |> Command.buildProcess
     |> (fun p -> p.FileName)
     |> should equal "cmd.exe"
 
@@ -19,7 +19,7 @@ let ``Check Argument in ProcessStartInfo with Command`` () =
         Shell PS
         Command "echo Hello World!"
     }
-    |> Command.configureProcess
+    |> Command.buildProcess
     |> (fun p -> p.Arguments)
     |> should equal "-Command echo Hello World!"
 
@@ -29,7 +29,7 @@ let ``Check WorkingDirectory in ProcessStartInfo with WorkingDirectory`` () =
         Shell CMD
         WorkingDirectory @"C:\Users"
     }
-    |> Command.configureProcess
+    |> Command.buildProcess
     |> (fun p -> p.WorkingDirectory)
     |> should equal @"C:\Users"
 
@@ -39,7 +39,7 @@ let ``Check Environment in ProcessStartInfo with single environment variable`` (
         Shell CMD
         EnvironmentVariable("Fli", "test")
     }
-    |> Command.configureProcess
+    |> Command.buildProcess
     |> (fun p -> p.Environment.Contains(KeyValuePair("Fli", "test")))
     |> should be True
 
@@ -50,7 +50,7 @@ let ``Check Environment in ProcessStartInfo with multiple environment variables`
             Shell CMD
             EnvironmentVariables [ ("Fli", "test"); ("Fli.Test", "test") ]
         }
-        |> Command.configureProcess
+        |> Command.buildProcess
 
     config.Environment.Contains(KeyValuePair("Fli", "test")) |> should be True
     config.Environment.Contains(KeyValuePair("Fli.Test", "test")) |> should be True
@@ -65,7 +65,7 @@ let ``Check all possible values in ProcessStartInfo`` () =
             EnvironmentVariable("Fli", "test")
             EnvironmentVariables [ ("Fli.Test", "test") ]
         }
-        |> Command.configureProcess
+        |> Command.buildProcess
 
     config.FileName |> should equal "bash"
     config.Arguments |> should equal "-c echo Hello World!"

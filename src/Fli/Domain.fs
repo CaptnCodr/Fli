@@ -18,7 +18,7 @@ module Domain =
         | PWSH
         | BASH
 
-    type ProgramConfig =
+    type ExecConfig =
         { Program: string
           Arguments: string option
           WorkingDirectory: string option
@@ -31,7 +31,7 @@ module Domain =
 
     type Config =
         { ShellConfig: ShellConfig
-          ProgramConfig: ProgramConfig }
+          ExecConfig: ExecConfig }
 
     type ShellContext =
         { config: ShellConfig }
@@ -39,10 +39,10 @@ module Domain =
         interface ICommandContext<ShellContext> with
             member this.Context = this
 
-    type ProgramContext =
-        { config: ProgramConfig }
+    type ExecContext =
+        { config: ExecConfig }
 
-        interface ICommandContext<ProgramContext> with
+        interface ICommandContext<ExecContext> with
             member this.Context = this
 
     let Defaults =
@@ -51,7 +51,7 @@ module Domain =
               Command = ""
               WorkingDirectory = None
               EnvironmentVariables = None }
-          ProgramConfig =
+          ExecConfig =
             { Program = ""
               Arguments = None
               WorkingDirectory = None
