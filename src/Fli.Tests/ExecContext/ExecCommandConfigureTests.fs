@@ -1,10 +1,11 @@
-﻿module Fli.ProgramContext.ProgramCommandConfigureTests
+﻿module Fli.ExecContext.ExecCommandConfigureTests
 
 open NUnit.Framework
 open FsUnit
 open Fli
 open System
 open System.Collections.Generic
+open System.Text
 
 [<Test>]
 let ``Check FileName in ProcessStartInfo Exec program`` () =
@@ -94,6 +95,18 @@ let ``Check Environment in ProcessStartInfo with multiple environment variables`
     config.Environment.Contains(KeyValuePair("Fli.Test", "test")) |> should be True
 
 [<Test>]
+let ``Check StandardOutputEncoding & StandardErrorEncoding with setting Encoding`` () =
+    let config = 
+        cli {
+            Exec "cmd.exe"
+            Encoding Encoding.UTF8
+        }
+        |> Command.buildProcess
+
+    config.StandardOutputEncoding |> should equal Encoding.UTF8
+    config.StandardErrorEncoding |> should equal Encoding.UTF8
+
+[<Test>]
 let ``Check all possible values in ProcessStartInfo for windows`` () =
     if OperatingSystem.IsWindows() then
         let config =
@@ -106,6 +119,7 @@ let ``Check all possible values in ProcessStartInfo for windows`` () =
                 Credentials("domain", "admin", "password")
                 EnvironmentVariable("Fli", "test")
                 EnvironmentVariables [ ("Fli.Test", "test") ]
+                Encoding Encoding.UTF8
             }
             |> Command.buildProcess
 
@@ -118,6 +132,8 @@ let ``Check all possible values in ProcessStartInfo for windows`` () =
         config.Password |> should not' (equal "password")
         config.Environment.Contains(KeyValuePair("Fli", "test")) |> should be True
         config.Environment.Contains(KeyValuePair("Fli.Test", "test")) |> should be True
+        config.StandardOutputEncoding |> should equal Encoding.UTF8
+        config.StandardErrorEncoding |> should equal Encoding.UTF8
     else
         let config =
             cli {
@@ -127,6 +143,7 @@ let ``Check all possible values in ProcessStartInfo for windows`` () =
                 Username "admin"
                 EnvironmentVariable("Fli", "test")
                 EnvironmentVariables [ ("Fli.Test", "test") ]
+                Encoding Encoding.UTF8
             }
             |> Command.buildProcess
 
@@ -137,3 +154,5 @@ let ``Check all possible values in ProcessStartInfo for windows`` () =
         config.UserName |> should equal "admin"
         config.Environment.Contains(KeyValuePair("Fli", "test")) |> should be True
         config.Environment.Contains(KeyValuePair("Fli.Test", "test")) |> should be True
+        config.StandardOutputEncoding |> should equal Encoding.UTF8
+        config.StandardErrorEncoding |> should equal Encoding.UTF8

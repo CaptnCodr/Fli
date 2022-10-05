@@ -51,6 +51,10 @@ module CE =
         member this.EnvironmentVariables(context: ICommandContext<ShellContext>, environmentVariables) =
             Cli.environmentVariables environmentVariables context.Context
 
+        [<CustomOperation("Encoding")>]
+        member this.Encoding(context: ICommandContext<ShellContext>, encoding) =
+            Cli.encoding encoding context.Context
+
     /// Extensions for Exec context.
     type ICommandContext<'a> with
 
@@ -84,3 +88,7 @@ module CE =
         [<CustomOperation("EnvironmentVariables")>]
         member this.EnvironmentVariables(context: ICommandContext<ExecContext>, environmentVariables) =
             Program.environmentVariables environmentVariables context.Context
+
+        [<CustomOperation("Encoding")>]
+        member this.Encoding(context: ICommandContext<ExecContext>, encoding) =
+            Program.encoding encoding context.Context

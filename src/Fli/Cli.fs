@@ -21,6 +21,9 @@ module Cli =
 
         { context with config = { context.config with EnvironmentVariables = Some vars } }
 
+    let encoding (encoding: System.Text.Encoding) (context: ShellContext) =
+        { context with config = { context.config with Encoding = Some encoding } }
+
 module Program =
 
     let program (program: string) (config: Config) : ExecContext =
@@ -48,3 +51,6 @@ module Program =
             | None -> variables
 
         { context with config = { context.config with EnvironmentVariables = Some vars } }
+
+    let encoding (encoding: System.Text.Encoding) (context: ExecContext) =
+        { context with config = { context.config with Encoding = Some encoding } }
