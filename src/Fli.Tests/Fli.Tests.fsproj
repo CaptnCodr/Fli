@@ -6,10 +6,10 @@
     <GenerateProgramFile>false</GenerateProgramFile>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="ProgramContext\ProgramCommandConfigureTests.fs" />
-    <Compile Include="ProgramContext\ProgramCommandExecuteTests.fs" />
-    <Compile Include="ProgramContext\ProgramCommandToStringTests.fs" />
-    <Compile Include="ProgramContext\ProgramConfigTests.fs" />
+    <Compile Include="ExecContext\ExecCommandConfigureTests.fs" />
+    <Compile Include="ExecContext\ExecCommandExecuteTests.fs" />
+    <Compile Include="ExecContext\ExecCommandToStringTests.fs" />
+    <Compile Include="ExecContext\ExecConfigTests.fs" />
     <Compile Include="ShellContext\ShellCommandConfigureTests.fs" />
     <Compile Include="ShellContext\ShellCommandExecuteTests.fs" />
     <Compile Include="ShellContext\ShellCommandToStringTests.fs" />

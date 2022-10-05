@@ -10,7 +10,8 @@ module Domain =
         { Shell: Shells
           Command: string
           WorkingDirectory: string option
-          EnvironmentVariables: (string * string) list option }
+          EnvironmentVariables: (string * string) list option
+          Encoding: System.Text.Encoding option }
 
     and Shells =
         | CMD
@@ -25,7 +26,8 @@ module Domain =
           Verb: string option
           UserName: string option
           Credentials: Credentials option
-          EnvironmentVariables: (string * string) list option }
+          EnvironmentVariables: (string * string) list option
+          Encoding: System.Text.Encoding option }
 
     and Credentials = Credentials of Domain: string * UserName: string * Password: string
 
@@ -50,7 +52,8 @@ module Domain =
             { Shell = CMD
               Command = ""
               WorkingDirectory = None
-              EnvironmentVariables = None }
+              EnvironmentVariables = None 
+              Encoding = None }
           ExecConfig =
             { Program = ""
               Arguments = None
@@ -58,4 +61,5 @@ module Domain =
               Verb = None
               UserName = None
               Credentials = None
-              EnvironmentVariables = None } }
+              EnvironmentVariables = None
+              Encoding = None } }

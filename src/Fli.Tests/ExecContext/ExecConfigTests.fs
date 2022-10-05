@@ -1,4 +1,4 @@
-﻿module Fli.ProgramContext.ProgramCommandConfigTests
+﻿module Fli.ExecContext.ExecCommandConfigTests
 
 open NUnit.Framework
 open FsUnit
@@ -92,3 +92,12 @@ let ``Check Credentials with domain, username and password`` () =
     }
     |> fun c -> c.config.Credentials.Value
     |> should equal (Credentials("domain", "user", "password123"))
+
+[<Test>]
+let ``Check Encoding with setting Encoding`` () =
+    cli {
+        Exec "cmd.exe"
+        Encoding System.Text.Encoding.UTF8
+    }
+    |> fun c -> c.config.Encoding.Value
+    |> should equal System.Text.Encoding.UTF8

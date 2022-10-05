@@ -44,3 +44,12 @@ let ``Check EnvironmentVariables with multiple KeyValues config`` () =
     }
     |> fun c -> c.config.EnvironmentVariables.Value
     |> should equal [ ("user", "admin"); ("path", "path/to/file") ]
+
+[<Test>]
+let ``Check Encoding with setting Encoding`` () =
+    cli {
+        Shell BASH
+        Encoding System.Text.Encoding.UTF8
+    }
+    |> fun c -> c.config.Encoding.Value
+    |> should equal System.Text.Encoding.UTF8

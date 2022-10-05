@@ -23,7 +23,8 @@ module Command =
             WindowStyle = ProcessWindowStyle.Hidden,
             CreateNoWindow = true,
             UseShellExecute = false,
-            RedirectStandardOutput = true
+            RedirectStandardOutput = true,
+            RedirectStandardError = true
         )
 
     let private startProcess (psi: ProcessStartInfo) =
@@ -68,6 +69,14 @@ module Command =
 
         psi
 
+    let private addEncoding (encoding: System.Text.Encoding option) (psi: ProcessStartInfo) =
+        match encoding with 
+        | Some(e) -> 
+            psi.StandardOutputEncoding <- e
+            psi.StandardErrorEncoding <- e
+        | None -> ()
+        psi
+
 
     type Command =
         static member internal buildProcess(context: ShellContext) =
@@ -76,6 +85,7 @@ module Command =
             (createProcess proc $"{flag} {context.config.Command}")
             |> addWorkingDirectory context.config.WorkingDirectory
             |> addEnvironmentVariables context.config.EnvironmentVariables
+            |> addEncoding context.config.Encoding
 
         static member execute(context: ShellContext) =
             context |> (Command.buildProcess >> startProcess)
@@ -95,6 +105,7 @@ module Command =
             |> addUserName context.config.UserName
             |> addEnvironmentVariables context.config.EnvironmentVariables
             |> addCredentials context.config.Credentials
+            |> addEncoding context.config.Encoding
 
         static member execute(context: ExecContext) =
             context |> (Command.buildProcess >> startProcess)
