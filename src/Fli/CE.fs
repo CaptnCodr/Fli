@@ -4,7 +4,6 @@
 module CE =
 
     open Domain
-    open System.Collections
 
     type ICommandContext<'a> with
 
@@ -19,15 +18,6 @@ module CE =
             member this.Context = this
 
     let cli = { config = None }
-
-    let private matchArguments arguments =
-        match box (arguments) with
-        | :? string as s -> s
-        | :? seq<string> as s -> s |> Seq.map (fun sa -> sa |> string) |> String.concat " "
-        | :? list<string> as l -> l |> List.map (fun la -> la |> string) |> String.concat " "
-        | :? array<string> as a -> a |> Array.map (fun aa -> aa |> string) |> String.concat " "
-        | :? IEnumerable as e -> e |> Seq.cast |> Seq.map (fun ea -> ea |> string) |> String.concat " "
-        | _ -> failwith "Cannot convert arguments to a string!"
 
     /// Extensions for Shell context.
     type ICommandContext<'a> with
@@ -52,8 +42,7 @@ module CE =
             Cli.environmentVariables environmentVariables context.Context
 
         [<CustomOperation("Encoding")>]
-        member this.Encoding(context: ICommandContext<ShellContext>, encoding) =
-            Cli.encoding encoding context.Context
+        member this.Encoding(context: ICommandContext<ShellContext>, encoding) = Cli.encoding encoding context.Context
 
     /// Extensions for Exec context.
     type ICommandContext<'a> with
@@ -64,6 +53,12 @@ module CE =
 
         [<CustomOperation("Arguments")>]
         member this.Arguments(context: ICommandContext<ExecContext>, arguments) =
+            let matchArguments arguments =
+                match box (arguments) with
+                | :? string as s -> s
+                | :? seq<string> as s -> s |> Seq.map string |> String.concat " "
+                | _ -> failwith "Cannot convert arguments to a string!"
+
             Program.arguments (matchArguments arguments) context.Context
 
         [<CustomOperation("WorkingDirectory")>]

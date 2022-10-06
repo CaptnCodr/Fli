@@ -96,7 +96,7 @@ let ``Check Environment in ProcessStartInfo with multiple environment variables`
 
 [<Test>]
 let ``Check StandardOutputEncoding & StandardErrorEncoding with setting Encoding`` () =
-    let config = 
+    let config =
         cli {
             Exec "cmd.exe"
             Encoding Encoding.UTF8

@@ -58,13 +58,13 @@ let ``Check Environment in ProcessStartInfo with multiple environment variables`
 
 [<Test>]
 let ``Check StandardOutputEncoding & StandardErrorEncoding with setting Encoding`` () =
-    let config = 
+    let config =
         cli {
             Shell CMD
             Encoding Encoding.UTF8
         }
         |> Command.buildProcess
-        
+
     config.StandardOutputEncoding |> should equal Encoding.UTF8
     config.StandardErrorEncoding |> should equal Encoding.UTF8
 

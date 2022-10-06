@@ -6,6 +6,7 @@ module Command =
     open Domain
     open Helpers
     open System
+    open System.Text
     open System.Diagnostics
     open System.Runtime.InteropServices
 
@@ -38,17 +39,18 @@ module Command =
             |> ArgumentException
             |> raise
 
-    let private addVerb verb (psi: ProcessStartInfo) =
-        psi.Verb <- (verb |> Option.defaultValue null)
+    let private setReturn (func: unit) (psi: ProcessStartInfo) =
+        func
         psi
+
+    let private addVerb verb (psi: ProcessStartInfo) =
+        setReturn (psi.Verb <- (verb |> Option.defaultValue null)) psi
 
     let private addWorkingDirectory workingDirectory (psi: ProcessStartInfo) =
-        psi.WorkingDirectory <- (workingDirectory |> Option.defaultValue "")
-        psi
+        setReturn (psi.WorkingDirectory <- (workingDirectory |> Option.defaultValue "")) psi
 
     let private addUserName username (psi: ProcessStartInfo) =
-        psi.UserName <- (username |> Option.defaultValue "")
-        psi
+        setReturn (psi.UserName <- (username |> Option.defaultValue "")) psi
 
     let private addEnvironmentVariables (variables: (string * string) list option) (psi: ProcessStartInfo) =
         match variables with
@@ -69,12 +71,13 @@ module Command =
 
         psi
 
-    let private addEncoding (encoding: System.Text.Encoding option) (psi: ProcessStartInfo) =
-        match encoding with 
-        | Some(e) -> 
+    let private addEncoding (encoding: Encoding option) (psi: ProcessStartInfo) =
+        match encoding with
+        | Some (e) ->
             psi.StandardOutputEncoding <- e
             psi.StandardErrorEncoding <- e
         | None -> ()
+
         psi
 
 
