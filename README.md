@@ -19,6 +19,16 @@ cli {
 ```
 that starts `CMD.exe` as Shell and `echo Hello World!` is the command to execute.
 
+Run a file with PowerShell from a specific directory:
+```fsharp
+cli {
+    Shell PWSH
+    Command "test.bat"
+    WorkingDirectory (Environment.GetFolderPath Environment.SpecialFolder.UserProfile)
+}
+|> Command.execute
+```
+
 Executing programs with arguments:
 ```fsharp
 cli {
@@ -40,13 +50,14 @@ cli {
 Add a verb to your executing program:
 ```fsharp
 cli {
-    Exec "cmd.exe"
-    Verb "runas"
+    Exec "adobe.exe"
+    Arguments (Path.Combine ((Environment.GetFolderPath Environment.SpecialFolder.UserProfile), "test.pdf"))
+    Verb "open"
 }
 |> Command.execute
 ```
 
-Add environment variables for the executing program e.g.:
+Add environment variables for the executing program:
 ```fsharp
 cli {
     Exec "git"
@@ -55,14 +66,55 @@ cli {
 |> Command.execute
 ```
 
-#### Implementations
+Add credentials to program:
+```fsharp
+cli {
+    Exec "program"
+    Credentials ("domain", "bobk", "password123")
+}
+|> Command.execute
+```
+Hint: Running a process as a different user is supported on all platforms. Other options (Domain, Password) are only available on Windows. As an alternative for not Windows based systems there is:
+```fsharp
+cli {
+    Exec "path/to/program"
+    Username "admin"
+}
+|> Command.execute
+```
 
-Currently provided Shells:
-- `cmd.exe` as `CMD`
-- `powershell.exe` as `PS`
-- `pwsh.exe` as `PWSH`
-- `bash` as `BASH`
-- ...
+### Implementations
+
+#### Builder Methods:
+
+`ShellContext` methods (`cli { Shell ... }`):
+| Method                 |  operation type          |
+|------------------------|--------------------------|
+| `Shell`                | `Fli.Shells`             |
+| `Command`              | `string`                 |
+| `WorkingDirectory`     | `string`                 |
+| `EnvironmentVariable`  | `string * string`        |
+| `EnvironmentVariables` | `(string * string) list` |
+| `Encoding`             | `System.Text.Encoding`   |
+
+`ExecContext` methods (`cli { Exec ... }`):
+| Method                 |  operation type            |
+|------------------------|----------------------------|
+| `Exec`                 | `string`                   |
+| `Arguments`            | `string` / `string seq` / `string list` / `string array` |
+| `Verb`                 | `string`                   |
+| `Username`             | `string`                   |
+| `Credentials`          | `string * string * string` |
+| `WorkingDirectory`     | `string`                   |
+| `EnvironmentVariable`  | `string * string`          |
+| `EnvironmentVariables` | `(string * string) list`   |
+| `Encoding`             | `System.Text.Encoding`     |
+
+Currently provided `Fli.Shells`:
+- `CMD` runs `cmd.exe /C ...`
+- `PS` runs `powershell.exe -Command ...`
+- `PWSH` runs `pwsh.exe -Command ...`
+- `BASH` runs `bash -c ..`
 
 ### Inspiration
 Use CE's for command line interface commands came in mind while using [FsHttp](https://github.com/fsprojects/FsHttp).
