@@ -6,7 +6,7 @@
     <TargetFrameworks>netstandard2.0;net6.0</TargetFrameworks>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Configurations>Debug;Release</Configurations>
-    <Version>0.6.1.0</Version>
+    <Version>0.7.0.0</Version>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -16,6 +16,27 @@
     <Authors>Constantin Tews</Authors>
     <Description>An F# library to run CLI commands and processes in F# (CE) style.</Description>
     <Copyright>Copyright © 2022</Copyright>
+    <PackageReleaseNotes>
+v0.7.0.0 - 2022-10-07
+- Add `Encoding` to contexts. (https://github.com/CaptnCodr/Fli/pull/11)
+- Renaming of contexts.
+- Update docs with more snippets etc.
+- **BREAKING** Add output type with exit code: `type Output = { Text: string; ExitCode: int }` (https://github.com/CaptnCodr/Fli/pull/14)
+
+v0.6.1.0 - 2022-10-04
+- Fix: Wrong (old) content in Release 0.6.0 Nuget package.
+
+v0.6.0.0 - 2022-10-04
+- Add `WorkingDirectory` to both ShellContext &amp; ProgramContext. (https://github.com/CaptnCodr/Fli/pull/4)
+- Add `Verb` to ProgramContext. (https://github.com/CaptnCodr/Fli/pull/6)
+- Add `Username` to ProgramContext. (https://github.com/CaptnCodr/Fli/pull/5)
+  + `Credentials` added later (for windows only)
+- Add `EnvironmentVariables` to contexts. (https://github.com/CaptnCodr/Fli/pull/8)
+- Add internal method `configureProcess` for better testing. (https://github.com/CaptnCodr/Fli/pull/9)
+
+v0.0.2.0 - "Hello World!"-Release 2022-09-29
+- Initial release
+    </PackageReleaseNotes>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
