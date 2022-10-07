@@ -14,6 +14,7 @@ let ``Hello World with executing program`` () =
             Arguments "/C echo Hello World!"
         }
         |> Command.execute
+        |> Output.toText
         |> should equal "Hello World!\r\n"
     else
         Assert.Pass()
@@ -27,6 +28,7 @@ let ``Hello World with executing program with Verb`` () =
             Arguments "/C echo Hello World!"
         }
         |> Command.execute
+        |> Output.toText
         |> should equal "Hello World!\r\n"
     else
         Assert.Pass()

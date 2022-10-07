@@ -29,7 +29,12 @@ module Command =
         )
 
     let private startProcess (psi: ProcessStartInfo) =
-        Process.Start(psi).StandardOutput.ReadToEnd()
+        let proc, text = Process.Start(psi) |> fun p -> (p, p.StandardOutput.ReadToEnd())
+        proc.WaitForExit()
+
+        { Text = text
+          ExitCode = proc.ExitCode }
+
 
     let private checkVerb (verb: string) (executable: string) =
         let verbs = ProcessStartInfo(executable).Verbs
