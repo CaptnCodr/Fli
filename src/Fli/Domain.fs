@@ -63,3 +63,11 @@ module Domain =
               Credentials = None
               EnvironmentVariables = None
               Encoding = None } }
+
+    type Output =
+        { Text: string
+          ExitCode: int }
+
+        static member toText(output: Output) = output.Text
+
+        static member toExitCode(output: Output) = output.ExitCode

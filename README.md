@@ -83,12 +83,52 @@ cli {
 |> Command.execute
 ```
 
+#### `Command.execute`
+`Command.execute` returns record: `type Output = { Text: string; ExitCode: int }`
+which has getter methods to get only one value:
+```fsharp
+toText: Output -> string
+toExitCode: Output -> int
+```
+example:
+```fsharp
+cli {
+    Shell CMD
+    Command "echo Hello World!"
+}
+|> Command.execute // { Text = "Hello World!"; ExitCode = 0 }
+|> Output.toText // "Hello World!"
+
+// same with Output.toExitCode:
+cli { ... }
+|> Command.execute // { Text = "Hello World!"; ExitCode = 0 }
+|> Output.toExitCode // 0
+```
+
+#### `Command.toString`
+`Command.toString` concatenates only the the executing shell/program + the given commands/arguments:
+```fsharp
+cli {
+    Shell PS
+    Command "Write-Host Hello World!"
+}
+|> Command.toString // "powershell.exe -Command Write-Host Hello World!"
+```
+and:
+```fsharp
+cli {
+    Exec "cmd.exe"
+    Arguments [ "/C"; "echo"; "Hello World!" ]
+}
+|> Command.toString // "cmd.exe /C echo Hello World!"
+```
+
 ### Implementations
 
-#### Builder Methods:
+#### Builder operations:
 
-`ShellContext` methods (`cli { Shell ... }`):
-| Method                 |  operation type          |
+`ShellContext` operations (`cli { Shell ... }`):
+| Operation              |  Type                    |
 |------------------------|--------------------------|
 | `Shell`                | `Fli.Shells`             |
 | `Command`              | `string`                 |
@@ -97,8 +137,8 @@ cli {
 | `EnvironmentVariables` | `(string * string) list` |
 | `Encoding`             | `System.Text.Encoding`   |
 
-`ExecContext` methods (`cli { Exec ... }`):
-| Method                 |  operation type            |
+`ExecContext` operations (`cli { Exec ... }`):
+| Operation              |  Type                      |
 |------------------------|----------------------------|
 | `Exec`                 | `string`                   |
 | `Arguments`            | `string` / `string seq` / `string list` / `string array` |
