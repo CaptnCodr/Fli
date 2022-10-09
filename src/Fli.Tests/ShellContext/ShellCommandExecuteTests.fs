@@ -71,6 +71,23 @@ let ``Hello World with BASH`` () =
     else
         Assert.Pass()
 
+[<Test>]
+let ``Hello World with BASH async`` () =
+    if OperatingSystem.IsWindows() |> not then
+        async {
+            let! output =
+                cli {
+                    Shell BASH
+                    Command "\"echo Hello World!\""
+                }
+                |> Command.executeAsync
+        
+            output
+            |> Output.toText
+            |> should equal "Hello World!\n"
+        } |> Async.Start
+    else
+        Assert.Pass()
 
 [<Test>]
 let ``BASH returning non zero ExitCode`` () =
