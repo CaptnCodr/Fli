@@ -19,6 +19,25 @@ let ``Hello World with executing program`` () =
     else
         Assert.Pass()
 
+
+[<Test>]
+let ``Hello World with executing program async`` () =
+    if OperatingSystem.IsWindows() then
+        async {
+            let! output = 
+                cli {
+                    Exec "cmd.exe"
+                    Arguments "/C echo Hello World!"
+                }
+                |> Command.executeAsync
+
+            output 
+            |> Output.toText
+            |> should equal "Hello World!\r\n"
+        } |> Async.Start
+    else
+        Assert.Pass()
+
 [<Test>]
 let ``Hello World with executing program with Verb`` () =
     if OperatingSystem.IsWindows() then

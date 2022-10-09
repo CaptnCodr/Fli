@@ -28,8 +28,22 @@ module Command =
             RedirectStandardError = true
         )
 
+#if NET
+    let private startProcessAsync (psi: ProcessStartInfo) =
+        async {
+            let proc = psi |> Process.Start
+            let! text = proc.StandardOutput.ReadToEndAsync() |> Async.AwaitTask
+    
+            proc.WaitForExitAsync() |> ignore
+    
+            return { Text = text; ExitCode = proc.ExitCode }
+        } 
+        |> Async.StartAsTask 
+        |> Async.AwaitTask
+#endif
+
     let private startProcess (psi: ProcessStartInfo) =
-        let proc, text = Process.Start(psi) |> fun p -> (p, p.StandardOutput.ReadToEnd())
+        let proc, text = psi |> Process.Start |> fun p -> (p, p.StandardOutput.ReadToEnd())
         proc.WaitForExit()
 
         { Text = text
@@ -95,13 +109,6 @@ module Command =
             |> addEnvironmentVariables context.config.EnvironmentVariables
             |> addEncoding context.config.Encoding
 
-        static member execute(context: ShellContext) =
-            context |> (Command.buildProcess >> startProcess)
-
-        static member toString(context: ShellContext) =
-            let (proc, flag) = context.config.Shell |> shellToProcess
-            $"{proc} {flag} {context.config.Command}"
-
         static member internal buildProcess(context: ExecContext) =
             match context.config.Verb with
             | Some (verb) -> checkVerb verb context.config.Program
@@ -115,8 +122,23 @@ module Command =
             |> addCredentials context.config.Credentials
             |> addEncoding context.config.Encoding
 
-        static member execute(context: ExecContext) =
-            context |> (Command.buildProcess >> startProcess)
+        static member toString(context: ShellContext) =
+            let (proc, flag) = context.config.Shell |> shellToProcess
+            $"{proc} {flag} {context.config.Command}"
 
         static member toString(context: ExecContext) =
             $"""{context.config.Program} {context.config.Arguments |> Option.defaultValue ""}"""
+
+        static member execute(context: ShellContext) =
+            context |> (Command.buildProcess >> startProcess)
+
+        static member execute(context: ExecContext) =
+            context |> (Command.buildProcess >> startProcess)
+
+#if NET
+        static member executeAsync(context: ShellContext) =
+            context |> (Command.buildProcess >> startProcessAsync)
+            
+        static member executeAsync(context: ExecContext) =
+            context |> (Command.buildProcess >> startProcessAsync)
+#endif
