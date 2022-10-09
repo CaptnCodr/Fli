@@ -65,9 +65,12 @@ module Domain =
               Encoding = None } }
 
     type Output =
-        { Text: string
-          ExitCode: int }
+        { Text: string option
+          ExitCode: int
+          Error: string option }
 
-        static member toText(output: Output) = output.Text
+        static member toText(output: Output) = output.Text |> Option.defaultValue ""
 
         static member toExitCode(output: Output) = output.ExitCode
+
+        static member toError(output: Output) = output.Error |> Option.defaultValue ""
