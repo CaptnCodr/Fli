@@ -66,8 +66,11 @@ module Domain =
 
     type Output =
         { Text: string
-          ExitCode: int }
+          ExitCode: int
+          Error: string option }
 
         static member toText(output: Output) = output.Text
 
         static member toExitCode(output: Output) = output.ExitCode
+
+        static member toError(output: Output) = output.Error

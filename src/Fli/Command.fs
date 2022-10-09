@@ -17,6 +17,12 @@ module Command =
         | PWSH -> "pwsh.exe", "-Command"
         | BASH -> "bash", "-c"
 
+    let private toOption =
+        function
+        | null
+        | "" -> None
+        | _ as s -> Some s
+
     let private createProcess executable argumentString =
         ProcessStartInfo(
             FileName = executable,
@@ -32,22 +38,30 @@ module Command =
     let private startProcessAsync (psi: ProcessStartInfo) =
         async {
             let proc = psi |> Process.Start
+
             let! text = proc.StandardOutput.ReadToEndAsync() |> Async.AwaitTask
-    
+            let! error = proc.StandardError.ReadToEndAsync() |> Async.AwaitTask
             proc.WaitForExitAsync() |> ignore
-    
-            return { Text = text; ExitCode = proc.ExitCode }
-        } 
-        |> Async.StartAsTask 
+
+            return
+                { Text = text
+                  ExitCode = proc.ExitCode
+                  Error = error |> toOption }
+        }
+        |> Async.StartAsTask
         |> Async.AwaitTask
 #endif
 
     let private startProcess (psi: ProcessStartInfo) =
-        let proc, text = psi |> Process.Start |> fun p -> (p, p.StandardOutput.ReadToEnd())
+        let proc = psi |> Process.Start
+
+        let text = proc.StandardOutput.ReadToEnd()
+        let error = proc.StandardError.ReadToEnd()
         proc.WaitForExit()
 
         { Text = text
-          ExitCode = proc.ExitCode }
+          ExitCode = proc.ExitCode
+          Error = error |> toOption }
 
 
     let private checkVerb (verb: string) (executable: string) =
@@ -138,7 +152,7 @@ module Command =
 #if NET
         static member executeAsync(context: ShellContext) =
             context |> (Command.buildProcess >> startProcessAsync)
-            
+
         static member executeAsync(context: ExecContext) =
             context |> (Command.buildProcess >> startProcessAsync)
 #endif

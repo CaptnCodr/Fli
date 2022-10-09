@@ -33,6 +33,19 @@ let ``CMD returning non zero ExitCode`` () =
         Assert.Pass()
 
 [<Test>]
+let ``CMD returning error message`` () =
+    if OperatingSystem.IsWindows() then
+        cli {
+            Shell CMD
+            Command "echl Test"
+        }
+        |> Command.execute
+        |> Output.toError
+        |> should not' (equal None)
+    else
+        Assert.Pass()
+
+[<Test>]
 let ``Hello World with PS`` () =
     if OperatingSystem.IsWindows() then
         cli {
@@ -72,6 +85,19 @@ let ``Hello World with BASH`` () =
         Assert.Pass()
 
 [<Test>]
+let ``BASH returning None on ErrorMessage when there's no error`` () =
+    if OperatingSystem.IsWindows() |> not then
+        cli {
+            Shell BASH
+            Command "\"echo Test\""
+        }
+        |> Command.execute
+        |> Output.toError
+        |> should equal None
+    else
+        Assert.Pass()
+
+[<Test>]
 let ``Hello World with BASH async`` () =
     if OperatingSystem.IsWindows() |> not then
         async {
@@ -81,11 +107,10 @@ let ``Hello World with BASH async`` () =
                     Command "\"echo Hello World!\""
                 }
                 |> Command.executeAsync
-        
-            output
-            |> Output.toText
-            |> should equal "Hello World!\n"
-        } |> Async.Start
+
+            output |> Output.toText |> should equal "Hello World!\n"
+        }
+        |> Async.Start
     else
         Assert.Pass()
 
