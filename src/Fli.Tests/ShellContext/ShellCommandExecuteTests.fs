@@ -9,13 +9,15 @@ open System
 [<Test>]
 let ``Hello World with CMD`` () =
     if OperatingSystem.IsWindows() then
-        cli {
-            Shell CMD
-            Command "echo Hello World!"
-        }
-        |> Command.execute
-        |> Output.toText
-        |> should equal "Hello World!\r\n"
+        let operation =
+            cli {
+                Shell CMD
+                Command "echo Hello World!"
+            }
+            |> Command.execute
+
+        operation |> Output.toText |> should equal "Hello World!\r\n"
+        operation |> Output.toError |> should equal ""
     else
         Assert.Pass()
 
@@ -42,6 +44,21 @@ let ``CMD returning error message`` () =
         |> Command.execute
         |> Output.toError
         |> should not' (equal None)
+    else
+        Assert.Pass()
+
+[<Test>]
+let ``CMD returning error message without text`` () =
+    if OperatingSystem.IsWindows() then
+        let operation =
+            cli {
+                Shell CMD
+                Command "echl Test"
+            }
+            |> Command.execute
+
+        operation |> Output.toError |> should not' (equal None)
+        operation |> Output.toText |> should equal ""
     else
         Assert.Pass()
 
@@ -93,7 +110,7 @@ let ``BASH returning None on ErrorMessage when there's no error`` () =
         }
         |> Command.execute
         |> Output.toError
-        |> should equal None
+        |> should equal ""
     else
         Assert.Pass()
 

@@ -44,7 +44,7 @@ module Command =
             proc.WaitForExitAsync() |> ignore
 
             return
-                { Text = text
+                { Text = text |> toOption
                   ExitCode = proc.ExitCode
                   Error = error |> toOption }
         }
@@ -59,7 +59,7 @@ module Command =
         let error = proc.StandardError.ReadToEnd()
         proc.WaitForExit()
 
-        { Text = text
+        { Text = text |> toOption
           ExitCode = proc.ExitCode
           Error = error |> toOption }
 
