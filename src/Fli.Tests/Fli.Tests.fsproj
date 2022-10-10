@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <OutputType>Library</OutputType>
     <TargetFramework>net6.0</TargetFramework>
     <IsPackable>false</IsPackable>
-    <GenerateProgramFile>false</GenerateProgramFile>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ExecContext\ExecCommandConfigureTests.fs" />
@@ -15,13 +15,6 @@
     <Compile Include="ShellContext\ShellCommandToStringTests.fs" />
     <Compile Include="ShellContext\ShellConfigTests.fs" />
     <None Include="paket.references" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
-    <PackageReference Include="NUnit" Version="3.13.3" />
-    <PackageReference Include="NUnit3TestAdapter" Version="4.2.1" />
-    <PackageReference Include="NUnit.Analyzers" Version="3.3.0" />
-    <PackageReference Include="coverlet.collector" Version="3.1.2" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Fli\Fli.fsproj" />
