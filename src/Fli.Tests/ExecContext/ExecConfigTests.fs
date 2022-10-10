@@ -18,7 +18,6 @@ let ``Check arguments config for executing program`` () =
     |> fun c -> c.config.Arguments
     |> should equal (Some "echo Hello World!")
 
-
 [<Test>]
 let ``Check arguments list config for executing program`` () =
     cli {
@@ -27,6 +26,15 @@ let ``Check arguments list config for executing program`` () =
     }
     |> fun c -> c.config.Arguments
     |> should equal (Some "echo Hello World!")
+
+[<Test>]
+let ``Check Input config for executing program`` () =
+    cli {
+        Exec "cmd.exe"
+        Input "echo 123\r\necho Test"
+    }
+    |> fun c -> c.config.Input
+    |> should equal (Some "echo 123\r\necho Test")
 
 [<Test>]
 let ``Check working directory config for executing program`` () =

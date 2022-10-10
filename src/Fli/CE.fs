@@ -29,6 +29,9 @@ module CE =
         [<CustomOperation("Command")>]
         member this.Command(context: ICommandContext<ShellContext>, command) = Cli.command command context.Context
 
+        [<CustomOperation("Input")>]
+        member this.Input(context: ICommandContext<ShellContext>, input) = Cli.input input context.Context
+
         [<CustomOperation("WorkingDirectory")>]
         member this.WorkingDirectory(context: ICommandContext<ShellContext>, workingDirectory) =
             Cli.workingDirectory workingDirectory context.Context
@@ -60,6 +63,9 @@ module CE =
                 | _ -> failwith "Cannot convert arguments to a string!"
 
             Program.arguments (matchArguments arguments) context.Context
+
+        [<CustomOperation("Input")>]
+        member this.Input(context: ICommandContext<ExecContext>, input) = Program.input input context.Context
 
         [<CustomOperation("WorkingDirectory")>]
         member this.WorkingDirectory(context: ICommandContext<ExecContext>, workingDirectory) =

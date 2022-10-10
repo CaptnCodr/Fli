@@ -8,7 +8,10 @@ module Cli =
         { config = { config.ShellConfig with Shell = shell } }
 
     let command (command: string) (context: ShellContext) =
-        { context with config = { context.config with Command = command } }
+        { context with config = { context.config with Command = Some command } }
+
+    let input (input: string) (context: ShellContext) =
+        { context with config = { context.config with Input = Some input } }
 
     let workingDirectory (workingDirectory: string) (context: ShellContext) =
         { context with config = { context.config with WorkingDirectory = Some workingDirectory } }
@@ -31,6 +34,9 @@ module Program =
 
     let arguments (arguments: string) (context: ExecContext) =
         { context with config = { context.config with Arguments = Some arguments } }
+
+    let input (input: string) (context: ExecContext) =
+        { context with config = { context.config with Input = Some input } }
 
     let workingDirectory (workingDirectory: string) (context: ExecContext) =
         { context with config = { context.config with WorkingDirectory = Some workingDirectory } }

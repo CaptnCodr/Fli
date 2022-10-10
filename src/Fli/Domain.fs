@@ -8,7 +8,8 @@ module Domain =
 
     type ShellConfig =
         { Shell: Shells
-          Command: string
+          Command: string option
+          Input: string option
           WorkingDirectory: string option
           EnvironmentVariables: (string * string) list option
           Encoding: System.Text.Encoding option }
@@ -22,6 +23,7 @@ module Domain =
     type ExecConfig =
         { Program: string
           Arguments: string option
+          Input: string option
           WorkingDirectory: string option
           Verb: string option
           UserName: string option
@@ -50,13 +52,15 @@ module Domain =
     let Defaults =
         { ShellConfig =
             { Shell = CMD
-              Command = ""
+              Command = None
+              Input = None
               WorkingDirectory = None
               EnvironmentVariables = None
               Encoding = None }
           ExecConfig =
             { Program = ""
               Arguments = None
+              Input = None
               WorkingDirectory = None
               Verb = None
               UserName = None

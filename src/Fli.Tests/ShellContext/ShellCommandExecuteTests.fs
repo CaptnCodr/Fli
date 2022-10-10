@@ -35,6 +35,20 @@ let ``CMD returning non zero ExitCode`` () =
         Assert.Pass()
 
 [<Test>]
+let ``Text in Input with CMD`` () =
+    if OperatingSystem.IsWindows() then
+        cli {
+            Shell CMD
+            Input "echo 123\r\necho 345"
+            WorkingDirectory @"C:\"
+        }
+        |> Command.execute
+        |> Output.toText
+        |> should equal "C:\\>echo 123\r\n123\r\n\r\nC:\\>echo 345\r\n345\r\n\r\nC:\\>"
+    else
+        Assert.Pass()
+
+[<Test>]
 let ``CMD returning error message`` () =
     if OperatingSystem.IsWindows() then
         cli {
@@ -102,15 +116,16 @@ let ``Hello World with BASH`` () =
         Assert.Pass()
 
 [<Test>]
-let ``BASH returning None on ErrorMessage when there's no error`` () =
+let ``Input text in BASH`` () =
     if OperatingSystem.IsWindows() |> not then
         cli {
             Shell BASH
-            Command "\"echo Test\""
+            Command "\"echo Hello World!\""
+            Input "\"echo Test\""
         }
         |> Command.execute
-        |> Output.toError
-        |> should equal ""
+        |> Output.toText
+        |> should equal "Hello World!\n"
     else
         Assert.Pass()
 
