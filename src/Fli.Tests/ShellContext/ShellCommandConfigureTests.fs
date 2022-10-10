@@ -74,6 +74,7 @@ let ``Check all possible values in ProcessStartInfo`` () =
         cli {
             Shell BASH
             Command "echo Hello World! €"
+            Input "echo TestInput"
             WorkingDirectory @"C:\Users"
             EnvironmentVariable("Fli", "test")
             EnvironmentVariables [ ("Fli.Test", "test") ]

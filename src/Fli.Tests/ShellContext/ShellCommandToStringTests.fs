@@ -12,7 +12,17 @@ let ``CMD command toString returns full line`` () =
         Command "echo Hello World!"
     }
     |> Command.toString
-    |> should equal "cmd.exe /C echo Hello World!"
+    |> should equal "cmd.exe /c echo Hello World!"
+
+[<Test>]
+let ``CMD command toString returns full line in interactive mode`` () =
+    cli {
+        Shell CMD
+        Command "echo Hello World!"
+        Input "echo Hello World!"
+    }
+    |> Command.toString
+    |> should equal "cmd.exe /k echo Hello World!"
 
 [<Test>]
 let ``PS command toString returns full line`` () =

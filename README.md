@@ -130,8 +130,6 @@ cli {
 |> Command.toString // "cmd.exe /C echo Hello World!"
 ```
 
-### Implementations
-
 #### Builder operations:
 
 `ShellContext` operations (`cli { Shell ... }`):
@@ -139,29 +137,34 @@ cli {
 |------------------------|--------------------------|
 | `Shell`                | `Fli.Shells`             |
 | `Command`              | `string`                 |
+| `Input`                | `string`                 |
 | `WorkingDirectory`     | `string`                 |
 | `EnvironmentVariable`  | `string * string`        |
 | `EnvironmentVariables` | `(string * string) list` |
 | `Encoding`             | `System.Text.Encoding`   |
 
 `ExecContext` operations (`cli { Exec ... }`):
-| Operation              |  Type                      |
-|------------------------|----------------------------|
-| `Exec`                 | `string`                   |
+| Operation              |  Type                                                    |
+|------------------------|----------------------------------------------------------|
+| `Exec`                 | `string`                                                 |
 | `Arguments`            | `string` / `string seq` / `string list` / `string array` |
-| `Verb`                 | `string`                   |
-| `Username`             | `string`                   |
-| `Credentials`          | `string * string * string` |
-| `WorkingDirectory`     | `string`                   |
-| `EnvironmentVariable`  | `string * string`          |
-| `EnvironmentVariables` | `(string * string) list`   |
-| `Encoding`             | `System.Text.Encoding`     |
+| `Input`                | `string`                                                 |
+| `Verb`                 | `string`                                                 |
+| `Username`             | `string`                                                 |
+| `Credentials`          | `string * string * string`                               |
+| `WorkingDirectory`     | `string`                                                 |
+| `EnvironmentVariable`  | `string * string`                                        |
+| `EnvironmentVariables` | `(string * string) list`                                 |
+| `Encoding`             | `System.Text.Encoding`                                   |
 
 Currently provided `Fli.Shells`:
-- `CMD` runs `cmd.exe /C ...`
+- `CMD` runs `cmd.exe /c ...` or `cmd.exe /k ...` (depends if `Input` is provided or not)
 - `PS` runs `powershell.exe -Command ...`
 - `PWSH` runs `pwsh.exe -Command ...`
-- `BASH` runs `bash -c ..`
+- `BASH` runs `bash -c ...`
+
+### Something's missing?
+Don't hesitate to open an [issue](https://github.com/CaptnCodr/Fli/issues) or start a [discussion](https://github.com/CaptnCodr/Fli/discussions).
 
 ### Inspiration
 Use CE's for command line interface commands came in mind while using [FsHttp](https://github.com/fsprojects/FsHttp).

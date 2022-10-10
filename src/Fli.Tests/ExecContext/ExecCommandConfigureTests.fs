@@ -113,6 +113,7 @@ let ``Check all possible values in ProcessStartInfo for windows`` () =
             cli {
                 Exec "cmd.exe"
                 Arguments "--help"
+                Input "Test"
                 WorkingDirectory @"C:\Users"
                 Verb "open"
                 Username "admin"

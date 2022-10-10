@@ -20,6 +20,21 @@ let ``Hello World with executing program`` () =
         Assert.Pass()
 
 [<Test>]
+let ``print text with Input with executing program`` () =
+    if OperatingSystem.IsWindows() then
+        cli {
+            Exec "cmd.exe"
+            Arguments "/k echo Test"
+            Input "echo Hello World!"
+            WorkingDirectory @"C:\"
+        }
+        |> Command.execute
+        |> Output.toText
+        |> should equal "Test\r\n\r\nC:\\>echo Hello World!\r\nHello World!\r\n\r\nC:\\>"
+    else
+        Assert.Pass()
+
+[<Test>]
 let ``Hello World with executing program async`` () =
     if OperatingSystem.IsWindows() then
         async {

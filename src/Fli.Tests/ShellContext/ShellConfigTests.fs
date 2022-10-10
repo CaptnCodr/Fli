@@ -16,7 +16,16 @@ let ``Check Command config`` () =
         Command "echo test"
     }
     |> fun c -> c.config.Command
-    |> should equal "echo test"
+    |> should equal (Some "echo test")
+
+[<Test>]
+let ``Check Input config for CMD`` () =
+    cli {
+        Shell CMD
+        Input "echo 123\r\necho Test"
+    }
+    |> fun c -> c.config.Input
+    |> should equal (Some "echo 123\r\necho Test")
 
 [<Test>]
 let ``Check WorkingDirectory config`` () =
