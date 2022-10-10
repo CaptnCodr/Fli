@@ -124,8 +124,6 @@ module Command =
         | Some (inputText) ->
             use sw = p.StandardInput
             sw.WriteLine(inputText, encoding)
-            sw.Flush()
-            sw.Close()
         | None -> ()
 
     let private writeInputAsync (input: string option) (p: Process) =
@@ -134,8 +132,6 @@ module Command =
             | Some (inputText) ->
                 use sw = p.StandardInput
                 do! inputText |> sw.WriteLineAsync |> Async.AwaitTask
-                sw.FlushAsync()
-                sw.Close()
             | None -> ()
         }
         |> Async.StartAsTask
