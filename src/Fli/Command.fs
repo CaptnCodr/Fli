@@ -122,16 +122,26 @@ module Command =
     let private writeInput (input: string option) (encoding: Encoding option) (p: Process) =
         match input with
         | Some (inputText) ->
-            use sw = p.StandardInput
-            sw.WriteLine(inputText, encoding)
+            try 
+                use sw = p.StandardInput
+                sw.WriteLine(inputText, encoding)
+                sw.Flush()
+                sw.Close()
+            with 
+            | :? System.IO.IOException as ex when ex.GetType() = typedefof<System.IO.IOException> -> ()
         | None -> ()
 
     let private writeInputAsync (input: string option) (p: Process) =
         async {
             match input with
             | Some (inputText) ->
-                use sw = p.StandardInput
-                do! inputText |> sw.WriteLineAsync |> Async.AwaitTask
+                try
+                    use sw = p.StandardInput
+                    do! inputText |> sw.WriteLineAsync |> Async.AwaitTask
+                    do! sw.FlushAsync() |> Async.AwaitTask
+                    sw.Close()
+                with 
+                | :? System.IO.IOException as ex when ex.GetType() = typedefof<System.IO.IOException> -> ()
             | None -> ()
         }
         |> Async.StartAsTask
