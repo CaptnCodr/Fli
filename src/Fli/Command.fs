@@ -124,6 +124,7 @@ module Command =
         | Some (inputText) ->
             use sw = p.StandardInput
             sw.WriteLine(inputText, encoding)
+            sw.Flush()
             sw.Close()
         | None -> ()
 
@@ -133,6 +134,7 @@ module Command =
             | Some (inputText) ->
                 use sw = p.StandardInput
                 do! inputText |> sw.WriteLineAsync |> Async.AwaitTask
+                sw.FlushAsync()
                 sw.Close()
             | None -> ()
         }
