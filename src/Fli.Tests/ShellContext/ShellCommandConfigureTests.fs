@@ -1,4 +1,4 @@
-﻿module Fli.ShellContext.ShellCommandConfigureTests
+﻿module Fli.Tests.ShellContext.ShellCommandConfigureTests
 
 open Fli
 open NUnit.Framework

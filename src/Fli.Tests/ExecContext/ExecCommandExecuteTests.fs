@@ -1,4 +1,4 @@
-﻿module Fli.ExecContext.ExecCommandExecuteTests
+﻿module Fli.Tests.ExecContext.ExecCommandExecuteTests
 
 open NUnit.Framework
 open FsUnit

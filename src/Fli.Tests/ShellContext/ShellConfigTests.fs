@@ -1,4 +1,4 @@
-module Fli.ShellContext.ShellConfigTests
+module Fli.Tests.ShellContext.ShellConfigTests
 
 open NUnit.Framework
 open FsUnit
