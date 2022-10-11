@@ -1,13 +1,12 @@
 ﻿namespace Fli
 
-open System.Text
-
 [<AutoOpen>]
 module Command =
 
     open Domain
     open Helpers
     open System
+    open System.IO
     open System.Text
     open System.Diagnostics
     open System.Runtime.InteropServices
@@ -122,13 +121,13 @@ module Command =
     let private writeInput (input: string option) (encoding: Encoding option) (p: Process) =
         match input with
         | Some (inputText) ->
-            try 
+            try
                 use sw = p.StandardInput
                 sw.WriteLine(inputText, encoding)
                 sw.Flush()
                 sw.Close()
-            with 
-            | :? System.IO.IOException as ex when ex.GetType() = typedefof<System.IO.IOException> -> ()
+            with :? IOException as ex when ex.GetType() = typedefof<IOException> ->
+                ()
         | None -> ()
 
     let private writeInputAsync (input: string option) (p: Process) =
@@ -140,8 +139,8 @@ module Command =
                     do! inputText |> sw.WriteLineAsync |> Async.AwaitTask
                     do! sw.FlushAsync() |> Async.AwaitTask
                     sw.Close()
-                with 
-                | :? System.IO.IOException as ex when ex.GetType() = typedefof<System.IO.IOException> -> ()
+                with :? IOException as ex when ex.GetType() = typedefof<IOException> ->
+                    ()
             | None -> ()
         }
         |> Async.StartAsTask
@@ -168,29 +167,35 @@ module Command =
             |> addCredentials context.config.Credentials
             |> addEncoding context.config.Encoding
 
+        /// Stringifies shell + opening flag and given command.
         static member toString(context: ShellContext) =
             let (proc, flag) = (context.config.Shell, context.config.Input) ||> shellToProcess
             $"""{proc} {flag} {context.config.Command |> Option.defaultValue ""}"""
 
+        /// Stringifies executable + arguments.
         static member toString(context: ExecContext) =
             $"""{context.config.Program} {context.config.Arguments |> Option.defaultValue ""}"""
 
+        /// Executes the given context as a new process.
         static member execute(context: ShellContext) =
             context
             |> Command.buildProcess
             |> startProcess (writeInput context.config.Input context.config.Encoding)
 
+        /// Executes the given context as a new process.
         static member execute(context: ExecContext) =
             context
             |> Command.buildProcess
             |> startProcess (writeInput context.config.Input context.config.Encoding)
 
 #if NET
+        /// Executes the given context as a new process asynchronously.
         static member executeAsync(context: ShellContext) =
             context
             |> Command.buildProcess
             |> startProcessAsync (writeInputAsync context.config.Input)
 
+        /// Executes the given context as a new process asynchronously.
         static member executeAsync(context: ExecContext) =
             context
             |> Command.buildProcess

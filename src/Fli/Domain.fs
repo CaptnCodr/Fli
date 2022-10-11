@@ -73,8 +73,11 @@ module Domain =
           ExitCode: int
           Error: string option }
 
+        /// Gets `Text` from `Output`.
         static member toText(output: Output) = output.Text |> Option.defaultValue ""
 
+        /// Gets `ExitCode` from `Output`.
         static member toExitCode(output: Output) = output.ExitCode
 
+        /// Gets `Error` from `Output`.
         static member toError(output: Output) = output.Error |> Option.defaultValue ""
