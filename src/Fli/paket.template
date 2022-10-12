@@ -6,7 +6,15 @@ owners
 authors
     Constantin Tews
 version
-    0.7.0.0
+    0.8.0.0
+readme
+    README.md
+releaseNotes
+    - Add `Command.executeAsync` for `NET5` and up! (https://github.com/CaptnCodr/Fli/pull/19)
+    - Add `Error` from `StandardError`. (https://github.com/CaptnCodr/Fli/pull/20)
+    - Add `Input` for `StandardInput`. (https://github.com/CaptnCodr/Fli/pull/21)
+    - Fix some build warnings. (https://github.com/CaptnCodr/Fli/pull/22)
+    (All release notes: https://github.com/CaptnCodr/Fli/blob/main/RELEASE_NOTES.md)
 projectUrl
     https://github.com/CaptnCodr/Fli
 licenseExpression
@@ -29,5 +37,6 @@ files
     /bin/Release/netstandard2.0/Fli.* ==> lib/netstandard2.0
     /bin/Release/netstandard2.1/Fli.* ==> lib/netstandard2.1
     ../install.ps1 ==> tools
+    ../../README.md ==> .
 dependencies
     FSharp.Core >= LOCKEDVERSION
