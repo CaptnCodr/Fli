@@ -69,9 +69,13 @@ module Domain =
               Encoding = None } }
 
     type Output =
-        { Text: string option
+        { Id: int
+          Text: string option
           ExitCode: int
           Error: string option }
+
+        /// Gets `Id` from `Output`.
+        static member toId(output: Output) = output.Id
 
         /// Gets `Text` from `Output`.
         static member toText(output: Output) = output.Text |> Option.defaultValue ""

@@ -20,6 +20,19 @@ let ``Hello World with executing program`` () =
         Assert.Pass()
 
 [<Test>]
+let ``Test with process Id`` () =
+    if OperatingSystem.IsWindows() then
+        cli {
+            Exec "cmd.exe"
+            Arguments "/C echo Test"
+        }
+        |> Command.execute
+        |> Output.toId
+        |> should not' (equal 0)
+    else
+        Assert.Pass()
+
+[<Test>]
 let ``print text with Input with executing program`` () =
     if OperatingSystem.IsWindows() then
         cli {
