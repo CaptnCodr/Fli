@@ -45,6 +45,7 @@ module Command =
 
             let! text = proc.StandardOutput.ReadToEndAsync() |> Async.AwaitTask
             let! error = proc.StandardError.ReadToEndAsync() |> Async.AwaitTask
+            do! proc.WaitForExitAsync() |> Async.AwaitTask
 
             return
                 { Id = proc.Id
@@ -62,6 +63,7 @@ module Command =
 
         let text = proc.StandardOutput.ReadToEnd()
         let error = proc.StandardError.ReadToEnd()
+        proc.WaitForExit()
 
         { Id = proc.Id
           Text = text |> toOption
