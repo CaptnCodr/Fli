@@ -48,7 +48,8 @@ module Command =
             do! proc.WaitForExitAsync() |> Async.AwaitTask
 
             return
-                { Text = text |> toOption
+                { Id = proc.Id
+                  Text = text |> toOption
                   ExitCode = proc.ExitCode
                   Error = error |> toOption }
         }
@@ -64,7 +65,8 @@ module Command =
         let error = proc.StandardError.ReadToEnd()
         proc.WaitForExit()
 
-        { Text = text |> toOption
+        { Id = proc.Id
+          Text = text |> toOption
           ExitCode = proc.ExitCode
           Error = error |> toOption }
 

@@ -35,6 +35,19 @@ let ``CMD returning non zero ExitCode`` () =
         Assert.Pass()
 
 [<Test>]
+let ``CMD returning non zero process id`` () =
+    if OperatingSystem.IsWindows() then
+        cli {
+            Shell CMD
+            Command "echo Test"
+        }
+        |> Command.execute
+        |> Output.toId
+        |> should not' (equal 0)
+    else
+        Assert.Pass()
+
+[<Test>]
 let ``Text in Input with CMD`` () =
     if OperatingSystem.IsWindows() then
         cli {
@@ -156,5 +169,18 @@ let ``BASH returning non zero ExitCode`` () =
         |> Command.execute
         |> Output.toExitCode
         |> should equal 127
+    else
+        Assert.Pass()
+
+[<Test>]
+let ``BASH returning non zero process id`` () =
+    if OperatingSystem.IsWindows() |> not then
+        cli {
+            Shell BASH
+            Command "\"echo Test\""
+        }
+        |> Command.execute
+        |> Output.toId
+        |> should not' (equal 0)
     else
         Assert.Pass()
