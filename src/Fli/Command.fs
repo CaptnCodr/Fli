@@ -5,12 +5,12 @@ module Command =
 
     open Domain
     open Helpers
+    open Extensions
     open System
     open System.IO
     open System.Text
     open System.Diagnostics
     open System.Runtime.InteropServices
-    open System.Threading.Tasks
 
     let private shellToProcess (shell: Shells) (input: string option) =
         match shell with
@@ -38,14 +38,13 @@ module Command =
         )
 
 #if NET
-    let private startProcessAsync (writeInputAsync: Process -> Task<unit>) (psi: ProcessStartInfo) =
+    let private startProcessAsync (writeInputAsync: Process -> Threading.Tasks.Task<unit>) (psi: ProcessStartInfo) =
         async {
             let proc = psi |> Process.Start
             do! proc |> writeInputAsync |> Async.AwaitTask
 
             let! text = proc.StandardOutput.ReadToEndAsync() |> Async.AwaitTask
             let! error = proc.StandardError.ReadToEndAsync() |> Async.AwaitTask
-            do! proc.WaitForExitAsync() |> Async.AwaitTask
 
             return
                 { Id = proc.Id
@@ -63,7 +62,6 @@ module Command =
 
         let text = proc.StandardOutput.ReadToEnd()
         let error = proc.StandardError.ReadToEnd()
-        proc.WaitForExit()
 
         { Id = proc.Id
           Text = text |> toOption
@@ -71,33 +69,20 @@ module Command =
           Error = error |> toOption }
 
 
-    let private checkVerb (verb: string) (executable: string) =
-        let verbs = ProcessStartInfo(executable).Verbs
+    let private checkVerb (verb: string option) (executable: string) =
+        match verb with
+        | Some (v) ->
+            let verbs = ProcessStartInfo(executable).Verbs
 
-        if not (verbs |> Array.contains verb) then
-            $"""Unknown verb '{verb}'. Possible verbs on '{executable}': {verbs |> String.concat ", "}"""
-            |> ArgumentException
-            |> raise
-
-    let private setReturn (func: unit) (psi: ProcessStartInfo) =
-        func
-        psi
-
-    let private addVerb verb (psi: ProcessStartInfo) =
-        setReturn (psi.Verb <- (verb |> Option.defaultValue null)) psi
-
-    let private addWorkingDirectory workingDirectory (psi: ProcessStartInfo) =
-        setReturn (psi.WorkingDirectory <- (workingDirectory |> Option.defaultValue "")) psi
-
-    let private addUserName username (psi: ProcessStartInfo) =
-        setReturn (psi.UserName <- (username |> Option.defaultValue "")) psi
-
-    let private addEnvironmentVariables (variables: (string * string) list option) (psi: ProcessStartInfo) =
-        match variables with
-        | Some (v) -> v |> List.iter (psi.Environment.Add)
+            if not (verbs |> Array.contains v) then
+                $"""Unknown verb '{v}'. Possible verbs on '{executable}': {verbs |> String.concat ", "}"""
+                |> ArgumentException
+                |> raise
         | None -> ()
 
-        psi
+    let private addEnvironmentVariables (variables: (string * string) list option) (psi: ProcessStartInfo) =
+        ((variables |> Option.defaultValue [] |> List.iter (psi.Environment.Add)), psi)
+        |> snd
 
     let private addCredentials (credentials: Credentials option) (psi: ProcessStartInfo) =
         match credentials with
@@ -107,18 +92,9 @@ module Command =
             if RuntimeInformation.IsOSPlatform(OSPlatform.Windows) then
                 psi.Domain <- domain
                 psi.Password <- (password |> toSecureString)
-        | None -> ()
 
-        psi
-
-    let private addEncoding (encoding: Encoding option) (psi: ProcessStartInfo) =
-        match encoding with
-        | Some (e) ->
-            psi.StandardOutputEncoding <- e
-            psi.StandardErrorEncoding <- e
-        | None -> ()
-
-        psi
+            psi
+        | None -> psi
 
     let private writeInput (input: string option) (encoding: Encoding option) (p: Process) =
         match input with
@@ -152,22 +128,22 @@ module Command =
             let (proc, flag) = (context.config.Shell, context.config.Input) ||> shellToProcess
 
             (createProcess proc $"""{flag} {context.config.Command |> Option.defaultValue ""}""")
-            |> addWorkingDirectory context.config.WorkingDirectory
+                .With(WorkingDirectory = (context.config.WorkingDirectory |> Option.defaultValue ""))
+                .With(StandardOutputEncoding = (context.config.Encoding |> Option.defaultValue null))
+                .With(StandardErrorEncoding = (context.config.Encoding |> Option.defaultValue null))
             |> addEnvironmentVariables context.config.EnvironmentVariables
-            |> addEncoding context.config.Encoding
 
         static member internal buildProcess(context: ExecContext) =
-            match context.config.Verb with
-            | Some (verb) -> checkVerb verb context.config.Program
-            | None -> ()
+            checkVerb context.config.Verb context.config.Program
 
             (createProcess context.config.Program (context.config.Arguments |> Option.defaultValue ""))
-            |> addVerb context.config.Verb
-            |> addWorkingDirectory context.config.WorkingDirectory
-            |> addUserName context.config.UserName
-            |> addEnvironmentVariables context.config.EnvironmentVariables
+                .With(Verb = (context.config.Verb |> Option.defaultValue null))
+                .With(WorkingDirectory = (context.config.WorkingDirectory |> Option.defaultValue ""))
+                .With(UserName = (context.config.UserName |> Option.defaultValue ""))
+                .With(StandardOutputEncoding = (context.config.Encoding |> Option.defaultValue null))
+                .With(StandardErrorEncoding = (context.config.Encoding |> Option.defaultValue null))
             |> addCredentials context.config.Credentials
-            |> addEncoding context.config.Encoding
+            |> addEnvironmentVariables context.config.EnvironmentVariables
 
         /// Stringifies shell + opening flag and given command.
         static member toString(context: ShellContext) =
