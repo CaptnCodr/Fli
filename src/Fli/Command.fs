@@ -17,7 +17,7 @@ module Command =
         | CMD -> "cmd.exe", (if input.IsNone then "/c" else "/k")
         | PS -> "powershell.exe", "-Command"
         | PWSH -> "pwsh.exe", "-Command"
-        | WSL -> "wsl.exe", (if input.IsNone then "-e" else "--")
+        | WSL -> "wsl.exe", "--"
         | BASH -> "bash", "-c"
 
     let private toOption =

@@ -115,6 +115,7 @@ let ``Hello World with PWSH`` () =
     else
         Assert.Pass()
 
+#if DEBUG
 let isWslAvailable =
     Environment.GetEnvironmentVariable("PATH").Split [| ';' |]
     |> Array.map (fun p -> System.IO.Path.Combine(p, "wsl.exe"))
@@ -146,6 +147,7 @@ let ``Text in Input with WSL`` () =
         |> should equal "123\n345\r\n"
     else
         Assert.Pass()
+#endif
 
 [<Test>]
 let ``Hello World with BASH`` () =
