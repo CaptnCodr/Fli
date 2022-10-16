@@ -114,6 +114,38 @@ let ``Hello World with PWSH`` () =
         |> should equal "Hello World!\r\n"
     else
         Assert.Pass()
+        
+let isWslAvailable = 
+    Environment.GetEnvironmentVariable("PATH").Split [|';'|]
+    |> Array.map (fun p -> System.IO.Path.Combine(p, "wsl.exe"))
+    |> Array.filter(fun p -> System.IO.File.Exists(p))
+    |> Array.length > 0
+
+[<Test>]
+let ``Hello World with WSL`` () =
+    if OperatingSystem.IsWindows() && isWslAvailable then
+        cli {
+            Shell WSL
+            Command "echo Hello World!"
+        }
+        |> Command.execute
+        |> Output.toText 
+        |> should equal "Hello World!\n"
+    else 
+        Assert.Pass()
+
+[<Test>]
+let ``Text in Input with WSL`` () =
+    if OperatingSystem.IsWindows() && isWslAvailable then
+        cli {
+            Shell WSL
+            Input "echo 123\necho 345"
+        }
+        |> Command.execute
+        |> Output.toText
+        |> should equal "123\n345\r\n"
+    else
+        Assert.Pass()
 
 [<Test>]
 let ``Hello World with BASH`` () =

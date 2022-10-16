@@ -43,6 +43,15 @@ let ``PWSH command toString returns full line`` () =
     |> should equal "pwsh.exe -Command Write-Host Hello World!"
 
 [<Test>]
+let ``WSL command toString returns full line`` () =
+    cli {
+        Shell WSL
+        Command "echo Hello World!"
+    } 
+    |> Command.toString
+    |> should equal "wsl.exe -- echo Hello World!"
+
+[<Test>]
 let ``BASH command toString returns full line`` () =
     cli {
         Shell BASH

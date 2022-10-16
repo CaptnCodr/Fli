@@ -18,8 +18,9 @@ module Domain =
         | CMD
         | PS
         | PWSH
+        | WSL
         | BASH
-
+    
     type ExecConfig =
         { Program: string
           Arguments: string option
