@@ -161,6 +161,7 @@ Currently provided `Fli.Shells`:
 - `CMD` runs `cmd.exe /c ...` or `cmd.exe /k ...` (depends if `Input` is provided or not)
 - `PS` runs `powershell.exe -Command ...`
 - `PWSH` runs `pwsh.exe -Command ...`
+- `WSL` runs `wsl.exe -- ...`
 - `BASH` runs `bash -c ...`
 
 ### Something's missing?

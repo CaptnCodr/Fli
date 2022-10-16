@@ -18,6 +18,7 @@ module Domain =
         | CMD
         | PS
         | PWSH
+        | WSL
         | BASH
 
     type ExecConfig =
