@@ -47,7 +47,7 @@ let ``WSL command toString returns full line`` () =
     cli {
         Shell WSL
         Command "echo Hello World!"
-    } 
+    }
     |> Command.toString
     |> should equal "wsl.exe -- echo Hello World!"
 

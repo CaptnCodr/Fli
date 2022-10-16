@@ -114,11 +114,11 @@ let ``Hello World with PWSH`` () =
         |> should equal "Hello World!\r\n"
     else
         Assert.Pass()
-        
-let isWslAvailable = 
-    Environment.GetEnvironmentVariable("PATH").Split [|';'|]
+
+let isWslAvailable =
+    Environment.GetEnvironmentVariable("PATH").Split [| ';' |]
     |> Array.map (fun p -> System.IO.Path.Combine(p, "wsl.exe"))
-    |> Array.filter(fun p -> System.IO.File.Exists(p))
+    |> Array.filter (fun p -> System.IO.File.Exists(p))
     |> Array.length > 0
 
 [<Test>]
@@ -129,9 +129,9 @@ let ``Hello World with WSL`` () =
             Command "echo Hello World!"
         }
         |> Command.execute
-        |> Output.toText 
+        |> Output.toText
         |> should equal "Hello World!\n"
-    else 
+    else
         Assert.Pass()
 
 [<Test>]

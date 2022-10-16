@@ -20,7 +20,7 @@ module Domain =
         | PWSH
         | WSL
         | BASH
-    
+
     type ExecConfig =
         { Program: string
           Arguments: string option
