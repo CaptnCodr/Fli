@@ -16,7 +16,7 @@ let ``Hello World with CMD`` () =
             }
             |> Command.execute
 
-        operation |> Output.toText |> should equal "Hello World!\r\n"
+        operation |> Output.toText |> should equal "Hello World!"
         operation |> Output.toError |> should equal ""
     else
         Assert.Pass()
@@ -98,7 +98,7 @@ let ``Hello World with PS`` () =
         }
         |> Command.execute
         |> Output.toText
-        |> should equal "Hello World!\n"
+        |> should equal "Hello World!"
     else
         Assert.Pass()
 
@@ -111,7 +111,7 @@ let ``Hello World with PWSH`` () =
         }
         |> Command.execute
         |> Output.toText
-        |> should equal "Hello World!\r\n"
+        |> should equal "Hello World!"
     else
         Assert.Pass()
 
@@ -124,7 +124,7 @@ let ``Hello World with BASH`` () =
         }
         |> Command.execute
         |> Output.toText
-        |> should equal "Hello World!\n"
+        |> should equal "Hello World!"
     else
         Assert.Pass()
 
@@ -138,7 +138,7 @@ let ``Input text in BASH`` () =
         }
         |> Command.execute
         |> Output.toText
-        |> should equal "Hello World!\n"
+        |> should equal "Hello World!"
     else
         Assert.Pass()
 
@@ -153,7 +153,7 @@ let ``Hello World with BASH async`` () =
                 }
                 |> Command.executeAsync
 
-            output |> Output.toText |> should equal "Hello World!\n"
+            output |> Output.toText |> should equal "Hello World!"
         }
         |> Async.Start
     else
