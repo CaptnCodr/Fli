@@ -38,6 +38,8 @@ module Command =
             RedirectStandardError = true
         )
 
+    let private trim (s: string) = s.TrimEnd([| '\r'; '\n' |])
+
 #if NET
     let private startProcessAsync (writeInputAsync: Process -> Threading.Tasks.Task<unit>) (psi: ProcessStartInfo) =
         async {
@@ -50,9 +52,9 @@ module Command =
 
             return
                 { Id = proc.Id
-                  Text = text |> toOption
+                  Text = text |> trim |> toOption
                   ExitCode = proc.ExitCode
-                  Error = error |> toOption }
+                  Error = error |> trim |> toOption }
         }
         |> Async.StartAsTask
         |> Async.AwaitTask
@@ -67,9 +69,9 @@ module Command =
         proc.WaitForExit()
 
         { Id = proc.Id
-          Text = text |> toOption
+          Text = text |> trim |> toOption
           ExitCode = proc.ExitCode
-          Error = error |> toOption }
+          Error = error |> trim |> toOption }
 
 
     let private checkVerb (verb: string option) (executable: string) =

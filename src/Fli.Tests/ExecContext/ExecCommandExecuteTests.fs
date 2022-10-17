@@ -15,7 +15,7 @@ let ``Hello World with executing program`` () =
         }
         |> Command.execute
         |> Output.toText
-        |> should equal "Hello World!\r\n"
+        |> should equal "Hello World!"
     else
         Assert.Pass()
 
@@ -58,7 +58,7 @@ let ``Hello World with executing program async`` () =
                 }
                 |> Command.executeAsync
 
-            output |> Output.toText |> should equal "Hello World!\r\n"
+            output |> Output.toText |> should equal "Hello World!"
         }
         |> Async.Start
     else
@@ -74,7 +74,7 @@ let ``Hello World with executing program with Verb`` () =
         }
         |> Command.execute
         |> Output.toText
-        |> should equal "Hello World!\r\n"
+        |> should equal "Hello World!"
     else
         Assert.Pass()
 
