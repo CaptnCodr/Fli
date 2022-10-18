@@ -24,8 +24,8 @@ cli {
 
 // Pack Nuget Package
 cli {
-    Exec "paket"
-    Arguments [| "pack"; ".nupkg" |]
+    Shell CMD
+    Command "paket pack .nupkg"
     WorkingDirectory "src/"
 }
 |> Command.execute
@@ -34,9 +34,9 @@ cli {
 
 // Push Nuget Package
 cli {
-    Exec "paket"
-    Arguments [| "push"; ".nupkg" |]
-    WorkingDirectory "src/"
+    Shell CMD
+    Command "paket push Fli.0.9.0.0.nupkg"
+    WorkingDirectory "src/.nupkg/"
 }
 |> Command.execute
 |> Output.toText

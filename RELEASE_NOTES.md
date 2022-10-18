@@ -1,3 +1,10 @@
+v0.9.0.0 - Oct 18 2022
+- Add `Output.Id` from `Process.Id`. (https://github.com/CaptnCodr/Fli/pull/27)
+- Add `WSL` to provided `Shells`. (https://github.com/CaptnCodr/Fli/pull/31)
+- Enhencement: Trim output texts at the end. (https://github.com/CaptnCodr/Fli/pull/32)
+- Add logo for Nuget package. (https://github.com/CaptnCodr/Fli/pull/34)
+- Update dependencies.
+
 v0.8.0.0 - Oct 12 2022
 - Add `Command.executeAsync` for `NET5` and up! (https://github.com/CaptnCodr/Fli/pull/19)
 - Add `Error` from `StandardError`. (https://github.com/CaptnCodr/Fli/pull/20)
