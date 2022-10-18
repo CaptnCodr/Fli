@@ -17,6 +17,8 @@ releaseNotes
     (All release notes: https://github.com/CaptnCodr/Fli/blob/main/RELEASE_NOTES.md)
 projectUrl
     https://github.com/CaptnCodr/Fli
+iconUrl
+    https://raw.githubusercontent.com/CaptnCodr/Fli/main/logo.png
 licenseExpression
     MIT
 licenseUrl
