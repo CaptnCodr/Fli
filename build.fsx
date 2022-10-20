@@ -34,8 +34,8 @@ cli {
 
 // Push Nuget Package
 cli {
-    Shell CMD
-    Command "paket push Fli.0.9.0.0.nupkg"
+    Shell PWSH
+    Command "paket push (Get-Item * -Include *.nupkg).Name"
     WorkingDirectory "src/.nupkg/"
 }
 |> Command.execute
