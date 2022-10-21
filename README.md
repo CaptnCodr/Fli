@@ -4,9 +4,16 @@
 
 Execute CLI commands from your F# code in F# style!
 
-### Getting Started
-Get it from Nuget: `dotnet add package Fli`
+### Features
+- Starting processes easily
+- Execute CLI commands in your favourite shell
+- F# computation expression syntax
+- No external dependencies
 
+### Install
+Get it from [Nuget](https://www.nuget.org/packages/Fli/): `dotnet add package Fli`
+
+### Usage
 Just `open Fli` and start ...
 
 For example:
