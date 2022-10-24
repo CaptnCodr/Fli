@@ -8,6 +8,7 @@ Execute CLI commands from your F# code in F# style!
 - Starting processes easily
 - Execute CLI commands in your favourite shell
 - F# computation expression syntax
+- Wrap authenticated CLI tools
 - No external dependencies
 
 ### Install
