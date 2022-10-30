@@ -15,7 +15,7 @@ Execute CLI commands from your F# code in F# style!
 Get it from [Nuget](https://www.nuget.org/packages/Fli/): `dotnet add package Fli`
 
 ### Usage
-Just `open Fli` and start ...
+`open Fli` and start
 
 For example:
 ```fsharp
@@ -172,8 +172,8 @@ Currently provided `Fli.Shells`:
 - `WSL` runs `wsl.exe -- ...`
 - `BASH` runs `bash -c ...`
 
-### Something's missing?
-Don't hesitate to open an [issue](https://github.com/CaptnCodr/Fli/issues) or start a [discussion](https://github.com/CaptnCodr/Fli/discussions).
+### Do you miss something?
+Open an [issue](https://github.com/CaptnCodr/Fli/issues) or start a [discussion](https://github.com/CaptnCodr/Fli/discussions).
 
 ### Inspiration
-Use CE's for command line interface commands came in mind while using [FsHttp](https://github.com/fsprojects/FsHttp).
+Use CE's for CLI commands came in mind while using [FsHttp](https://github.com/fsprojects/FsHttp).
