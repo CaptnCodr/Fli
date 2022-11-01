@@ -10,6 +10,7 @@ module Domain =
         { Shell: Shells
           Command: string option
           Input: string option
+          Output: string option
           WorkingDirectory: string option
           EnvironmentVariables: (string * string) list option
           Encoding: System.Text.Encoding option }
@@ -25,6 +26,7 @@ module Domain =
         { Program: string
           Arguments: string option
           Input: string option
+          Output: string option
           WorkingDirectory: string option
           Verb: string option
           UserName: string option
@@ -55,6 +57,7 @@ module Domain =
             { Shell = CMD
               Command = None
               Input = None
+              Output = None
               WorkingDirectory = None
               EnvironmentVariables = None
               Encoding = None }
@@ -62,6 +65,7 @@ module Domain =
             { Program = ""
               Arguments = None
               Input = None
+              Output = None
               WorkingDirectory = None
               Verb = None
               UserName = None

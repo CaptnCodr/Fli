@@ -34,6 +34,9 @@ module CE =
         /// `Input` string(s) that can be used to interact with the executable.
         [<CustomOperation("Input")>]
         member _.Input(context: ICommandContext<ShellContext>, input) = Cli.input input context.Context
+        
+        [<CustomOperation("Output")>]
+        member _.Output(context: ICommandContext<ShellContext>, output) = Cli.output output context.Context
 
         /// Current executing `working directory`.
         [<CustomOperation("WorkingDirectory")>]
@@ -76,6 +79,9 @@ module CE =
         /// `Input` string(s) that can be used to interact with the executable.
         [<CustomOperation("Input")>]
         member _.Input(context: ICommandContext<ExecContext>, input) = Program.input input context.Context
+        
+        [<CustomOperation("Output")>]
+        member _.Output(context: ICommandContext<ExecContext>, output) = Program.output output context.Context
 
         /// Current executing `working directory`.
         [<CustomOperation("WorkingDirectory")>]
