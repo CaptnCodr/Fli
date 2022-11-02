@@ -65,6 +65,16 @@ cli {
 |> Command.execute
 ```
 
+Write output to a specific file:
+```fsharp
+cli {
+    Exec "dotnet"
+    Arguments "--list-sdks"
+    Output @"absolute\path\to\dotnet-sdks.txt"
+}
+|> Command.execute
+```
+
 Add environment variables for the executing program:
 ```fsharp
 cli {
@@ -146,6 +156,7 @@ cli {
 | `Shell`                | `Fli.Shells`             |
 | `Command`              | `string`                 |
 | `Input`                | `string`                 |
+| `Output`               | `string`                 |
 | `WorkingDirectory`     | `string`                 |
 | `EnvironmentVariable`  | `string * string`        |
 | `EnvironmentVariables` | `(string * string) list` |
@@ -157,6 +168,7 @@ cli {
 | `Exec`                 | `string`                                                 |
 | `Arguments`            | `string` / `string seq` / `string list` / `string array` |
 | `Input`                | `string`                                                 |
+| `Output`               | `string`                                                 |
 | `Verb`                 | `string`                                                 |
 | `Username`             | `string`                                                 |
 | `Credentials`          | `string * string * string`                               |

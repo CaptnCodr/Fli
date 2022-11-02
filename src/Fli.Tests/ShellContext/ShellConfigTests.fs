@@ -28,6 +28,15 @@ let ``Check Input config for CMD`` () =
     |> should equal (Some "echo 123\r\necho Test")
 
 [<Test>]
+let ``Check Output config for CMD`` () =
+    cli {
+        Shell CMD
+        Output @"C:\Users\test.txt"
+    }
+    |> fun c -> c.config.Output
+    |> should equal (Some @"C:\Users\test.txt")
+
+[<Test>]
 let ``Check WorkingDirectory config`` () =
     cli {
         Shell BASH

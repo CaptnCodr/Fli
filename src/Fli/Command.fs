@@ -41,7 +41,7 @@ module Command =
     let private trim (s: string) = s.TrimEnd([| '\r'; '\n' |])
 
 #if NET
-    let private startProcessAsync (writeInputAsync: Process -> Threading.Tasks.Task<unit>) (psi: ProcessStartInfo) =
+    let private startProcessAsync (writeInputAsync: Process -> Threading.Tasks.Task<unit>) (writeOutputFunc: string -> unit) (psi: ProcessStartInfo) =
         async {
             let proc = psi |> Process.Start
             do! proc |> writeInputAsync |> Async.AwaitTask
@@ -49,6 +49,8 @@ module Command =
             let! text = proc.StandardOutput.ReadToEndAsync() |> Async.AwaitTask
             let! error = proc.StandardError.ReadToEndAsync() |> Async.AwaitTask
             do! proc.WaitForExitAsync() |> Async.AwaitTask
+
+            do text |> writeOutputFunc
 
             return
                 { Id = proc.Id
@@ -60,13 +62,15 @@ module Command =
         |> Async.AwaitTask
 #endif
 
-    let private startProcess (writeInputFunc: Process -> unit) (psi: ProcessStartInfo) =
+    let private startProcess (writeInputFunc: Process -> unit) (writeOutputFunc: string -> unit) (psi: ProcessStartInfo) =
         let proc = psi |> Process.Start
         proc |> writeInputFunc
 
         let text = proc.StandardOutput.ReadToEnd()
         let error = proc.StandardError.ReadToEnd()
         proc.WaitForExit()
+
+        text |> writeOutputFunc
 
         { Id = proc.Id
           Text = text |> trim |> toOption
@@ -128,6 +132,12 @@ module Command =
         }
         |> Async.StartAsTask
 
+    let private writeOutput (outputPath: string option) (output: string) =
+        match outputPath with 
+        | Some (out) -> 
+            File.WriteAllText(out, output)
+        | None -> ()
+
     type Command =
         static member internal buildProcess(context: ShellContext) =
             let (proc, flag) = (context.config.Shell, context.config.Input) ||> shellToProcess
@@ -163,24 +173,32 @@ module Command =
         static member execute(context: ShellContext) =
             context
             |> Command.buildProcess
-            |> startProcess (writeInput context.config.Input context.config.Encoding)
+            |> startProcess 
+                (writeInput context.config.Input context.config.Encoding) 
+                (writeOutput context.config.Output)
 
         /// Executes the given context as a new process.
         static member execute(context: ExecContext) =
             context
             |> Command.buildProcess
-            |> startProcess (writeInput context.config.Input context.config.Encoding)
+            |> startProcess 
+                (writeInput context.config.Input context.config.Encoding) 
+                (writeOutput context.config.Output)
 
 #if NET
         /// Executes the given context as a new process asynchronously.
         static member executeAsync(context: ShellContext) =
             context
             |> Command.buildProcess
-            |> startProcessAsync (writeInputAsync context.config.Input)
+            |> startProcessAsync 
+                (writeInputAsync context.config.Input)
+                (writeOutput context.config.Output)
 
         /// Executes the given context as a new process asynchronously.
         static member executeAsync(context: ExecContext) =
             context
             |> Command.buildProcess
-            |> startProcessAsync (writeInputAsync context.config.Input)
+            |> startProcessAsync 
+                (writeInputAsync context.config.Input)
+                (writeOutput context.config.Output)
 #endif
