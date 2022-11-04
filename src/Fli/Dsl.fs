@@ -13,7 +13,7 @@ module Cli =
     let input (input: string) (context: ShellContext) =
         { context with config = { context.config with Input = Some input } }
 
-    let output (output: string) (context: ShellContext) =
+    let output (output: Outputs) (context: ShellContext) =
         { context with config = { context.config with Output = Some output } }
 
     let workingDirectory (workingDirectory: string) (context: ShellContext) =
@@ -22,7 +22,7 @@ module Cli =
     let environmentVariables (variables: (string * string) list) (context: ShellContext) =
         let vars =
             match context.config.EnvironmentVariables with
-            | Some (vs) -> vs @ variables
+            | Some(vs) -> vs @ variables
             | None -> variables
 
         { context with config = { context.config with EnvironmentVariables = Some vars } }
@@ -41,7 +41,7 @@ module Program =
     let input (input: string) (context: ExecContext) =
         { context with config = { context.config with Input = Some input } }
 
-    let output (output: string) (context: ExecContext) =
+    let output (output: Outputs) (context: ExecContext) =
         { context with config = { context.config with Output = Some output } }
 
     let workingDirectory (workingDirectory: string) (context: ExecContext) =
@@ -59,7 +59,7 @@ module Program =
     let environmentVariables (variables: (string * string) list) (context: ExecContext) =
         let vars =
             match context.config.EnvironmentVariables with
-            | Some (vs) -> vs @ variables
+            | Some(vs) -> vs @ variables
             | None -> variables
 
         { context with config = { context.config with EnvironmentVariables = Some vars } }

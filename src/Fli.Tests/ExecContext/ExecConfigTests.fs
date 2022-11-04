@@ -40,10 +40,10 @@ let ``Check Input config for executing program`` () =
 let ``Check Output config for executing program`` () =
     cli {
         Exec "cmd.exe"
-        Output @"C:\Users\test.txt"
+        Output(File @"C:\Users\test.txt")
     }
     |> fun c -> c.config.Output
-    |> should equal (Some @"C:\Users\test.txt")
+    |> should equal (Some(File @"C:\Users\test.txt"))
 
 [<Test>]
 let ``Check working directory config for executing program`` () =

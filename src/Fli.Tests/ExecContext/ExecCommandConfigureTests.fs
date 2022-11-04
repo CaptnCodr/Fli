@@ -114,7 +114,7 @@ let ``Check all possible values in ProcessStartInfo for windows`` () =
                 Exec "cmd.exe"
                 Arguments "--help"
                 Input "Test"
-                Output @"C:\Users\test.txt"
+                Output(File @"C:\Users\test.txt")
                 WorkingDirectory @"C:\Users"
                 Verb "open"
                 Username "admin"
@@ -141,7 +141,7 @@ let ``Check all possible values in ProcessStartInfo for windows`` () =
             cli {
                 Exec "bash"
                 Arguments "--help"
-                Output "./Users/test.txt"
+                Output(File "./Users/test.txt")
                 WorkingDirectory "./Users"
                 Username "admin"
                 EnvironmentVariable("Fli", "test")

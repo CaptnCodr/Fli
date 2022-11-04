@@ -41,7 +41,11 @@ module Command =
     let private trim (s: string) = s.TrimEnd([| '\r'; '\n' |])
 
 #if NET
-    let private startProcessAsync (writeInputAsync: Process -> Threading.Tasks.Task<unit>) (writeOutputFunc: string -> unit) (psi: ProcessStartInfo) =
+    let private startProcessAsync
+        (writeInputAsync: Process -> Threading.Tasks.Task<unit>)
+        (writeOutputFunc: string -> unit)
+        (psi: ProcessStartInfo)
+        =
         async {
             let proc = psi |> Process.Start
             do! proc |> writeInputAsync |> Async.AwaitTask
@@ -62,7 +66,11 @@ module Command =
         |> Async.AwaitTask
 #endif
 
-    let private startProcess (writeInputFunc: Process -> unit) (writeOutputFunc: string -> unit) (psi: ProcessStartInfo) =
+    let private startProcess
+        (writeInputFunc: Process -> unit)
+        (writeOutputFunc: string -> unit)
+        (psi: ProcessStartInfo)
+        =
         let proc = psi |> Process.Start
         proc |> writeInputFunc
 
@@ -80,7 +88,7 @@ module Command =
 
     let private checkVerb (verb: string option) (executable: string) =
         match verb with
-        | Some (v) ->
+        | Some(v) ->
             let verbs = ProcessStartInfo(executable).Verbs
 
             if not (verbs |> Array.contains v) then
@@ -95,7 +103,7 @@ module Command =
 
     let private addCredentials (credentials: Credentials option) (psi: ProcessStartInfo) =
         match credentials with
-        | Some (Credentials (domain, username, password)) ->
+        | Some(Credentials(domain, username, password)) ->
             psi.UserName <- username
 
             if RuntimeInformation.IsOSPlatform(OSPlatform.Windows) then
@@ -107,7 +115,7 @@ module Command =
 
     let private writeInput (input: string option) (encoding: Encoding option) (p: Process) =
         match input with
-        | Some (inputText) ->
+        | Some(inputText) ->
             try
                 use sw = p.StandardInput
                 sw.WriteLine(inputText, encoding)
@@ -120,7 +128,7 @@ module Command =
     let private writeInputAsync (input: string option) (p: Process) =
         async {
             match input with
-            | Some (inputText) ->
+            | Some(inputText) ->
                 try
                     use sw = p.StandardInput
                     do! inputText |> sw.WriteLineAsync |> Async.AwaitTask
@@ -132,10 +140,12 @@ module Command =
         }
         |> Async.StartAsTask
 
-    let private writeOutput (outputPath: string option) (output: string) =
-        match outputPath with 
-        | Some (out) -> 
-            File.WriteAllText(out, output)
+    let private writeOutput (outputType: Outputs option) (output: string) =
+        match outputType with
+        | Some(o) ->
+            match o with
+            | Outputs.File(file) -> File.WriteAllText(file, output)
+
         | None -> ()
 
     type Command =
@@ -173,16 +183,16 @@ module Command =
         static member execute(context: ShellContext) =
             context
             |> Command.buildProcess
-            |> startProcess 
-                (writeInput context.config.Input context.config.Encoding) 
+            |> startProcess
+                (writeInput context.config.Input context.config.Encoding)
                 (writeOutput context.config.Output)
 
         /// Executes the given context as a new process.
         static member execute(context: ExecContext) =
             context
             |> Command.buildProcess
-            |> startProcess 
-                (writeInput context.config.Input context.config.Encoding) 
+            |> startProcess
+                (writeInput context.config.Input context.config.Encoding)
                 (writeOutput context.config.Output)
 
 #if NET
@@ -190,15 +200,11 @@ module Command =
         static member executeAsync(context: ShellContext) =
             context
             |> Command.buildProcess
-            |> startProcessAsync 
-                (writeInputAsync context.config.Input)
-                (writeOutput context.config.Output)
+            |> startProcessAsync (writeInputAsync context.config.Input) (writeOutput context.config.Output)
 
         /// Executes the given context as a new process asynchronously.
         static member executeAsync(context: ExecContext) =
             context
             |> Command.buildProcess
-            |> startProcessAsync 
-                (writeInputAsync context.config.Input)
-                (writeOutput context.config.Output)
+            |> startProcessAsync (writeInputAsync context.config.Input) (writeOutput context.config.Output)
 #endif

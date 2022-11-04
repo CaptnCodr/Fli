@@ -10,7 +10,7 @@ module Domain =
         { Shell: Shells
           Command: string option
           Input: string option
-          Output: string option
+          Output: Outputs option
           WorkingDirectory: string option
           EnvironmentVariables: (string * string) list option
           Encoding: System.Text.Encoding option }
@@ -22,11 +22,13 @@ module Domain =
         | WSL
         | BASH
 
+    and Outputs = File of string
+
     type ExecConfig =
         { Program: string
           Arguments: string option
           Input: string option
-          Output: string option
+          Output: Outputs option
           WorkingDirectory: string option
           Verb: string option
           UserName: string option
