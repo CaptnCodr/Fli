@@ -184,6 +184,9 @@ Currently provided `Fli.Shells`:
 - `WSL` runs `wsl.exe -- ...`
 - `BASH` runs `bash -c ...`
 
+`Fli.Outputs`:
+- `string` which is the absolute path of the output file.
+
 ### Do you miss something?
 Open an [issue](https://github.com/CaptnCodr/Fli/issues) or start a [discussion](https://github.com/CaptnCodr/Fli/discussions).
 

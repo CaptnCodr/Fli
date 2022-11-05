@@ -34,10 +34,12 @@ module CE =
         /// `Input` string(s) that can be used to interact with the shell.
         [<CustomOperation("Input")>]
         member _.Input(context: ICommandContext<ShellContext>, input) = Cli.input input context.Context
-        
-        /// Absolute path with filename for the `Output`.
+
+        /// Extra `Output` that is being executed immediately after getting output from execution.
         [<CustomOperation("Output")>]
-        member _.Output(context: ICommandContext<ShellContext>, output) = Cli.output output context.Context
+        member _.Output(context: ICommandContext<ShellContext>, output) =
+            let outputTy = Outputs.File output
+            Cli.output outputTy context.Context
 
         /// Current executing `working directory`.
         [<CustomOperation("WorkingDirectory")>]
@@ -81,9 +83,11 @@ module CE =
         [<CustomOperation("Input")>]
         member _.Input(context: ICommandContext<ExecContext>, input) = Program.input input context.Context
 
-        /// Absolute path with filename for the `Output`.
+        /// Extra `Output` that is being executed immediately after getting output from execution.
         [<CustomOperation("Output")>]
-        member _.Output(context: ICommandContext<ExecContext>, output) = Program.output output context.Context
+        member _.Output(context: ICommandContext<ExecContext>, output) =
+            let outputTy = Outputs.File output
+            Program.output outputTy context.Context
 
         /// Current executing `working directory`.
         [<CustomOperation("WorkingDirectory")>]

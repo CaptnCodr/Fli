@@ -34,7 +34,7 @@ let ``Check Output config for CMD`` () =
         Output @"C:\Users\test.txt"
     }
     |> fun c -> c.config.Output
-    |> should equal (Some @"C:\Users\test.txt")
+    |> should equal (Some(File @"C:\Users\test.txt"))
 
 [<Test>]
 let ``Check WorkingDirectory config`` () =
