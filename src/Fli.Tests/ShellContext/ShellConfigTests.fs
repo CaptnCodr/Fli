@@ -31,7 +31,7 @@ let ``Check Input config for CMD`` () =
 let ``Check Output config for CMD`` () =
     cli {
         Shell CMD
-        Output(File @"C:\Users\test.txt")
+        Output @"C:\Users\test.txt"
     }
     |> fun c -> c.config.Output
     |> should equal (Some(File @"C:\Users\test.txt"))

@@ -41,20 +41,16 @@ module Command =
     let private trim (s: string) = s.TrimEnd([| '\r'; '\n' |])
 
 #if NET
-    let private startProcessAsync
-        (writeInputAsync: Process -> Threading.Tasks.Task<unit>)
-        (writeOutputFunc: string -> unit)
-        (psi: ProcessStartInfo)
-        =
+    let private startProcessAsync (inputFunc: Process -> Threading.Tasks.Task<unit>) (outputFunc: string -> unit) psi =
         async {
-            let proc = psi |> Process.Start
-            do! proc |> writeInputAsync |> Async.AwaitTask
+            let proc = Process.Start(startInfo = psi)
+            do! proc |> inputFunc |> Async.AwaitTask
 
             let! text = proc.StandardOutput.ReadToEndAsync() |> Async.AwaitTask
             let! error = proc.StandardError.ReadToEndAsync() |> Async.AwaitTask
             do! proc.WaitForExitAsync() |> Async.AwaitTask
 
-            do text |> writeOutputFunc
+            do text |> outputFunc
 
             return
                 { Id = proc.Id
@@ -66,19 +62,15 @@ module Command =
         |> Async.AwaitTask
 #endif
 
-    let private startProcess
-        (writeInputFunc: Process -> unit)
-        (writeOutputFunc: string -> unit)
-        (psi: ProcessStartInfo)
-        =
-        let proc = psi |> Process.Start
-        proc |> writeInputFunc
+    let private startProcess (inputFunc: Process -> unit) (outputFunc: string -> unit) psi =
+        let proc = Process.Start(startInfo = psi)
+        proc |> inputFunc
 
         let text = proc.StandardOutput.ReadToEnd()
         let error = proc.StandardError.ReadToEnd()
         proc.WaitForExit()
 
-        text |> writeOutputFunc
+        text |> outputFunc
 
         { Id = proc.Id
           Text = text |> trim |> toOption
