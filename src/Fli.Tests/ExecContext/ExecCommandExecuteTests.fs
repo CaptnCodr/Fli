@@ -4,6 +4,7 @@ open NUnit.Framework
 open FsUnit
 open Fli
 open System
+open System.Text
 
 
 [<Test>]
@@ -20,7 +21,7 @@ let ``Hello World with executing program`` () =
         Assert.Pass()
 
 [<Test>]
-let ``Test with process Id`` () =
+let ``Get process Id`` () =
     if OperatingSystem.IsWindows() then
         cli {
             Exec "cmd.exe"
@@ -46,6 +47,31 @@ let ``print text with Input with executing program`` () =
         |> should equal "Test\r\n\r\nC:\\>echo Hello World!\r\nHello World!\r\n\r\nC:\\>"
     else
         Assert.Pass()
+
+[<Test>]
+let ``Get output in StringBuilder`` () =
+    let sb = StringBuilder()
+
+    if OperatingSystem.IsWindows() then
+        cli {
+            Exec "cmd.exe"
+            Arguments "/c echo Test"
+            Output sb
+        }
+        |> Command.execute
+        |> ignore
+
+        sb.ToString() |> should equal "Test\r\n"
+    else
+        cli {
+            Exec "bash"
+            Arguments "-c \"echo Test\""
+            Output sb
+        }
+        |> Command.execute
+        |> ignore
+
+        sb.ToString() |> should equal "Test\n"
 
 [<Test>]
 let ``Hello World with executing program async`` () =

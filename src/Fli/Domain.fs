@@ -1,5 +1,7 @@
 ﻿namespace Fli
 
+open System.Text
+
 [<AutoOpen>]
 module Domain =
 
@@ -13,7 +15,7 @@ module Domain =
           Output: Outputs option
           WorkingDirectory: string option
           EnvironmentVariables: (string * string) list option
-          Encoding: System.Text.Encoding option }
+          Encoding: Encoding option }
 
     and Shells =
         | CMD
@@ -22,7 +24,9 @@ module Domain =
         | WSL
         | BASH
 
-    and Outputs = File of string
+    and Outputs =
+        | File of string
+        | StringBuilder of StringBuilder
 
     type ExecConfig =
         { Program: string
@@ -34,7 +38,7 @@ module Domain =
           UserName: string option
           Credentials: Credentials option
           EnvironmentVariables: (string * string) list option
-          Encoding: System.Text.Encoding option }
+          Encoding: Encoding option }
 
     and Credentials = Credentials of Domain: string * UserName: string * Password: string
 
