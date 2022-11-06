@@ -4,6 +4,7 @@ open NUnit.Framework
 open FsUnit
 open Fli
 open System
+open System.Text
 
 
 [<Test>]
@@ -33,6 +34,31 @@ let ``CMD returning non zero ExitCode`` () =
         |> should equal 1
     else
         Assert.Pass()
+
+[<Test>]
+let ``Get output in StringBuilder`` () =
+    let sb = StringBuilder()
+
+    if OperatingSystem.IsWindows() then
+        cli {
+            Shell CMD
+            Command "echo Test"
+            Output sb
+        }
+        |> Command.execute
+        |> ignore
+
+        sb.ToString() |> should equal "Test\r\n"
+    else
+        cli {
+            Shell BASH
+            Command "\"echo Test\""
+            Output sb
+        }
+        |> Command.execute
+        |> ignore
+
+        sb.ToString() |> should equal "Test\n"
 
 [<Test>]
 let ``CMD returning non zero process id`` () =

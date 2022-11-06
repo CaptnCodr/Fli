@@ -137,6 +137,7 @@ module Command =
         | Some(o) ->
             match o with
             | Outputs.File(file) -> File.WriteAllText(file, output)
+            | Outputs.StringBuilder(stringBuilder) -> output |> stringBuilder.Append |> ignore
 
         | None -> ()
 

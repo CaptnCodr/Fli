@@ -151,16 +151,16 @@ cli {
 #### Builder operations:
 
 `ShellContext` operations (`cli { Shell ... }`):
-| Operation              |  Type                    |
-|------------------------|--------------------------|
-| `Shell`                | `Fli.Shells`             |
-| `Command`              | `string`                 |
-| `Input`                | `string`                 |
-| `Output`               | `string`                 |
-| `WorkingDirectory`     | `string`                 |
-| `EnvironmentVariable`  | `string * string`        |
-| `EnvironmentVariables` | `(string * string) list` |
-| `Encoding`             | `System.Text.Encoding`   |
+| Operation              |  Type                      |
+|------------------------|----------------------------|
+| `Shell`                | `Fli.Shells`               |
+| `Command`              | `string`                   |
+| `Input`                | `string`                   |
+| `Output`               | `string` / `StringBuilder` |
+| `WorkingDirectory`     | `string`                   |
+| `EnvironmentVariable`  | `string * string`          |
+| `EnvironmentVariables` | `(string * string) list`   |
+| `Encoding`             | `System.Text.Encoding`     |
 
 `ExecContext` operations (`cli { Exec ... }`):
 | Operation              |  Type                                                    |
@@ -168,7 +168,7 @@ cli {
 | `Exec`                 | `string`                                                 |
 | `Arguments`            | `string` / `string seq` / `string list` / `string array` |
 | `Input`                | `string`                                                 |
-| `Output`               | `string`                                                 |
+| `Output`               | `string` / `StringBuilder`                               |
 | `Verb`                 | `string`                                                 |
 | `Username`             | `string`                                                 |
 | `Credentials`          | `string * string * string`                               |
@@ -186,6 +186,7 @@ Currently provided `Fli.Shells`:
 
 `Fli.Outputs`:
 - `string` which is the absolute path of the output file.
+- `StringBuilder` which will be filled with output text.
 
 ### Do you miss something?
 Open an [issue](https://github.com/CaptnCodr/Fli/issues) or start a [discussion](https://github.com/CaptnCodr/Fli/discussions).

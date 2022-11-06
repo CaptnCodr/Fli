@@ -1,5 +1,7 @@
 ﻿namespace Fli
 
+open System.Text
+
 [<AutoOpen>]
 module CE =
 
@@ -8,6 +10,12 @@ module CE =
     type ICommandContext<'a> with
 
         member this.Yield(_) = this
+
+        member internal _.outputTypeMapping(output) =
+            match box (output) with
+            | :? string as s -> Outputs.File s
+            | :? StringBuilder as sb -> Outputs.StringBuilder sb
+            | _ -> failwith "Cannot convert output type."
 
     type StartingContext =
         { config: Config option }
@@ -37,9 +45,8 @@ module CE =
 
         /// Extra `Output` that is being executed immediately after getting output from execution.
         [<CustomOperation("Output")>]
-        member _.Output(context: ICommandContext<ShellContext>, output) =
-            let outputTy = Outputs.File output
-            Cli.output outputTy context.Context
+        member this.Output(context: ICommandContext<ShellContext>, output) =
+            Cli.output ((this :> ICommandContext<_>).outputTypeMapping output) context.Context
 
         /// Current executing `working directory`.
         [<CustomOperation("WorkingDirectory")>]
@@ -85,9 +92,8 @@ module CE =
 
         /// Extra `Output` that is being executed immediately after getting output from execution.
         [<CustomOperation("Output")>]
-        member _.Output(context: ICommandContext<ExecContext>, output) =
-            let outputTy = Outputs.File output
-            Program.output outputTy context.Context
+        member this.Output(context: ICommandContext<ExecContext>, output) =
+            Program.output ((this :> ICommandContext<_>).outputTypeMapping output) context.Context
 
         /// Current executing `working directory`.
         [<CustomOperation("WorkingDirectory")>]
