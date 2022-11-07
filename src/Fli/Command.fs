@@ -138,6 +138,7 @@ module Command =
             match o with
             | Outputs.File(file) -> File.WriteAllText(file, output)
             | Outputs.StringBuilder(stringBuilder) -> output |> stringBuilder.Append |> ignore
+            | Outputs.Custom(func) -> func.Invoke(output)
 
         | None -> ()
 

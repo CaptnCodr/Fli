@@ -74,6 +74,31 @@ let ``Get output in StringBuilder`` () =
         sb.ToString() |> should equal "Test\n"
 
 [<Test>]
+let ``Call custom function in output`` () =
+    if OperatingSystem.IsWindows() then
+        let f (s: string) = 
+            s |> should equal "Test\r\n"
+
+        cli {
+            Exec "cmd.exe"
+            Arguments "/c echo Test"
+            Output f
+        } 
+        |> Command.execute
+        |> ignore
+    else
+        let f (s: string) = 
+            s |> should equal "Test\n"
+
+        cli {
+            Exec "bash"
+            Arguments "-c \"echo Test\""
+            Output f
+        } 
+        |> Command.execute
+        |> ignore
+
+[<Test>]
 let ``Hello World with executing program async`` () =
     if OperatingSystem.IsWindows() then
         async {

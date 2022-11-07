@@ -15,6 +15,7 @@ module CE =
             match box (output) with
             | :? string as s -> Outputs.File s
             | :? StringBuilder as sb -> Outputs.StringBuilder sb
+            | :? (string -> unit) as func -> Outputs.Custom func
             | _ -> failwith "Cannot convert output type."
 
     type StartingContext =
