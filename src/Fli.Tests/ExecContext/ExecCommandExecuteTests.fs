@@ -75,25 +75,20 @@ let ``Get output in StringBuilder`` () =
 
 [<Test>]
 let ``Call custom function in output`` () =
+    let testFunc (test: string) (s: string) = s |> should equal test
     if OperatingSystem.IsWindows() then
-        let f (s: string) = 
-            s |> should equal "Test\r\n"
-
         cli {
             Exec "cmd.exe"
             Arguments "/c echo Test"
-            Output f
+            Output (testFunc "Test\r\n")
         } 
         |> Command.execute
         |> ignore
     else
-        let f (s: string) = 
-            s |> should equal "Test\n"
-
         cli {
             Exec "bash"
             Arguments "-c \"echo Test\""
-            Output f
+            Output (testFunc "Test\n")
         } 
         |> Command.execute
         |> ignore

@@ -156,7 +156,7 @@ cli {
 | `Shell`                | `Fli.Shells`               |
 | `Command`              | `string`                   |
 | `Input`                | `string`                   |
-| `Output`               | `string` / `StringBuilder` |
+| `Output`               | `Outputs` (see below)      |
 | `WorkingDirectory`     | `string`                   |
 | `EnvironmentVariable`  | `string * string`          |
 | `EnvironmentVariables` | `(string * string) list`   |
@@ -168,7 +168,7 @@ cli {
 | `Exec`                 | `string`                                                 |
 | `Arguments`            | `string` / `string seq` / `string list` / `string array` |
 | `Input`                | `string`                                                 |
-| `Output`               | `string` / `StringBuilder`                               |
+| `Output`               | `Outputs` (see below)                                    |
 | `Verb`                 | `string`                                                 |
 | `Username`             | `string`                                                 |
 | `Credentials`          | `string * string * string`                               |
@@ -184,9 +184,10 @@ Currently provided `Fli.Shells`:
 - `WSL` runs `wsl.exe -- ...`
 - `BASH` runs `bash -c ...`
 
-`Fli.Outputs`:
-- `string` which is the absolute path of the output file.
-- `StringBuilder` which will be filled with output text.
+Provided `Fli.Outputs`:
+- `File of string` a string with an absolute path of the output file.
+- `StringBuilder of StringBuilder` a StringBuilder which will be filled with the output text.
+- `Custom of Func<string, unit>` a custom function (`string -> unit`) that will be called with the output string (logging, printing etc.).
 
 ### Do you miss something?
 Open an [issue](https://github.com/CaptnCodr/Fli/issues) or start a [discussion](https://github.com/CaptnCodr/Fli/discussions).
