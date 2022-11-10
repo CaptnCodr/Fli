@@ -35,8 +35,8 @@ description
 summary
     F# library to run CLI commands and processes in F# (CE) style.
 files
-    /bin/Release/net5.0/Fli.* ==> lib/net5.0
     /bin/Release/net6.0/Fli.* ==> lib/net6.0
+    /bin/Release/net7.0/Fli.* ==> lib/net7.0
     /bin/Release/netstandard2.0/Fli.* ==> lib/netstandard2.0
     /bin/Release/netstandard2.1/Fli.* ==> lib/netstandard2.1
     ../install.ps1 ==> tools
