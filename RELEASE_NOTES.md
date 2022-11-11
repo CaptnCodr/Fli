@@ -1,3 +1,8 @@
+v0.11.0.0 - Nov 11 2022
+- Add `Output` as CustomOperation with different types (s. `Fli.Outputs`). (https://github.com/CaptnCodr/Fli/pull/37 https://github.com/CaptnCodr/Fli/pull/39 https://github.com/CaptnCodr/Fli/pull/40 https://github.com/CaptnCodr/Fli/pull/41)
+- Add .NET7 support and drop .MET5. (https://github.com/CaptnCodr/Fli/pull/42)
+- Update dependencies.
+
 v0.9.0.0 - Oct 18 2022
 - Add `Output.Id` from `Process.Id`. (https://github.com/CaptnCodr/Fli/pull/27)
 - Add `WSL` to provided `Shells`. (https://github.com/CaptnCodr/Fli/pull/31)
