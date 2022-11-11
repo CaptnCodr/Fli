@@ -6,14 +6,12 @@ owners
 authors
     Constantin Tews
 version
-    0.9.0.0
+    0.11.0.0
 readme
     README.md
 releaseNotes
-    - Add `Output.Id` from `Process.Id`. (https://github.com/CaptnCodr/Fli/pull/27)
-    - Add `WSL` to provided `Shells`. (https://github.com/CaptnCodr/Fli/pull/31)
-    - Enhencement: Trim output texts at the end. (https://github.com/CaptnCodr/Fli/pull/32)
-    - Add logo for Nuget package. (https://github.com/CaptnCodr/Fli/pull/34)
+    - Add `Output` as CustomOperation with different types. (https://github.com/CaptnCodr/Fli/pull/37;https://github.com/CaptnCodr/Fli/pull/39;https://github.com/CaptnCodr/Fli/pull/40;https://github.com/CaptnCodr/Fli/pull/41)
+    - Add .NET7 support and drop .MET5. (https://github.com/CaptnCodr/Fli/pull/42)
     - Update dependencies.
     (All release notes: https://github.com/CaptnCodr/Fli/blob/main/RELEASE_NOTES.md)
 projectUrl
@@ -42,4 +40,4 @@ files
     ../install.ps1 ==> tools
     ../../README.md ==> .
 dependencies
-    FSharp.Core >= LOCKEDVERSION
+    FSharp.Core
