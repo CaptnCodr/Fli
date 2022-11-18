@@ -1,10 +1,10 @@
 ﻿namespace Fli
 
-open System.Text
 
 [<AutoOpen>]
 module CE =
 
+    open System.Text
     open Domain
 
     type ICommandContext<'a> with

@@ -23,7 +23,7 @@ module Domain =
         | PWSH
         | WSL
         | BASH
-        
+
     and Outputs =
         | File of string
         | StringBuilder of StringBuilder
