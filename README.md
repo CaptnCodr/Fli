@@ -102,9 +102,10 @@ cli {
 ```
 
 #### `Command.execute`
-`Command.execute` returns record: `type Output = { Text: string option; ExitCode: int; Error: string option }`
+`Command.execute` returns record: `type Output = { Id: int; Text: string option; ExitCode: int; Error: string option }`
 which has getter methods to get only one value:
 ```fsharp
+toId: Output -> int
 toText: Output -> string
 toExitCode: Output -> int
 toError: Output -> string
@@ -115,17 +116,22 @@ cli {
     Shell CMD
     Command "echo Hello World!"
 }
-|> Command.execute // { Text = Some "Hello World!"; ExitCode = 0; Error = None }
+|> Command.execute // { Id = 123; Text = Some "Hello World!"; ExitCode = 0; Error = None }
 |> Output.toText // "Hello World!"
+
+// same with Output.toId:
+cli { ... }
+|> Command.execute // { Id = 123; Text = Some "Hello World!"; ExitCode = 0; Error = None }
+|> Output.toId // 123
 
 // same with Output.toExitCode:
 cli { ... }
-|> Command.execute // { Text = Some "Hello World!"; ExitCode = 0; Error = None }
+|> Command.execute // { Id = 123; Text = Some "Hello World!"; ExitCode = 0; Error = None }
 |> Output.toExitCode // 0
 
 // in case of an error:
 cli { ... }
-|> Command.execute // { Text = None; ExitCode = 1; Error = Some "This is an error!" }
+|> Command.execute // { Id = 123; Text = None; ExitCode = 1; Error = Some "This is an error!" }
 |> Output.toError // "This is an error!"
 
 ```
