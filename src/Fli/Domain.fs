@@ -89,11 +89,23 @@ module Domain =
         /// Gets `Id` from `Output`.
         static member toId(output: Output) = output.Id
 
+        /// Prints `Id` from `Output`.
+        static member printId = Output.toId >> printfn "%i"
+
         /// Gets `Text` from `Output`.
         static member toText(output: Output) = output.Text |> Option.defaultValue ""
+
+        /// Prints `Text` from `Output`.
+        static member printText = Output.toText >> printfn "%s"
 
         /// Gets `ExitCode` from `Output`.
         static member toExitCode(output: Output) = output.ExitCode
 
+        /// Prints `ExitCode` from `Output`.
+        static member printExitCode = Output.toExitCode >> printfn "%i"
+
         /// Gets `Error` from `Output`.
         static member toError(output: Output) = output.Error |> Option.defaultValue ""
+
+        /// Prints `Error` from `Output`.
+        static member printError = Output.toError >> printfn "%s"
