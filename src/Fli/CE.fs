@@ -1,6 +1,5 @@
 ﻿namespace Fli
 
-
 [<AutoOpen>]
 module CE =
 

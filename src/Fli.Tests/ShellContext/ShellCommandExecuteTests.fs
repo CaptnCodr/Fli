@@ -23,6 +23,25 @@ let ``Hello World with CMD`` () =
         Assert.Pass()
 
 [<Test>]
+let ``Hello World with CUSTOM shell`` () =
+    if OperatingSystem.IsWindows() then
+        cli {
+            Shell(CUSTOM("cmd.exe", "/c"))
+            Command "echo Hello World!"
+        }
+        |> Command.execute
+        |> Output.toText
+        |> should equal "Hello World!"
+    else
+        cli {
+            Shell(CUSTOM("bash", "-c"))
+            Command "\"echo Hello World!\""
+        }
+        |> Command.execute
+        |> Output.toText
+        |> should equal "Hello World!"
+
+[<Test>]
 let ``CMD returning non zero ExitCode`` () =
     if OperatingSystem.IsWindows() then
         cli {
