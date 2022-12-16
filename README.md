@@ -189,6 +189,7 @@ Currently provided `Fli.Shells`:
 - `PWSH` runs `pwsh.exe -Command ...`
 - `WSL` runs `wsl.exe -- ...`
 - `BASH` runs `bash -c ...`
+- `CUSTOM (shell: string * flag: string)` run the custom specified shell with the specified starting argument
 
 Provided `Fli.Outputs`:
 - `File of string` a string with an absolute path of the output file.

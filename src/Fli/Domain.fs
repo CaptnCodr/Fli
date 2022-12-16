@@ -1,9 +1,9 @@
 ﻿namespace Fli
 
-open System.Text
-
 [<AutoOpen>]
 module Domain =
+
+    open System.Text
 
     type ICommandContext<'a> =
         abstract member Context: 'a
@@ -23,6 +23,7 @@ module Domain =
         | PWSH
         | WSL
         | BASH
+        | CUSTOM of shell: string * flag: string
 
     and Outputs =
         | File of string

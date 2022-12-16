@@ -2,10 +2,10 @@
 
 #nowarn "9"
 
-open System.Runtime.InteropServices
-open System.Security
-
 module Helpers =
+
+    open System.Runtime.InteropServices
+    open System.Security
 
     let toSecureString (unsureString: string) =
         if isNull unsureString then

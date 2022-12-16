@@ -19,6 +19,7 @@ module Command =
         | PWSH -> "pwsh.exe", "-Command"
         | WSL -> "wsl.exe", "--"
         | BASH -> "bash", "-c"
+        | CUSTOM(shell, flag) -> shell, flag
 
     let private toOption =
         function
