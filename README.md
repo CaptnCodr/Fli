@@ -133,7 +133,29 @@ cli { ... }
 cli { ... }
 |> Command.execute // { Id = 123; Text = None; ExitCode = 1; Error = Some "This is an error!" }
 |> Output.toError // "This is an error!"
+```
 
+#### Printing `Output` fields
+There are printing methods in `Output` too:
+```fsharp
+printId: Output -> unit
+printText: Output -> unit
+printExitCode: Output -> unit
+printError: Output -> unit
+```
+
+Instead of writing:
+```fsharp
+cli { ... }
+|> Command.execute
+|> Output.toText
+|> printfn "%s"
+```
+For a little shorter code you can use:
+```fsharp
+cli { ... }
+|> Command.execute
+|> Output.printText
 ```
 
 #### `Command.toString`
