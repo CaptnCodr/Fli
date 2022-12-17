@@ -1,3 +1,8 @@
+v1.0.0.0 - Dec 18 2022
+- Add `CUSTOM` shell in `ShellContext`. (https://github.com/CaptnCodr/Fli/pull/46)
+- Add printing methods for each field in `Output` for shorter code. (https://github.com/CaptnCodr/Fli/pull/45)
+- Update dependencies.
+
 v0.11.0.0 - Nov 11 2022
 - Add `Output` as CustomOperation with different types (s. `Fli.Outputs`). (https://github.com/CaptnCodr/Fli/pull/37 https://github.com/CaptnCodr/Fli/pull/39 https://github.com/CaptnCodr/Fli/pull/40 https://github.com/CaptnCodr/Fli/pull/41)
 - Add .NET7 support and drop .MET5. (https://github.com/CaptnCodr/Fli/pull/42)

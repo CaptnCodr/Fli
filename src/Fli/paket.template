@@ -6,12 +6,12 @@ owners
 authors
     Constantin Tews
 version
-    0.11.0.0
+    1.0.0.0
 readme
     README.md
 releaseNotes
-    - Add `Output` as CustomOperation with different types. (https://github.com/CaptnCodr/Fli/pull/37;https://github.com/CaptnCodr/Fli/pull/39;https://github.com/CaptnCodr/Fli/pull/40;https://github.com/CaptnCodr/Fli/pull/41)
-    - Add .NET7 support and drop .MET5. (https://github.com/CaptnCodr/Fli/pull/42)
+    - Add `CUSTOM` shell in `ShellContext`.
+    - Add printing methods for each field in `Output` for shorter code.
     - Update dependencies.
     (All release notes: https://github.com/CaptnCodr/Fli/blob/main/RELEASE_NOTES.md)
 projectUrl
