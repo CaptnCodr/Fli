@@ -4,6 +4,8 @@
 
 Execute CLI commands from your F# code in F# style!
 
+**Fli is part of the F# Advent Calendar 2022: [A little story about Fli](https://gist.github.com/CaptnCodr/d709b30eb1191bedda090623d04bf738)**
+
 ### Features
 - Starting processes easily
 - Execute CLI commands in your favourite shell
@@ -211,7 +213,7 @@ Currently provided `Fli.Shells`:
 - `PWSH` runs `pwsh.exe -Command ...`
 - `WSL` runs `wsl.exe -- ...`
 - `BASH` runs `bash -c ...`
-- `CUSTOM (shell: string * flag: string)` run the custom specified shell with the specified starting argument
+- `CUSTOM (shell: string * flag: string)` runs the specified `shell` with the specified starting argument (`flag`)
 
 Provided `Fli.Outputs`:
 - `File of string` a string with an absolute path of the output file.
