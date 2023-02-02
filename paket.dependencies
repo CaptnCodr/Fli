@@ -1,7 +1,7 @@
 source https://api.nuget.org/v3/index.json
 framework: net6.0, net7.0, netstandard2.0, netstandard2.1
 
-nuget FSharp.Core
+nuget FSharp.Core ~> 6.0.0
 
 nuget FsUnit
 nuget Microsoft.NET.Test.Sdk

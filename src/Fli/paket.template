@@ -6,13 +6,11 @@ owners
 authors
     Constantin Tews
 version
-    1.0.0.0
+    1.0.1.0
 readme
     README.md
 releaseNotes
-    - Add `CUSTOM` shell in `ShellContext`.
-    - Add printing methods for each field in `Output` for shorter code.
-    - Update dependencies.
+    - Fix FSharp.Core to v6.0. (https://github.com/CaptnCodr/Fli/issues/47)
     (All release notes: https://github.com/CaptnCodr/Fli/blob/main/RELEASE_NOTES.md)
 projectUrl
     https://github.com/CaptnCodr/Fli
@@ -25,7 +23,7 @@ licenseUrl
 requireLicenseAcceptance
     false
 copyright
-    Copyright 2022
+    Copyright 2022-2023
 tags
     fsharp cli shell process computation-expression
 description
@@ -40,4 +38,4 @@ files
     ../install.ps1 ==> tools
     ../../README.md ==> .
 dependencies
-    FSharp.Core
+    FSharp.Core >= LOCKEDVERSION
