@@ -30,6 +30,9 @@ module Cli =
     let encoding (encoding: System.Text.Encoding) (context: ShellContext) =
         { context with config = { context.config with Encoding = Some encoding } }
 
+    let cancelAfter (cancelAfter: int) (context: ShellContext) =
+        { context with config = { context.config with CancelAfter = Some cancelAfter } }
+
 module Program =
 
     let program (program: string) (config: Config) : ExecContext =
@@ -66,3 +69,6 @@ module Program =
 
     let encoding (encoding: System.Text.Encoding) (context: ExecContext) =
         { context with config = { context.config with Encoding = Some encoding } }
+
+    let cancelAfter (cancelAfter: int) (context: ExecContext) =
+        { context with config = { context.config with CancelAfter = Some cancelAfter } }

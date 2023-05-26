@@ -17,9 +17,11 @@
     <Description>An F# library to run CLI commands and processes in F# (CE) style.</Description>
     <Copyright>Copyright © 2022-2023</Copyright>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'" />
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="Domain.fs" />
+    <Compile Include="Output.fs" />
     <Compile Include="Dsl.fs" />
     <Compile Include="CE.fs" />
     <Compile Include="Extensions.fs" />

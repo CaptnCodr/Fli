@@ -3,6 +3,7 @@
 [<AutoOpen>]
 module Domain =
 
+    open System
     open System.Text
 
     type ICommandContext<'a> =
@@ -15,7 +16,8 @@ module Domain =
           Output: Outputs option
           WorkingDirectory: string option
           EnvironmentVariables: (string * string) list option
-          Encoding: Encoding option }
+          Encoding: Encoding option
+          CancelAfter: int option }
 
     and Shells =
         | CMD
@@ -40,7 +42,8 @@ module Domain =
           UserName: string option
           Credentials: Credentials option
           EnvironmentVariables: (string * string) list option
-          Encoding: Encoding option }
+          Encoding: Encoding option
+          CancelAfter: int option }
 
     and Credentials = Credentials of Domain: string * UserName: string * Password: string
 
@@ -68,7 +71,8 @@ module Domain =
               Output = None
               WorkingDirectory = None
               EnvironmentVariables = None
-              Encoding = None }
+              Encoding = None
+              CancelAfter = None }
           ExecConfig =
             { Program = ""
               Arguments = None
@@ -79,34 +83,12 @@ module Domain =
               UserName = None
               Credentials = None
               EnvironmentVariables = None
-              Encoding = None } }
+              Encoding = None
+              CancelAfter = None } }
 
     type Output =
         { Id: int
           Text: string option
           ExitCode: int
-          Error: string option }
-
-        /// Gets `Id` from `Output`.
-        static member toId(output: Output) = output.Id
-
-        /// Prints `Id` from `Output`.
-        static member printId = Output.toId >> printfn "%i"
-
-        /// Gets `Text` from `Output`.
-        static member toText(output: Output) = output.Text |> Option.defaultValue ""
-
-        /// Prints `Text` from `Output`.
-        static member printText = Output.toText >> printfn "%s"
-
-        /// Gets `ExitCode` from `Output`.
-        static member toExitCode(output: Output) = output.ExitCode
-
-        /// Prints `ExitCode` from `Output`.
-        static member printExitCode = Output.toExitCode >> printfn "%i"
-
-        /// Gets `Error` from `Output`.
-        static member toError(output: Output) = output.Error |> Option.defaultValue ""
-
-        /// Prints `Error` from `Output`.
-        static member printError = Output.toError >> printfn "%s"
+          Error: string option
+          Duration: TimeSpan option }

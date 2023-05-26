@@ -11,6 +11,7 @@ module Command =
     open System.Text
     open System.Diagnostics
     open System.Runtime.InteropServices
+    open System.Threading
 
     let private shellToProcess (shell: Shells) (input: string option) =
         match shell with
@@ -41,23 +42,42 @@ module Command =
 
     let private trim (s: string) = s.TrimEnd([| '\r'; '\n' |])
 
+    let private duration (startTime: DateTime) (endTime: DateTime) =
+        endTime.Subtract(startTime)
+
 #if NET
-    let private startProcessAsync (inputFunc: Process -> Threading.Tasks.Task<unit>) (outputFunc: string -> unit) psi =
+    let private startProcessAsync (inputFunc: Process -> Threading.Tasks.Task<unit>) (outputFunc: string -> unit) cancellationToken psi =
         async {
             let proc = Process.Start(startInfo = psi)
             do! proc |> inputFunc |> Async.AwaitTask
 
-            let! text = proc.StandardOutput.ReadToEndAsync() |> Async.AwaitTask
-            let! error = proc.StandardError.ReadToEndAsync() |> Async.AwaitTask
-            do! proc.WaitForExitAsync() |> Async.AwaitTask
+            let sbStd = StringBuilder()
+            proc.OutputDataReceived.AddHandler(new DataReceivedEventHandler(fun s e -> 
+                use o = proc.StandardOutput
+                sbStd.Append(o.ReadToEnd()) |> ignore
+            ))
+
+            let sbErr = StringBuilder()
+            proc.ErrorDataReceived.AddHandler(new DataReceivedEventHandler(fun s e -> 
+                use o = proc.StandardError
+                sbErr.Append(o.ReadToEnd()) |> ignore
+            ))
+            
+            let text = sbStd.ToString()
+            let error = sbErr.ToString()
+            
+            try
+                do! proc.WaitForExitAsync(cancellationToken) |> Async.AwaitTask
+            with 
+            | :? OperationCanceledException -> ()
 
             do text |> outputFunc
 
-            return
-                { Id = proc.Id
-                  Text = text |> trim |> toOption
-                  ExitCode = proc.ExitCode
-                  Error = error |> trim |> toOption }
+            return { Id = proc.Id
+                     Text = text |> trim |> toOption
+                     ExitCode = proc.ExitCode
+                     Error = error |> trim |> toOption
+                     Duration = Some (duration proc.StartTime proc.ExitTime) }
         }
         |> Async.StartAsTask
         |> Async.AwaitTask
@@ -76,7 +96,8 @@ module Command =
         { Id = proc.Id
           Text = text |> trim |> toOption
           ExitCode = proc.ExitCode
-          Error = error |> trim |> toOption }
+          Error = error |> trim |> toOption
+          Duration = Some (duration proc.StartTime proc.ExitTime) }
 
 
     let private checkVerb (verb: string option) (executable: string) =
@@ -193,13 +214,29 @@ module Command =
 #if NET
         /// Executes the given context as a new process asynchronously.
         static member executeAsync(context: ShellContext) =
+            let cts = new CancellationTokenSource()
+            match context.config.CancelAfter with 
+            | None -> ()
+            | Some ca -> cts.CancelAfter(ca)
+
             context
             |> Command.buildProcess
-            |> startProcessAsync (writeInputAsync context.config.Input) (writeOutput context.config.Output)
+            |> startProcessAsync 
+                (writeInputAsync context.config.Input) 
+                (writeOutput context.config.Output) 
+                cts.Token
 
         /// Executes the given context as a new process asynchronously.
         static member executeAsync(context: ExecContext) =
+            let cts = new CancellationTokenSource()
+            match context.config.CancelAfter with 
+            | None -> ()
+            | Some ca -> cts.CancelAfter(ca)
+
             context
             |> Command.buildProcess
-            |> startProcessAsync (writeInputAsync context.config.Input) (writeOutput context.config.Output)
+            |> startProcessAsync 
+                (writeInputAsync context.config.Input) 
+                (writeOutput context.config.Output) 
+                cts.Token
 #endif
