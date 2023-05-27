@@ -90,5 +90,4 @@ module Domain =
         { Id: int
           Text: string option
           ExitCode: int
-          Error: string option
-          Duration: TimeSpan option }
+          Error: string option }

@@ -12,6 +12,7 @@ module Command =
     open System.Diagnostics
     open System.Runtime.InteropServices
     open System.Threading
+    open System.Threading.Tasks
 
     let private shellToProcess (shell: Shells) (input: string option) =
         match shell with
@@ -42,43 +43,42 @@ module Command =
 
     let private trim (s: string) = s.TrimEnd([| '\r'; '\n' |])
 
-    let inline private duration (startTime: DateTime) (endTime: DateTime) =
-        endTime.Subtract(startTime)
-
 #if NET
-    let private startProcessAsync (inputFunc: Process -> Threading.Tasks.Task<unit>) (outputFunc: string -> unit) cancellationToken psi =
+    let private startProcessAsync (inFunc: Process -> Task<unit>) (outFunc: string -> unit) cancellationToken psi =
         async {
             let proc = Process.Start(startInfo = psi)
-            let startTime = proc.StartTime
-            do! proc |> inputFunc |> Async.AwaitTask
+            do! proc |> inFunc |> Async.AwaitTask
 
             let sbStd = StringBuilder()
-            proc.OutputDataReceived.AddHandler(new DataReceivedEventHandler(fun s e -> 
-                use o = proc.StandardOutput
-                sbStd.Append(o.ReadToEnd()) |> ignore
-            ))
-
             let sbErr = StringBuilder()
-            proc.ErrorDataReceived.AddHandler(new DataReceivedEventHandler(fun s e -> 
-                use o = proc.StandardError
-                sbErr.Append(o.ReadToEnd()) |> ignore
-            ))
-            
+
+            proc.OutputDataReceived.AddHandler(
+                new DataReceivedEventHandler(fun s e ->
+                    use o = proc.StandardOutput
+                    sbStd.Append(o.ReadToEnd()) |> ignore)
+            )
+
+            proc.ErrorDataReceived.AddHandler(
+                new DataReceivedEventHandler(fun s e ->
+                    use o = proc.StandardError
+                    sbErr.Append(o.ReadToEnd()) |> ignore)
+            )
+
             let text = sbStd.ToString()
             let error = sbErr.ToString()
-            
+
             try
                 do! proc.WaitForExitAsync(cancellationToken) |> Async.AwaitTask
-            with 
-            | :? OperationCanceledException -> ()
+            with :? OperationCanceledException ->
+                ()
 
-            do text |> outputFunc
+            do text |> outFunc
 
-            return { Id = proc.Id
-                     Text = text |> trim |> toOption
-                     ExitCode = proc.ExitCode
-                     Error = error |> trim |> toOption
-                     Duration = Some (duration startTime proc.ExitTime) }
+            return
+                { Id = proc.Id
+                  Text = text |> trim |> toOption
+                  ExitCode = proc.ExitCode
+                  Error = error |> trim |> toOption }
         }
         |> Async.StartAsTask
         |> Async.AwaitTask
@@ -88,8 +88,6 @@ module Command =
         let proc = Process.Start(startInfo = psi)
         proc |> inputFunc
 
-        let startTime = proc.StartTime
-        
         let text = proc.StandardOutput.ReadToEnd()
         let error = proc.StandardError.ReadToEnd()
         proc.WaitForExit()
@@ -99,8 +97,7 @@ module Command =
         { Id = proc.Id
           Text = text |> trim |> toOption
           ExitCode = proc.ExitCode
-          Error = error |> trim |> toOption
-          Duration = Some (duration startTime proc.ExitTime) }
+          Error = error |> trim |> toOption }
 
 
     let private checkVerb (verb: string option) (executable: string) =
@@ -167,6 +164,15 @@ module Command =
 
         | None -> ()
 
+    let private setupCancellationToken (cancelAfter: int option) =
+        let cts = new CancellationTokenSource()
+
+        match cancelAfter with
+        | None -> ()
+        | Some ca -> cts.CancelAfter(ca)
+
+        cts.Token
+
     type Command =
         static member internal buildProcess(context: ShellContext) =
             let (proc, flag) = (context.config.Shell, context.config.Input) ||> shellToProcess
@@ -217,29 +223,19 @@ module Command =
 #if NET
         /// Executes the given context as a new process asynchronously.
         static member executeAsync(context: ShellContext) =
-            let cts = new CancellationTokenSource()
-            match context.config.CancelAfter with 
-            | None -> ()
-            | Some ca -> cts.CancelAfter(ca)
-
             context
             |> Command.buildProcess
-            |> startProcessAsync 
-                (writeInputAsync context.config.Input) 
-                (writeOutput context.config.Output) 
-                cts.Token
+            |> startProcessAsync
+                (writeInputAsync context.config.Input)
+                (writeOutput context.config.Output)
+                (setupCancellationToken context.config.CancelAfter)
 
         /// Executes the given context as a new process asynchronously.
         static member executeAsync(context: ExecContext) =
-            let cts = new CancellationTokenSource()
-            match context.config.CancelAfter with 
-            | None -> ()
-            | Some ca -> cts.CancelAfter(ca)
-
             context
             |> Command.buildProcess
-            |> startProcessAsync 
-                (writeInputAsync context.config.Input) 
-                (writeOutput context.config.Output) 
-                cts.Token
+            |> startProcessAsync
+                (writeInputAsync context.config.Input)
+                (writeOutput context.config.Output)
+                (setupCancellationToken context.config.CancelAfter)
 #endif

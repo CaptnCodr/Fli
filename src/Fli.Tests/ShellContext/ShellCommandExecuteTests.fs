@@ -27,32 +27,31 @@ let ``Hello World with CMD`` () =
 
 [<Test>]
 let ``Hello World with CMD waiting async`` () =
-        async {
-            if OperatingSystem.IsWindows() then
-                let stopwatch = new Stopwatch()
-                stopwatch.Start()
+    async {
+        if OperatingSystem.IsWindows() then
+            let stopwatch = new Stopwatch()
+            stopwatch.Start()
 
-                try 
-                    let! operation =
-                        cli {
-                            Shell (CUSTOM("cmd.exe", "/K"))
-                            Command "Hello World!"
-                            CancelAfter 3000
-                        }
-                        |> Command.executeAsync
-                        |> Async.StartAsTask
-                        |> Async.AwaitTask
+            try
+                let! operation =
+                    cli {
+                        Shell(CUSTOM("cmd.exe", "/K"))
+                        Command "Hello World!"
+                        CancelAfter 3000
+                    }
+                    |> Command.executeAsync
+                    |> Async.StartAsTask
+                    |> Async.AwaitTask
 
-                    operation.Duration.Value.TotalSeconds |> should be (inRange 2900 3200)
-                    ()
-                with 
-                | :? AggregateException as e -> e.GetType() |> should equal typeof<AggregateException>
+                ()
+            with :? AggregateException as e ->
+                e.GetType() |> should equal typeof<AggregateException>
 
-                stopwatch.Stop()
-                stopwatch.Elapsed.TotalSeconds |> should be (inRange 2.9 3.2)
-            else
-                Assert.Pass()
-        }
+            stopwatch.Stop()
+            stopwatch.Elapsed.TotalSeconds |> should be (inRange 2.9 3.2)
+        else
+            Assert.Pass()
+    }
 
 [<Test>]
 let ``Hello World with CUSTOM shell`` () =
