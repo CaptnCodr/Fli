@@ -77,6 +77,18 @@ cli {
 |> Command.execute
 ```
 
+Write output to a function (logging, printing, etc.):
+```fsharp
+let log (output: string) = Debug.Log($"CLI log: {output}")
+
+cli {
+    Exec "dotnet"
+    Arguments "--list-sdks"
+    Output log
+}
+|> Command.execute
+```
+
 Add environment variables for the executing program:
 ```fsharp
 cli {
