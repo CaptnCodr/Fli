@@ -86,9 +86,10 @@ module Command =
 
     let private startProcess (inputFunc: Process -> unit) (outputFunc: string -> unit) psi =
         let proc = Process.Start(startInfo = psi)
-        let startTime = proc.StartTime
         proc |> inputFunc
 
+        let startTime = proc.StartTime
+        
         let text = proc.StandardOutput.ReadToEnd()
         let error = proc.StandardError.ReadToEnd()
         proc.WaitForExit()
