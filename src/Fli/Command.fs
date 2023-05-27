@@ -42,13 +42,14 @@ module Command =
 
     let private trim (s: string) = s.TrimEnd([| '\r'; '\n' |])
 
-    let private duration (startTime: DateTime) (endTime: DateTime) =
+    let inline private duration (startTime: DateTime) (endTime: DateTime) =
         endTime.Subtract(startTime)
 
 #if NET
     let private startProcessAsync (inputFunc: Process -> Threading.Tasks.Task<unit>) (outputFunc: string -> unit) cancellationToken psi =
         async {
             let proc = Process.Start(startInfo = psi)
+            let startTime = proc.StartTime
             do! proc |> inputFunc |> Async.AwaitTask
 
             let sbStd = StringBuilder()
@@ -77,7 +78,7 @@ module Command =
                      Text = text |> trim |> toOption
                      ExitCode = proc.ExitCode
                      Error = error |> trim |> toOption
-                     Duration = Some (duration proc.StartTime proc.ExitTime) }
+                     Duration = Some (duration startTime proc.ExitTime) }
         }
         |> Async.StartAsTask
         |> Async.AwaitTask
@@ -85,6 +86,7 @@ module Command =
 
     let private startProcess (inputFunc: Process -> unit) (outputFunc: string -> unit) psi =
         let proc = Process.Start(startInfo = psi)
+        let startTime = proc.StartTime
         proc |> inputFunc
 
         let text = proc.StandardOutput.ReadToEnd()
@@ -97,7 +99,7 @@ module Command =
           Text = text |> trim |> toOption
           ExitCode = proc.ExitCode
           Error = error |> trim |> toOption
-          Duration = Some (duration proc.StartTime proc.ExitTime) }
+          Duration = Some (duration startTime proc.ExitTime) }
 
 
     let private checkVerb (verb: string option) (executable: string) =
