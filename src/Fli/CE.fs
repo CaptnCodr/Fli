@@ -10,13 +10,6 @@ module CE =
 
         member this.Yield(_) = this
 
-        member internal _.outputTypeMapping(output) =
-            match box (output) with
-            | :? string as s -> Outputs.File s
-            | :? StringBuilder as sb -> Outputs.StringBuilder sb
-            | :? (string -> unit) as func -> Outputs.Custom func
-            | _ -> failwith "Cannot convert output type."
-
     type StartingContext =
         { config: Config option }
 
@@ -45,8 +38,18 @@ module CE =
 
         /// Extra `Output` that is being executed immediately after getting output from execution.
         [<CustomOperation("Output")>]
-        member this.Output(context: ICommandContext<ShellContext>, output) =
-            Cli.output ((this :> ICommandContext<_>).outputTypeMapping output) context.Context
+        member _.Output(context: ICommandContext<ShellContext>, filePath: string) =
+            Cli.output (File filePath) context.Context
+
+        /// Extra `Output` that is being executed immediately after getting output from execution.
+        [<CustomOperation("Output")>]
+        member _.Output(context: ICommandContext<ShellContext>, stringBuilder: StringBuilder) =
+            Cli.output (StringBuilder stringBuilder) context.Context
+
+        /// Extra `Output` that is being executed immediately after getting output from execution.
+        [<CustomOperation("Output")>]
+        member _.Output(context: ICommandContext<ShellContext>, func: string -> unit) =
+            Cli.output (Custom func) context.Context
 
         /// Current executing `working directory`.
         [<CustomOperation("WorkingDirectory")>]
@@ -96,8 +99,18 @@ module CE =
 
         /// Extra `Output` that is being executed immediately after getting output from execution.
         [<CustomOperation("Output")>]
-        member this.Output(context: ICommandContext<ExecContext>, output) =
-            Program.output ((this :> ICommandContext<_>).outputTypeMapping output) context.Context
+        member _.Output(context: ICommandContext<ExecContext>, filePath: string) =
+            Program.output (File filePath) context.Context
+
+        /// Extra `Output` that is being executed immediately after getting output from execution.
+        [<CustomOperation("Output")>]
+        member _.Output(context: ICommandContext<ExecContext>, stringBuilder: StringBuilder) =
+            Program.output (StringBuilder stringBuilder) context.Context
+
+        /// Extra `Output` that is being executed immediately after getting output from execution.
+        [<CustomOperation("Output")>]
+        member _.Output(context: ICommandContext<ExecContext>, func: string -> unit) =
+            Program.output (Custom func) context.Context
 
         /// Current executing `working directory`.
         [<CustomOperation("WorkingDirectory")>]
