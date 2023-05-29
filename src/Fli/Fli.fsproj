@@ -6,7 +6,7 @@
     <TargetFrameworks>netstandard2.0;netstandard2.1;net6.0;net7.0</TargetFrameworks>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Configurations>Debug;Release</Configurations>
-    <Version>1.0.1.0</Version>
+    <Version>1.1.0.0</Version>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -17,7 +17,6 @@
     <Description>An F# library to run CLI commands and processes in F# (CE) style.</Description>
     <Copyright>Copyright © 2022-2023</Copyright>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'" />
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="Domain.fs" />

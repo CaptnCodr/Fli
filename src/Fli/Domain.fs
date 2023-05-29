@@ -30,7 +30,7 @@ module Domain =
     and Outputs =
         | File of string
         | StringBuilder of StringBuilder
-        | Custom of System.Func<string, unit>
+        | Custom of Func<string, unit>
 
     type ExecConfig =
         { Program: string

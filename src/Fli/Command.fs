@@ -12,7 +12,6 @@ module Command =
     open System.Diagnostics
     open System.Runtime.InteropServices
     open System.Threading
-    open System.Threading.Tasks
 
     let private shellToProcess (shell: Shells) (input: string option) =
         match shell with
@@ -44,7 +43,7 @@ module Command =
     let private trim (s: string) = s.TrimEnd([| '\r'; '\n' |])
 
 #if NET
-    let private startProcessAsync (inFunc: Process -> Task<unit>) (outFunc: string -> unit) cancellationToken psi =
+    let private startProcessAsync (inFunc: Process -> Tasks.Task<unit>) (outFunc: string -> unit) cancellationToken psi =
         async {
             let proc = Process.Start(startInfo = psi)
             do! proc |> inFunc |> Async.AwaitTask

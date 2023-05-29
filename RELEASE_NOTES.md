@@ -1,3 +1,7 @@
+v1.1.0.0 - May 29, 2023
+- Slightly change signature of `Output` CustomOperation. (https://github.com/CaptnCodr/Fli/pull/51)
+- Add `CancelAfter` CustomOperation for `executeAsync` to cancel after a specific amount of time (milliseconds). (https://github.com/CaptnCodr/Fli/pull/50)
+
 v1.0.1.0 - Feb 02, 2023
 - Fix FSharp.Core to v6.0. (https://github.com/CaptnCodr/Fli/issues/47)
 
