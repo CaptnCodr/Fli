@@ -203,6 +203,7 @@ cli {
 | `EnvironmentVariable`  | `string * string`          |
 | `EnvironmentVariables` | `(string * string) list`   |
 | `Encoding`             | `System.Text.Encoding`     |
+| `CancelAfter`          | `int`                      |
 
 `ExecContext` operations (`cli { Exec ... }`):
 | Operation              |  Type                                                    |
@@ -218,6 +219,7 @@ cli {
 | `EnvironmentVariable`  | `string * string`                                        |
 | `EnvironmentVariables` | `(string * string) list`                                 |
 | `Encoding`             | `System.Text.Encoding`                                   |
+| `CancelAfter`          | `int`                                                    |
 
 Currently provided `Fli.Shells`:
 - `CMD` runs `cmd.exe /c ...` or `cmd.exe /k ...` (depends if `Input` is provided or not)

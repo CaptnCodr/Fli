@@ -70,6 +70,11 @@ module CE =
         [<CustomOperation("Encoding")>]
         member _.Encoding(context: ICommandContext<ShellContext>, encoding) = Cli.encoding encoding context.Context
 
+        /// Cancel after a period of time in milliseconds for async operations.
+        [<CustomOperation("CancelAfter")>]
+        member _.CancelAfter(context: ICommandContext<ShellContext>, cancelAfter) =
+            Cli.cancelAfter cancelAfter context.Context
+
     /// Extensions for Exec context.
     type ICommandContext<'a> with
 
@@ -142,3 +147,8 @@ module CE =
         [<CustomOperation("Encoding")>]
         member _.Encoding(context: ICommandContext<ExecContext>, encoding) =
             Program.encoding encoding context.Context
+
+        /// Cancel after a period of time in milliseconds for async operations.
+        [<CustomOperation("CancelAfter")>]
+        member _.CancelAfter(context: ICommandContext<ExecContext>, cancelAfter) =
+            Program.cancelAfter cancelAfter context.Context

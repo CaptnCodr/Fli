@@ -11,6 +11,8 @@ module Command =
     open System.Text
     open System.Diagnostics
     open System.Runtime.InteropServices
+    open System.Threading
+    open System.Threading.Tasks
 
     let private shellToProcess (shell: Shells) (input: string option) =
         match shell with
@@ -42,16 +44,35 @@ module Command =
     let private trim (s: string) = s.TrimEnd([| '\r'; '\n' |])
 
 #if NET
-    let private startProcessAsync (inputFunc: Process -> Threading.Tasks.Task<unit>) (outputFunc: string -> unit) psi =
+    let private startProcessAsync (inFunc: Process -> Task<unit>) (outFunc: string -> unit) cancellationToken psi =
         async {
             let proc = Process.Start(startInfo = psi)
-            do! proc |> inputFunc |> Async.AwaitTask
+            do! proc |> inFunc |> Async.AwaitTask
 
-            let! text = proc.StandardOutput.ReadToEndAsync() |> Async.AwaitTask
-            let! error = proc.StandardError.ReadToEndAsync() |> Async.AwaitTask
-            do! proc.WaitForExitAsync() |> Async.AwaitTask
+            let sbStd = StringBuilder()
+            let sbErr = StringBuilder()
 
-            do text |> outputFunc
+            proc.OutputDataReceived.AddHandler(
+                new DataReceivedEventHandler(fun s e ->
+                    use o = proc.StandardOutput
+                    sbStd.Append(o.ReadToEnd()) |> ignore)
+            )
+
+            proc.ErrorDataReceived.AddHandler(
+                new DataReceivedEventHandler(fun s e ->
+                    use o = proc.StandardError
+                    sbErr.Append(o.ReadToEnd()) |> ignore)
+            )
+
+            let text = sbStd.ToString()
+            let error = sbErr.ToString()
+
+            try
+                do! proc.WaitForExitAsync(cancellationToken) |> Async.AwaitTask
+            with :? OperationCanceledException ->
+                ()
+
+            do text |> outFunc
 
             return
                 { Id = proc.Id
@@ -143,6 +164,15 @@ module Command =
 
         | None -> ()
 
+    let private setupCancellationToken (cancelAfter: int option) =
+        let cts = new CancellationTokenSource()
+
+        match cancelAfter with
+        | None -> ()
+        | Some ca -> cts.CancelAfter(ca)
+
+        cts.Token
+
     type Command =
         static member internal buildProcess(context: ShellContext) =
             let (proc, flag) = (context.config.Shell, context.config.Input) ||> shellToProcess
@@ -195,11 +225,17 @@ module Command =
         static member executeAsync(context: ShellContext) =
             context
             |> Command.buildProcess
-            |> startProcessAsync (writeInputAsync context.config.Input) (writeOutput context.config.Output)
+            |> startProcessAsync
+                (writeInputAsync context.config.Input)
+                (writeOutput context.config.Output)
+                (setupCancellationToken context.config.CancelAfter)
 
         /// Executes the given context as a new process asynchronously.
         static member executeAsync(context: ExecContext) =
             context
             |> Command.buildProcess
-            |> startProcessAsync (writeInputAsync context.config.Input) (writeOutput context.config.Output)
+            |> startProcessAsync
+                (writeInputAsync context.config.Input)
+                (writeOutput context.config.Output)
+                (setupCancellationToken context.config.CancelAfter)
 #endif
