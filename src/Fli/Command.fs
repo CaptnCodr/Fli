@@ -13,14 +13,14 @@ module Command =
     open System.Runtime.InteropServices
     open System.Threading
 
-    let private shellToProcess (shell: Shells) (input: string option) (command: string option) =
+    let private shellToProcess (shell: Shells) (input: string option) =
         match shell with
-        | CMD -> "cmd.exe", (if input.IsNone then "/c" else "/k"), command
-        | PS -> "powershell.exe", "-Command", command
-        | PWSH -> "pwsh.exe", "-Command", command
-        | WSL -> "wsl.exe", "--", command
-        | BASH -> "bash", "-c", Some($"\"{command |> Option.defaultValue String.Empty}\"")
-        | CUSTOM(shell, flag) -> shell, flag, command
+        | CMD -> "cmd.exe", (if input.IsNone then "/c" else "/k")
+        | PS -> "powershell.exe", "-Command"
+        | PWSH -> "pwsh.exe", "-Command"
+        | WSL -> "wsl.exe", "--"
+        | BASH -> "bash", "-c"
+        | CUSTOM(shell, flag) -> shell, flag
 
     let private toOption =
         function
@@ -172,11 +172,17 @@ module Command =
 
         cts.Token
 
+    let private quoteBashCommand (context: ShellContext) = 
+        match context.config.Shell with 
+        | Shells.BASH -> context.config.Command |> Option.defaultValue "" |> fun s -> $"\"{s}\""
+        | _ -> context.config.Command |> Option.defaultValue ""
+
     type Command =
         static member internal buildProcess(context: ShellContext) =
-            let (proc, flag, command) = (context.config.Shell, context.config.Input, context.config.Command) |||> shellToProcess
+            let (proc, flag) = (context.config.Shell, context.config.Input) ||> shellToProcess
+            let command = context |> quoteBashCommand
 
-            (createProcess proc $"""{flag} {command |> Option.defaultValue ""}""")
+            (createProcess proc $"""{flag} {command}""")
                 .With(WorkingDirectory = (context.config.WorkingDirectory |> Option.defaultValue ""))
                 .With(StandardOutputEncoding = (context.config.Encoding |> Option.defaultValue null))
                 .With(StandardErrorEncoding = (context.config.Encoding |> Option.defaultValue null))
@@ -196,8 +202,9 @@ module Command =
 
         /// Stringifies shell + opening flag and given command.
         static member toString(context: ShellContext) =
-            let (proc, flag, command) = (context.config.Shell, context.config.Input, context.config.Command) |||> shellToProcess
-            $"""{proc} {flag} {command |> Option.defaultValue ""}"""
+            let (proc, flag) = (context.config.Shell, context.config.Input) ||> shellToProcess
+            let command = context |> quoteBashCommand
+            $"""{proc} {flag} {command}"""
 
         /// Stringifies executable + arguments.
         static member toString(context: ExecContext) =
