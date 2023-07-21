@@ -55,7 +55,7 @@ let ``WSL command toString returns full line`` () =
 let ``BASH command toString returns full line`` () =
     cli {
         Shell BASH
-        Command "\"echo Hello World!\""
+        Command "echo Hello World!"
     }
     |> Command.toString
     |> should equal "bash -c \"echo Hello World!\""
