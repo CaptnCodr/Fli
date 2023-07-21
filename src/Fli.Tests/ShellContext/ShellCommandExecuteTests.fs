@@ -66,7 +66,7 @@ let ``Hello World with CUSTOM shell`` () =
     else
         cli {
             Shell(CUSTOM("bash", "-c"))
-            Command "echo Hello World!"
+            Command "\"echo Hello World!\""
         }
         |> Command.execute
         |> Output.toText
