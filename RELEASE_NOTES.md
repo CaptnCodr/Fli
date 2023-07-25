@@ -1,3 +1,6 @@
+v1.1.1.0 - Jul 25, 2023
+- No need to quote the bash command anymore (https://github.com/CaptnCodr/Fli/pull/53) to have a consistent using between `Shells`.
+
 v1.1.0.0 - May 29, 2023
 - Slightly change signature of `Output` CustomOperation. (https://github.com/CaptnCodr/Fli/pull/51)
 - Add `CancelAfter` CustomOperation for `executeAsync` to cancel after a specific amount of time (milliseconds). (https://github.com/CaptnCodr/Fli/pull/50)
