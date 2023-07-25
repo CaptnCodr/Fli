@@ -172,11 +172,17 @@ module Command =
 
         cts.Token
 
+    let private quoteBashCommand (context: ShellContext) = 
+        match context.config.Shell with 
+        | Shells.BASH -> context.config.Command |> Option.defaultValue "" |> fun s -> $"\"{s}\""
+        | _ -> context.config.Command |> Option.defaultValue ""
+
     type Command =
         static member internal buildProcess(context: ShellContext) =
             let (proc, flag) = (context.config.Shell, context.config.Input) ||> shellToProcess
+            let command = context |> quoteBashCommand
 
-            (createProcess proc $"""{flag} {context.config.Command |> Option.defaultValue ""}""")
+            (createProcess proc $"""{flag} {command}""")
                 .With(WorkingDirectory = (context.config.WorkingDirectory |> Option.defaultValue ""))
                 .With(StandardOutputEncoding = (context.config.Encoding |> Option.defaultValue null))
                 .With(StandardErrorEncoding = (context.config.Encoding |> Option.defaultValue null))
@@ -197,7 +203,8 @@ module Command =
         /// Stringifies shell + opening flag and given command.
         static member toString(context: ShellContext) =
             let (proc, flag) = (context.config.Shell, context.config.Input) ||> shellToProcess
-            $"""{proc} {flag} {context.config.Command |> Option.defaultValue ""}"""
+            let command = context |> quoteBashCommand
+            $"""{proc} {flag} {command}"""
 
         /// Stringifies executable + arguments.
         static member toString(context: ExecContext) =

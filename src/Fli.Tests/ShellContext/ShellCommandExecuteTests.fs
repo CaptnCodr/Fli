@@ -102,7 +102,7 @@ let ``Get output in StringBuilder`` () =
     else
         cli {
             Shell BASH
-            Command "\"echo Test\""
+            Command "echo Test"
             Output sb
         }
         |> Command.execute
@@ -196,7 +196,7 @@ let ``Hello World with BASH`` () =
     if OperatingSystem.IsWindows() |> not then
         cli {
             Shell BASH
-            Command "\"echo Hello World!\""
+            Command "echo Hello World!"
         }
         |> Command.execute
         |> Output.toText
@@ -209,8 +209,8 @@ let ``Input text in BASH`` () =
     if OperatingSystem.IsWindows() |> not then
         cli {
             Shell BASH
-            Command "\"echo Hello World!\""
-            Input "\"echo Test\""
+            Command "echo Hello World!"
+            Input "echo Test"
         }
         |> Command.execute
         |> Output.toText
@@ -225,7 +225,7 @@ let ``Hello World with BASH async`` () =
             let! output =
                 cli {
                     Shell BASH
-                    Command "\"echo Hello World!\""
+                    Command "echo Hello World!"
                 }
                 |> Command.executeAsync
 
@@ -240,7 +240,7 @@ let ``BASH returning non zero ExitCode`` () =
     if OperatingSystem.IsWindows() |> not then
         cli {
             Shell BASH
-            Command "\"echl Test\""
+            Command "echl Test"
         }
         |> Command.execute
         |> Output.toExitCode
@@ -253,7 +253,7 @@ let ``BASH returning non zero process id`` () =
     if OperatingSystem.IsWindows() |> not then
         cli {
             Shell BASH
-            Command "\"echo Test\""
+            Command "echo Test"
         }
         |> Command.execute
         |> Output.toId

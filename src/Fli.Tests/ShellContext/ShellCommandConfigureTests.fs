@@ -83,7 +83,7 @@ let ``Check all possible values in ProcessStartInfo`` () =
         |> Command.buildProcess
 
     config.FileName |> should equal "bash"
-    config.Arguments |> should equal "-c echo Hello World! €"
+    config.Arguments |> should equal "-c \"echo Hello World! €\""
     config.WorkingDirectory |> should equal @"C:\Users"
     config.Environment.Contains(KeyValuePair("Fli", "test")) |> should be True
     config.Environment.Contains(KeyValuePair("Fli.Test", "test")) |> should be True
