@@ -28,16 +28,16 @@ module Command =
         | "" -> None
         | _ as s -> Some s
 
-    let private createProcess executable argumentString =
+    let private createProcess executable argumentString openDefault =
         ProcessStartInfo(
             FileName = executable,
             Arguments = argumentString,
             WindowStyle = ProcessWindowStyle.Hidden,
             CreateNoWindow = true,
-            UseShellExecute = false,
-            RedirectStandardInput = true,
-            RedirectStandardOutput = true,
-            RedirectStandardError = true
+            UseShellExecute = openDefault,
+            RedirectStandardInput = not(openDefault),
+            RedirectStandardOutput = not(openDefault),
+            RedirectStandardError = not(openDefault)
         )
 
     let private trim (s: string) = s.TrimEnd([| '\r'; '\n' |])
@@ -87,8 +87,8 @@ module Command =
         let proc = Process.Start(startInfo = psi)
         proc |> inputFunc
 
-        let text = proc.StandardOutput.ReadToEnd()
-        let error = proc.StandardError.ReadToEnd()
+        let text = if psi.UseShellExecute |> not then proc.StandardOutput.ReadToEnd() else ""
+        let error = if psi.UseShellExecute |> not then proc.StandardError.ReadToEnd() else ""
         proc.WaitForExit()
 
         text |> outputFunc
@@ -111,8 +111,11 @@ module Command =
         | None -> ()
 
     let private addEnvironmentVariables (variables: (string * string) list option) (psi: ProcessStartInfo) =
-        ((variables |> Option.defaultValue [] |> List.iter (psi.Environment.Add)), psi)
-        |> snd
+        if psi.UseShellExecute |> not then
+            ((variables |> Option.defaultValue [] |> List.iter (psi.Environment.Add)), psi)
+            |> snd
+        else 
+            psi
 
     let private addCredentials (credentials: Credentials option) (psi: ProcessStartInfo) =
         match credentials with
@@ -182,7 +185,7 @@ module Command =
             let (proc, flag) = (context.config.Shell, context.config.Input) ||> shellToProcess
             let command = context |> quoteBashCommand
 
-            (createProcess proc $"""{flag} {command}""")
+            (createProcess proc $"""{flag} {command}""" false)
                 .With(WorkingDirectory = (context.config.WorkingDirectory |> Option.defaultValue ""))
                 .With(StandardOutputEncoding = (context.config.Encoding |> Option.defaultValue null))
                 .With(StandardErrorEncoding = (context.config.Encoding |> Option.defaultValue null))
@@ -191,7 +194,10 @@ module Command =
         static member internal buildProcess(context: ExecContext) =
             checkVerb context.config.Verb context.config.Program
 
-            (createProcess context.config.Program (context.config.Arguments |> Option.defaultValue ""))
+            let arguments = (context.config.Arguments |> Option.defaultValue "")
+            let openDefault = if arguments = "" && context.config.EnvironmentVariables.IsNone then true else false
+
+            (createProcess context.config.Program arguments openDefault)
                 .With(Verb = (context.config.Verb |> Option.defaultValue null))
                 .With(WorkingDirectory = (context.config.WorkingDirectory |> Option.defaultValue ""))
                 .With(UserName = (context.config.UserName |> Option.defaultValue ""))
