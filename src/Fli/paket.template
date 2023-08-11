@@ -6,11 +6,11 @@ owners
 authors
     Constantin Tews
 version
-    1.1.1.0
+    1.10.0.0
 readme
     README.md
 releaseNotes
-    - No need to quote the bash command anymore (https://github.com/CaptnCodr/Fli/pull/53) to have a consistent using between `Shells`.
+    - Open files in default/assigned program in `Exec` (https://github.com/CaptnCodr/Fli/pull/56).
     (All release notes: https://github.com/CaptnCodr/Fli/blob/main/RELEASE_NOTES.md)
 projectUrl
     https://github.com/CaptnCodr/Fli

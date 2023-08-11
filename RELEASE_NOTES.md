@@ -1,3 +1,6 @@
+v1.10.0.0 - Aug 11, 2023
+- Open files in default/assigned program in `Exec` (https://github.com/CaptnCodr/Fli/pull/56).
+
 v1.1.1.0 - Jul 25, 2023
 - No need to quote the bash command anymore (https://github.com/CaptnCodr/Fli/pull/53) to have a consistent using between `Shells`.
 
