@@ -66,6 +66,14 @@ cli {
 }
 |> Command.execute
 ```
+or open a file in the default/assigned program:
+```fsharp
+cli {
+    Exec "test.pdf"
+}
+|> Command.execute
+```
+(Hint: if file extension is not assigned to any installed program, it will throw a `System.NullReferenceException`)
 
 Write output to a specific file:
 ```fsharp
