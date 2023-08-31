@@ -231,9 +231,9 @@ let ``Hello World with BASH async`` () =
 
             output |> Output.toText |> should equal "Hello World!"
         }
-        |> Async.Start
     else
         Assert.Pass()
+        |> async.Return 
 
 [<Test>]
 let ``BASH returning non zero ExitCode`` () =

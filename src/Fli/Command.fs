@@ -48,28 +48,13 @@ module Command =
             let proc = Process.Start(startInfo = psi)
             do! proc |> inFunc |> Async.AwaitTask
 
-            let sbStd = StringBuilder()
-            let sbErr = StringBuilder()
-
-            proc.OutputDataReceived.AddHandler(
-                new DataReceivedEventHandler(fun s e ->
-                    use o = proc.StandardOutput
-                    sbStd.Append(o.ReadToEnd()) |> ignore)
-            )
-
-            proc.ErrorDataReceived.AddHandler(
-                new DataReceivedEventHandler(fun s e ->
-                    use o = proc.StandardError
-                    sbErr.Append(o.ReadToEnd()) |> ignore)
-            )
-
-            let text = sbStd.ToString()
-            let error = sbErr.ToString()
-
             try
                 do! proc.WaitForExitAsync(cancellationToken) |> Async.AwaitTask
             with :? OperationCanceledException ->
                 ()
+
+            let! text = proc.StandardOutput.ReadToEndAsync() |> Async.AwaitTask
+            let! error = proc.StandardError.ReadToEndAsync() |> Async.AwaitTask
 
             do text |> outFunc
 
