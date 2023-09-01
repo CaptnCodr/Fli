@@ -53,7 +53,7 @@ module Command =
         async {
             let proc = Process.Start(startInfo = psi)
             do! proc |> inFunc |> Async.AwaitTask
-            
+
             let sbStd = StringBuilder()
             let sbErr = StringBuilder()
 
