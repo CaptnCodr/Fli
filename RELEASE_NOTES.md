@@ -1,3 +1,6 @@
+v1.10.1.0 - Sep 01, 2023
+- `Command.executeAsync` stdout and stderr content now gets returned properly (https://github.com/CaptnCodr/Fli/pull/58).
+
 v1.10.0.0 - Aug 11, 2023
 - Open files in default/assigned program in `Exec` (https://github.com/CaptnCodr/Fli/pull/56).
 

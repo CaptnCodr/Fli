@@ -6,11 +6,11 @@ owners
 authors
     Constantin Tews
 version
-    1.10.0.0
+    1.10.1.0
 readme
     README.md
 releaseNotes
-    - Open files in default/assigned program in `Exec` (https://github.com/CaptnCodr/Fli/pull/56).
+    - `Command.executeAsync` stdout and stderr content now gets returned properly (https://github.com/CaptnCodr/Fli/pull/58).
     (All release notes: https://github.com/CaptnCodr/Fli/blob/main/RELEASE_NOTES.md)
 projectUrl
     https://github.com/CaptnCodr/Fli
