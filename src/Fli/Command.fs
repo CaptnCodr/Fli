@@ -41,20 +41,45 @@ module Command =
         )
 
     let private trim (s: string) = s.TrimEnd([| '\r'; '\n' |])
+    
+    let returnOr (sb: StringBuilder) (output: string) = 
+        match (sb.ToString(), output) with
+        | (t, _) when t.Length > 0 -> t
+        | (_, o) when o.Length > 0 -> o
+        | (_, _) -> ""
 
 #if NET
     let private startProcessAsync (inFunc: Process -> Tasks.Task<unit>) (outFunc: string -> unit) cancellationToken psi =
         async {
             let proc = Process.Start(startInfo = psi)
             do! proc |> inFunc |> Async.AwaitTask
+            
+            let sbStd = StringBuilder()
+            let sbErr = StringBuilder()
+
+            proc.OutputDataReceived.AddHandler(
+                new DataReceivedEventHandler(fun s e ->
+                    use o = proc.StandardOutput
+                    sbStd.Append(o.ReadToEnd()) |> ignore)
+            )
+
+            proc.ErrorDataReceived.AddHandler(
+                new DataReceivedEventHandler(fun s e ->
+                    use o = proc.StandardError
+                    sbErr.Append(o.ReadToEnd()) |> ignore)
+            )
 
             try
                 do! proc.WaitForExitAsync(cancellationToken) |> Async.AwaitTask
             with :? OperationCanceledException ->
                 ()
 
-            let! text = proc.StandardOutput.ReadToEndAsync() |> Async.AwaitTask
-            let! error = proc.StandardError.ReadToEndAsync() |> Async.AwaitTask
+            cancellationToken.ThrowIfCancellationRequested()
+            let! stdo = proc.StandardOutput.ReadToEndAsync() |> Async.AwaitTask
+            let text = returnOr sbStd stdo
+
+            let! stde = proc.StandardError.ReadToEndAsync() |> Async.AwaitTask
+            let error = returnOr sbErr stde
 
             do text |> outFunc
 
