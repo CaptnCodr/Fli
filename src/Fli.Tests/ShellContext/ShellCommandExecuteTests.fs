@@ -5,8 +5,6 @@ open FsUnit
 open Fli
 open System
 open System.Text
-open System.Runtime.CompilerServices
-open System.Threading
 open System.Diagnostics
 
 
