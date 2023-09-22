@@ -25,3 +25,13 @@ module Output =
 
     /// Prints `Error` from `Output`.
     let printError = toError >> printfn "%s"
+
+    /// Throws exception if given condition in `func` matches.
+    let throw (func: Output -> bool) (output: Output) =
+        if output |> func then
+            failwith $"Execution failed with exit code {output.ExitCode} {output.Error}"
+
+        output
+
+    /// Throws exception if exit code is not 0.
+    let throwIfErrored = throw (fun o -> o.ExitCode <> 0)
