@@ -1,3 +1,6 @@
+v1.11.0.0 - Oct 06, 2023
+- Add `throw` and `throwIfErrored` functions to interrupt pipeline on error (https://github.com/CaptnCodr/Fli/pull/56).
+
 v1.10.1.0 - Sep 01, 2023
 - `Command.executeAsync` stdout and stderr content now gets returned properly (https://github.com/CaptnCodr/Fli/pull/58).
 
