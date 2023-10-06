@@ -157,6 +157,33 @@ cli { ... }
 |> Output.toError // "This is an error!"
 ```
 
+#### `Output` functions
+```fsharp
+throwIfErrored: Output -> Output
+throw: (Output -> bool) -> Output -> Output
+```
+
+`Output.throw` and `Output.throwIfErrored` are assertion functions that if something's not right it will throw an exception.
+That is useful for build scripts to stop the execution immediately, here is an example:
+```fsharp
+cli {
+    Exec "dotnet"
+    Arguments [| "build"; "-c"; "Release" |]
+    WorkingDirectory "src/"
+}
+|> Command.execute // returns { Id = 123; Text = None; ExitCode = 1; Error = Some "This is an error!" }
+|> Output.throwIfErrored // <- Exception thrown!
+|> Output.toError
+```
+
+or, you can define when to "fail":
+```fsharp
+cli { ... }
+|> Command.execute // returns { Id = 123; Text = "An error occured: ..."; ExitCode = 1; Error = Some "Error detail." }
+|> Output.throw (fun output -> output.Text.Contains("error")) // <- Exception thrown!
+|> Output.toError
+```
+
 #### Printing `Output` fields
 There are printing methods in `Output` too:
 ```fsharp
