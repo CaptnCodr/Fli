@@ -108,8 +108,7 @@ let ``Hello World with executing program async`` () =
             output |> Output.toText |> should equal "Hello World!"
         }
     else
-        Assert.Pass()
-        |> async.Return
+        Assert.Pass() |> async.Return
 
 [<Test>]
 let ``Hello World with executing program with Verb`` () =

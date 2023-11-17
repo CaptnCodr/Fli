@@ -21,7 +21,7 @@ let ``Check Argument in ProcessStartInfo with Command`` () =
         Command "echo Hello World!"
     }
     |> Command.buildProcess
-    |> (fun p -> p.Arguments)
+    |> _.Arguments
     |> should equal "-Command echo Hello World!"
 
 [<Test>]
@@ -31,7 +31,7 @@ let ``Check WorkingDirectory in ProcessStartInfo with WorkingDirectory`` () =
         WorkingDirectory @"C:\Users"
     }
     |> Command.buildProcess
-    |> (fun p -> p.WorkingDirectory)
+    |> _.WorkingDirectory
     |> should equal @"C:\Users"
 
 [<Test>]
@@ -41,7 +41,7 @@ let ``Check Environment in ProcessStartInfo with single environment variable`` (
         EnvironmentVariable("Fli", "test")
     }
     |> Command.buildProcess
-    |> (fun p -> p.Environment.Contains(KeyValuePair("Fli", "test")))
+    |> _.Environment.Contains(KeyValuePair("Fli", "test"))
     |> should be True
 
 [<Test>]

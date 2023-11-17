@@ -25,30 +25,29 @@ let ``Hello World with CMD`` () =
 
 [<Test>]
 let ``Hello World with CMD waiting async`` () =
-        if OperatingSystem.IsWindows() then
-            async {
-                let stopwatch = new Stopwatch()
-                stopwatch.Start()
+    if OperatingSystem.IsWindows() then
+        async {
+            let stopwatch = new Stopwatch()
+            stopwatch.Start()
 
-                try
-                    let! operation =
-                        cli {
-                            Shell(CUSTOM("cmd.exe", "/K"))
-                            Command "Hello World!"
-                            CancelAfter 3000
-                        }
-                        |> Command.executeAsync
+            try
+                let! operation =
+                    cli {
+                        Shell(CUSTOM("cmd.exe", "/K"))
+                        Command "Hello World!"
+                        CancelAfter 3000
+                    }
+                    |> Command.executeAsync
 
-                    ()
-                with :? AggregateException as e ->
-                    e.GetType() |> should equal typeof<AggregateException>
+                ()
+            with :? AggregateException as e ->
+                e.GetType() |> should equal typeof<AggregateException>
 
-                stopwatch.Stop()
-                stopwatch.Elapsed.TotalSeconds |> should be (inRange 2.9 3.2)
-            }
-        else
-            Assert.Pass()
-            |> async.Return
+            stopwatch.Stop()
+            stopwatch.Elapsed.TotalSeconds |> should be (inRange 2.9 3.2)
+        }
+    else
+        Assert.Pass() |> async.Return
 
 [<Test>]
 let ``Hello World with CUSTOM shell`` () =
@@ -229,8 +228,7 @@ let ``Hello World with BASH async`` () =
             output |> Output.toText |> should equal "Hello World!"
         }
     else
-        Assert.Pass()
-        |> async.Return 
+        Assert.Pass() |> async.Return
 
 [<Test>]
 let ``BASH returning non zero ExitCode`` () =

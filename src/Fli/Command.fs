@@ -35,21 +35,26 @@ module Command =
             WindowStyle = ProcessWindowStyle.Hidden,
             CreateNoWindow = true,
             UseShellExecute = openDefault,
-            RedirectStandardInput = not(openDefault),
-            RedirectStandardOutput = not(openDefault),
-            RedirectStandardError = not(openDefault)
+            RedirectStandardInput = not (openDefault),
+            RedirectStandardOutput = not (openDefault),
+            RedirectStandardError = not (openDefault)
         )
 
     let private trim (s: string) = s.TrimEnd([| '\r'; '\n' |])
-    
-    let returnOr (sb: StringBuilder) (output: string) = 
+
+    let returnOr (sb: StringBuilder) (output: string) =
         match (sb.ToString(), output) with
         | (t, _) when t.Length > 0 -> t
         | (_, o) when o.Length > 0 -> o
         | (_, _) -> ""
 
 #if NET
-    let private startProcessAsync (inFunc: Process -> Tasks.Task<unit>) (outFunc: string -> unit) cancellationToken psi =
+    let private startProcessAsync
+        (inFunc: Process -> Tasks.Task<unit>)
+        (outFunc: string -> unit)
+        cancellationToken
+        psi
+        =
         async {
             let proc = Process.Start(startInfo = psi)
             do! proc |> inFunc |> Async.AwaitTask
@@ -97,8 +102,18 @@ module Command =
         let proc = Process.Start(startInfo = psi)
         proc |> inputFunc
 
-        let text = if psi.UseShellExecute |> not then proc.StandardOutput.ReadToEnd() else ""
-        let error = if psi.UseShellExecute |> not then proc.StandardError.ReadToEnd() else ""
+        let text =
+            if psi.UseShellExecute |> not then
+                proc.StandardOutput.ReadToEnd()
+            else
+                ""
+
+        let error =
+            if psi.UseShellExecute |> not then
+                proc.StandardError.ReadToEnd()
+            else
+                ""
+
         proc.WaitForExit()
 
         text |> outputFunc
@@ -124,7 +139,7 @@ module Command =
         if psi.UseShellExecute |> not then
             ((variables |> Option.defaultValue [] |> List.iter (psi.Environment.Add)), psi)
             |> snd
-        else 
+        else
             psi
 
     let private addCredentials (credentials: Credentials option) (psi: ProcessStartInfo) =
@@ -185,9 +200,9 @@ module Command =
 
         cts.Token
 
-    let private quoteBashCommand (context: ShellContext) = 
-        match context.config.Shell with 
-        | Shells.BASH -> context.config.Command |> Option.defaultValue "" |> fun s -> $"\"{s}\""
+    let private quoteBashCommand (context: ShellContext) =
+        match context.config.Shell with
+        | Shells.BASH -> context.config.Command |> Option.defaultValue "" |> (fun s -> $"\"{s}\"")
         | _ -> context.config.Command |> Option.defaultValue ""
 
     type Command =
@@ -205,7 +220,12 @@ module Command =
             checkVerb context.config.Verb context.config.Program
 
             let arguments = (context.config.Arguments |> Option.defaultValue "")
-            let openDefault = if arguments = "" && context.config.EnvironmentVariables.IsNone then true else false
+
+            let openDefault =
+                if arguments = "" && context.config.EnvironmentVariables.IsNone then
+                    true
+                else
+                    false
 
             (createProcess context.config.Program arguments openDefault)
                 .With(Verb = (context.config.Verb |> Option.defaultValue null))
