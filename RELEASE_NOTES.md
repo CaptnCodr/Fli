@@ -1,3 +1,6 @@
+v1.100.10.0 - Nov 24, 2023
+- Tiny logo fix.
+
 v1.100.1.0 - Nov 24, 2023
 - Tiny fix.
 
