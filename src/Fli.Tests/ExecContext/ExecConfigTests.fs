@@ -15,7 +15,7 @@ let ``Check arguments config for executing program`` () =
         Exec "cmd.exe"
         Arguments "echo Hello World!"
     }
-    |> fun c -> c.config.Arguments
+    |> _.config.Arguments
     |> should equal (Some "echo Hello World!")
 
 [<Test>]
@@ -24,7 +24,7 @@ let ``Check arguments list config for executing program`` () =
         Exec "cmd.exe"
         Arguments [ "echo"; "Hello World!" ]
     }
-    |> fun c -> c.config.Arguments
+    |> _.config.Arguments
     |> should equal (Some "echo Hello World!")
 
 [<Test>]
@@ -33,7 +33,7 @@ let ``Check Input config for executing program`` () =
         Exec "cmd.exe"
         Input "echo 123\r\necho Test"
     }
-    |> fun c -> c.config.Input
+    |> _.config.Input
     |> should equal (Some "echo 123\r\necho Test")
 
 [<Test>]
@@ -42,7 +42,7 @@ let ``Check Output config for executing program`` () =
         Exec "cmd.exe"
         Output @"C:\Users\test.txt"
     }
-    |> fun c -> c.config.Output
+    |> _.config.Output
     |> should equal (Some(File @"C:\Users\test.txt"))
 
 [<Test>]
@@ -51,7 +51,7 @@ let ``Check working directory config for executing program`` () =
         Exec "cmd.exe"
         WorkingDirectory @"C:\Users"
     }
-    |> fun c -> c.config.WorkingDirectory
+    |> _.config.WorkingDirectory
     |> should equal (Some @"C:\Users")
 
 [<Test>]
@@ -60,7 +60,7 @@ let ``Check Verb config for executing program`` () =
         Exec "cmd.exe"
         Verb "runas"
     }
-    |> fun c -> c.config.Verb
+    |> _.config.Verb
     |> should equal (Some "runas")
 
 [<Test>]
@@ -70,7 +70,7 @@ let ``Check credentials config for executing program`` () =
         WorkingDirectory @"C:\Users"
         Username "admin"
     }
-    |> fun c -> c.config.UserName.Value
+    |> _.config.UserName.Value
     |> should equal "admin"
 
 [<Test>]
@@ -80,7 +80,7 @@ let ``Check credentials config for executing program with NetworkCredentials`` (
         WorkingDirectory @"C:\Users"
         Username "admin@company"
     }
-    |> fun c -> c.config.UserName.Value
+    |> _.config.UserName.Value
     |> should equal "admin@company"
 
 [<Test>]
@@ -89,7 +89,7 @@ let ``Check EnvironmentVariables with single KeyValue config`` () =
         Exec "cmd.exe"
         EnvironmentVariable("user", "admin")
     }
-    |> fun c -> c.config.EnvironmentVariables.Value
+    |> _.config.EnvironmentVariables.Value
     |> should equal [ ("user", "admin") ]
 
 [<Test>]
@@ -98,7 +98,7 @@ let ``Check EnvironmentVariables with multiple KeyValues config`` () =
         Exec "cmd.exe"
         EnvironmentVariables [ ("user", "admin"); ("path", "path/to/file") ]
     }
-    |> fun c -> c.config.EnvironmentVariables.Value
+    |> _.config.EnvironmentVariables.Value
     |> should equal [ ("user", "admin"); ("path", "path/to/file") ]
 
 [<Test>]
@@ -107,7 +107,7 @@ let ``Check Credentials with domain, username and password`` () =
         Exec "cmd.exe"
         Credentials("domain", "user", "password123")
     }
-    |> fun c -> c.config.Credentials.Value
+    |> _.config.Credentials.Value
     |> should equal (Credentials("domain", "user", "password123"))
 
 [<Test>]
@@ -116,5 +116,5 @@ let ``Check Encoding with setting Encoding`` () =
         Exec "cmd.exe"
         Encoding System.Text.Encoding.UTF8
     }
-    |> fun c -> c.config.Encoding.Value
+    |> _.config.Encoding.Value
     |> should equal System.Text.Encoding.UTF8

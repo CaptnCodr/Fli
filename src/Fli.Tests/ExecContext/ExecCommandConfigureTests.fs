@@ -22,7 +22,7 @@ let ``Check Arguments in ProcessStartInfo with Arguments`` () =
         Arguments "-c echo Hello World!"
     }
     |> Command.buildProcess
-    |> (fun p -> p.Arguments)
+    |> _.Arguments
     |> should equal "-c echo Hello World!"
 
 [<Test>]
@@ -32,7 +32,7 @@ let ``Check WorkingDirectory in ProcessStartInfo with WorkingDirectory`` () =
         WorkingDirectory @"C:\Users"
     }
     |> Command.buildProcess
-    |> (fun p -> p.WorkingDirectory)
+    |> _.WorkingDirectory
     |> should equal @"C:\Users"
 
 [<Test>]
@@ -43,7 +43,7 @@ let ``Check Verb in ProcessStartInfo with Verb`` () =
             Verb "open"
         }
         |> Command.buildProcess
-        |> (fun p -> p.Verb)
+        |> _.Verb
         |> should equal "open"
     else
         Assert.Pass()
@@ -55,7 +55,7 @@ let ``Check UserName in ProcessStartInfo with Username`` () =
         Username "admin"
     }
     |> Command.buildProcess
-    |> (fun p -> p.UserName)
+    |> _.UserName
     |> should equal "admin"
 
 [<Test>]
@@ -80,7 +80,7 @@ let ``Check Environment in ProcessStartInfo with single environment variable`` (
         EnvironmentVariable("Fli", "test")
     }
     |> Command.buildProcess
-    |> (fun p -> p.Environment.Contains(KeyValuePair("Fli", "test")))
+    |> _.Environment.Contains(KeyValuePair("Fli", "test"))
     |> should be True
 
 [<Test>]

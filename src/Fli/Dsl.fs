@@ -11,27 +11,19 @@ module Cli =
 
     let command (command: string) (context: ShellContext) =
         { context with
-            config =
-                { context.config with
-                    Command = Some command } }
+            config.Command = Some command }
 
     let input (input: string) (context: ShellContext) =
         { context with
-            config =
-                { context.config with
-                    Input = Some input } }
+            config.Input = Some input }
 
     let output (output: Outputs) (context: ShellContext) =
         { context with
-            config =
-                { context.config with
-                    Output = Some output } }
+            config.Output = Some output }
 
     let workingDirectory (workingDirectory: string) (context: ShellContext) =
         { context with
-            config =
-                { context.config with
-                    WorkingDirectory = Some workingDirectory } }
+            config.WorkingDirectory = Some workingDirectory }
 
     let environmentVariables (variables: (string * string) list) (context: ShellContext) =
         let vars =
@@ -40,21 +32,15 @@ module Cli =
             | None -> variables
 
         { context with
-            config =
-                { context.config with
-                    EnvironmentVariables = Some vars } }
+            config.EnvironmentVariables = Some vars }
 
     let encoding (encoding: System.Text.Encoding) (context: ShellContext) =
         { context with
-            config =
-                { context.config with
-                    Encoding = Some encoding } }
+            config.Encoding = Some encoding }
 
     let cancelAfter (cancelAfter: int) (context: ShellContext) =
         { context with
-            config =
-                { context.config with
-                    CancelAfter = Some cancelAfter } }
+            config.CancelAfter = Some cancelAfter }
 
 module Program =
 
@@ -65,43 +51,30 @@ module Program =
 
     let arguments (arguments: string) (context: ExecContext) =
         { context with
-            config =
-                { context.config with
-                    Arguments = Some arguments } }
+            config.Arguments = Some arguments }
 
     let input (input: string) (context: ExecContext) =
         { context with
-            config =
-                { context.config with
-                    Input = Some input } }
+            config.Input = Some input }
 
     let output (output: Outputs) (context: ExecContext) =
         { context with
-            config =
-                { context.config with
-                    Output = Some output } }
+            config.Output = Some output }
 
     let workingDirectory (workingDirectory: string) (context: ExecContext) =
         { context with
-            config =
-                { context.config with
-                    WorkingDirectory = Some workingDirectory } }
+            config.WorkingDirectory = Some workingDirectory }
 
     let verb (verb: string) (context: ExecContext) =
-        { context with
-            config = { context.config with Verb = Some verb } }
+        { context with config.Verb = Some verb }
 
     let userName (userName: string) (context: ExecContext) =
         { context with
-            config =
-                { context.config with
-                    UserName = Some userName } }
+            config.UserName = Some userName }
 
     let credentials (credentials: Credentials) (context: ExecContext) =
         { context with
-            config =
-                { context.config with
-                    Credentials = Some credentials } }
+            config.Credentials = Some credentials }
 
     let environmentVariables (variables: (string * string) list) (context: ExecContext) =
         let vars =
@@ -110,18 +83,12 @@ module Program =
             | None -> variables
 
         { context with
-            config =
-                { context.config with
-                    EnvironmentVariables = Some vars } }
+            config.EnvironmentVariables = Some vars }
 
     let encoding (encoding: System.Text.Encoding) (context: ExecContext) =
         { context with
-            config =
-                { context.config with
-                    Encoding = Some encoding } }
+            config.Encoding = Some encoding }
 
     let cancelAfter (cancelAfter: int) (context: ExecContext) =
         { context with
-            config =
-                { context.config with
-                    CancelAfter = Some cancelAfter } }
+            config.CancelAfter = Some cancelAfter }
