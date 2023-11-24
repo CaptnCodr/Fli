@@ -6,11 +6,12 @@ owners
 authors
     Constantin Tews
 version
-    1.11.0.0
+    1.100.0.0
 readme
     README.md
 releaseNotes
-    - Add `throw` and `throwIfErrored` functions to interrupt pipeline on error (https://github.com/CaptnCodr/Fli/pull/56).
+    - Add .NET8 support (https://github.com/CaptnCodr/Fli/pull/60).
+    - Add new logo (https://github.com/CaptnCodr/Fli/pull/61).
     (All release notes: https://github.com/CaptnCodr/Fli/blob/main/RELEASE_NOTES.md)
 projectUrl
     https://github.com/CaptnCodr/Fli

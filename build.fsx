@@ -19,6 +19,7 @@ cli {
     WorkingDirectory "src/"
 }
 |> Command.execute
+|> Output.throwIfErrored
 |> Output.toText
 |> printfn "%s"
 
@@ -29,6 +30,7 @@ cli {
     WorkingDirectory "src/"
 }
 |> Command.execute
+|> Output.throwIfErrored
 |> Output.toText
 |> printfn "%s"
 

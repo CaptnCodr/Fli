@@ -1,3 +1,7 @@
+v1.100.0.0 - Nov 24, 2023
+- Add .NET8 support (https://github.com/CaptnCodr/Fli/pull/60).
+- Add new logo (https://github.com/CaptnCodr/Fli/pull/61).
+
 v1.11.0.0 - Oct 06, 2023
 - Add `throw` and `throwIfErrored` functions to interrupt pipeline on error (https://github.com/CaptnCodr/Fli/pull/56).
 
