@@ -1,3 +1,6 @@
+v1.100.1.0 - Nov 24, 2023
+- Tiny fix.
+
 v1.100.0.0 - Nov 24, 2023
 - Add .NET8 support (https://github.com/CaptnCodr/Fli/pull/60).
 - Add new logo (https://github.com/CaptnCodr/Fli/pull/61).
