@@ -6,12 +6,11 @@ owners
 authors
     Constantin Tews
 version
-    1.100.10.0
+    1.101.0.0
 readme
     README.md
 releaseNotes
-    - Add .NET8 support (https://github.com/CaptnCodr/Fli/pull/60).
-    - Add new logo (https://github.com/CaptnCodr/Fli/pull/61).
+    - New year's work.
     (All release notes: https://github.com/CaptnCodr/Fli/blob/main/RELEASE_NOTES.md)
 projectUrl
     https://github.com/CaptnCodr/Fli
@@ -24,7 +23,7 @@ licenseUrl
 requireLicenseAcceptance
     false
 copyright
-    Copyright 2022-2023
+    Copyright 2022-2024
 tags
     fsharp cli shell process computation-expression
 description
@@ -39,5 +38,6 @@ files
     /bin/Release/netstandard2.1/Fli.* ==> lib/netstandard2.1
     ../install.ps1 ==> tools
     ../../README.md ==> .
+    ../../RELEASE_NOTES.md ==> .
 dependencies
     FSharp.Core >= LOCKEDVERSION
