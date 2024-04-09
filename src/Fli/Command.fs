@@ -205,6 +205,13 @@ module Command =
         | Shells.BASH -> context.config.Command |> Option.defaultValue "" |> (fun s -> $"\"{s}\"")
         | _ -> context.config.Command |> Option.defaultValue ""
 
+    let private getProcessWindowStyle (windowStyle: WindowStyle) =
+        match windowStyle with
+        | Hidden -> ProcessWindowStyle.Hidden
+        | Maximized -> ProcessWindowStyle.Maximized
+        | Minimized -> ProcessWindowStyle.Minimized
+        | Normal -> ProcessWindowStyle.Normal
+
     type Command =
         static member internal buildProcess(context: ShellContext) =
             let (proc, flag) = (context.config.Shell, context.config.Input) ||> shellToProcess
@@ -214,6 +221,7 @@ module Command =
                 .With(WorkingDirectory = (context.config.WorkingDirectory |> Option.defaultValue ""))
                 .With(StandardOutputEncoding = (context.config.Encoding |> Option.defaultValue null))
                 .With(StandardErrorEncoding = (context.config.Encoding |> Option.defaultValue null))
+                .With(WindowStyle = getProcessWindowStyle (context.config.WindowStyle |> Option.defaultValue Hidden))
             |> addEnvironmentVariables context.config.EnvironmentVariables
 
         static member internal buildProcess(context: ExecContext) =
@@ -233,6 +241,7 @@ module Command =
                 .With(UserName = (context.config.UserName |> Option.defaultValue ""))
                 .With(StandardOutputEncoding = (context.config.Encoding |> Option.defaultValue null))
                 .With(StandardErrorEncoding = (context.config.Encoding |> Option.defaultValue null))
+                .With(WindowStyle = getProcessWindowStyle (context.config.WindowStyle |> Option.defaultValue Hidden))
             |> addCredentials context.config.Credentials
             |> addEnvironmentVariables context.config.EnvironmentVariables
 
