@@ -245,6 +245,7 @@ cli {
 | `Input`                | `string`                   |
 | `Output`               | `Outputs` (see below)      |
 | `WorkingDirectory`     | `string`                   |
+| `WindowStyle`          | `Fli.WindowStyle`          |
 | `EnvironmentVariable`  | `string * string`          |
 | `EnvironmentVariables` | `(string * string) list`   |
 | `Encoding`             | `System.Text.Encoding`     |
@@ -261,6 +262,7 @@ cli {
 | `Username`             | `string`                                                 |
 | `Credentials`          | `string * string * string`                               |
 | `WorkingDirectory`     | `string`                                                 |
+| `WindowStyle`          | `Fli.WindowStyle`             |
 | `EnvironmentVariable`  | `string * string`                                        |
 | `EnvironmentVariables` | `(string * string) list`                                 |
 | `Encoding`             | `System.Text.Encoding`                                   |
@@ -278,6 +280,12 @@ Provided `Fli.Outputs`:
 - `File of string` a string with an absolute path of the output file.
 - `StringBuilder of StringBuilder` a StringBuilder which will be filled with the output text.
 - `Custom of Func<string, unit>` a custom function (`string -> unit`) that will be called with the output string (logging, printing etc.).
+
+Provided `Fli.WindowStyle`:
+- `Hidden` (default)
+- `Maximized`
+- `Minimized`
+- `Normal`
 
 ### Do you miss something?
 Open an [issue](https://github.com/CaptnCodr/Fli/issues) or start a [discussion](https://github.com/CaptnCodr/Fli/discussions).

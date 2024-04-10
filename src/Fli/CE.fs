@@ -56,7 +56,7 @@ module CE =
         member _.WorkingDirectory(context: ICommandContext<ShellContext>, workingDirectory) =
             Cli.workingDirectory workingDirectory context.Context
 
-        /// The `windowsstyle` for newly created windows.
+        /// The `WindowStyle` for newly created windows.
         /// Hint: Hidden, Maximized, Minimized or Normal.
         [<CustomOperation("WindowStyle")>]
         member _.WindowStyle(context: ICommandContext<ShellContext>, windowStyle) =
@@ -124,7 +124,7 @@ module CE =
         member _.WorkingDirectory(context: ICommandContext<ExecContext>, workingDirectory) =
             Program.workingDirectory workingDirectory context.Context
 
-        /// The `windowsstyle` for newly created windows.
+        /// The `WindowStyle` for newly created windows.
         /// Hint: Hidden, Maximized, Minimized or Normal.
         [<CustomOperation("WindowStyle")>]
         member _.WindowStyle(context: ICommandContext<ExecContext>, windowStyle) =

@@ -55,7 +55,7 @@ let ``Check working directory config for executing program`` () =
     |> should equal (Some @"C:\Users")
 
 [<Test>]
-let ``Check window style config for executing program`` () =
+let ``Check windowstyle config for executing program`` () =
     cli {
         Exec "cmd.exe"
         WindowStyle Normal }

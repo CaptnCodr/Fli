@@ -28,7 +28,7 @@ let ``Check Arguments in ProcessStartInfo with Arguments`` () =
 [<Test>]
 let ``Check WorkingDirectory in ProcessStartInfo with WorkingDirectory`` () =
     cli {
-        Exec "cnd.exe"
+        Exec "cmd.exe"
         WorkingDirectory @"C:\Users"
     }
     |> Command.buildProcess
@@ -36,9 +36,9 @@ let ``Check WorkingDirectory in ProcessStartInfo with WorkingDirectory`` () =
     |> should equal @"C:\Users"
 
 [<Test>]
-let ``Check Window Style in ProcessStartInfo with WorkingDirectory`` () =
+let ``Check WindowStyle in ProcessStartInfo with WorkingDirectory`` () =
     cli {
-        Exec "cnd.exe"
+        Exec "cmd.exe"
         WindowStyle Normal
     }
     |> Command.buildProcess
