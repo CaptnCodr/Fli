@@ -32,7 +32,6 @@ module Command =
         ProcessStartInfo(
             FileName = executable,
             Arguments = argumentString,
-            WindowStyle = ProcessWindowStyle.Hidden,
             CreateNoWindow = true,
             UseShellExecute = openDefault,
             RedirectStandardInput = not (openDefault),

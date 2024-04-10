@@ -124,6 +124,15 @@ cli {
 |> Command.execute
 ```
 
+For Windows applications it's possible to set their visibility. There are four possible values: `Hidden`, `Maximized`, `Minimized` and `Normal`. The default is `Hidden`.
+```fsharp
+cli {
+        Exec @"C:\Windows\regedit.exe"
+        WindowStyle Normal
+}
+|> Command.execute
+```
+
 #### `Command.execute`
 `Command.execute` returns record: `type Output = { Id: int; Text: string option; ExitCode: int; Error: string option }`
 which has getter methods to get only one value:
