@@ -262,7 +262,7 @@ cli {
 | `Username`             | `string`                                                 |
 | `Credentials`          | `string * string * string`                               |
 | `WorkingDirectory`     | `string`                                                 |
-| `WindowStyle`          | `Fli.WindowStyle`             |
+| `WindowStyle`          | `Fli.WindowStyle`                                        |
 | `EnvironmentVariable`  | `string * string`                                        |
 | `EnvironmentVariables` | `(string * string) list`                                 |
 | `Encoding`             | `System.Text.Encoding`                                   |
