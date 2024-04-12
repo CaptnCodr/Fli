@@ -1,3 +1,6 @@
+v1.110.0.0 - Apr 12, 2024
+- Add WindowStyle to CE. (https://github.com/CaptnCodr/Fli/pull/67)
+
 v1.101.0.0 - Jan 09, 2024
 - New year's work.
 
