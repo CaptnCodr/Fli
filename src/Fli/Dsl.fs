@@ -25,6 +25,10 @@ module Cli =
         { context with
             config.WorkingDirectory = Some workingDirectory }
 
+    let windowStyle (windowStyle: WindowStyle) (context: ShellContext) =
+        { context with
+            config.WindowStyle = Some windowStyle }
+
     let environmentVariables (variables: (string * string) list) (context: ShellContext) =
         let vars =
             match context.config.EnvironmentVariables with
@@ -64,6 +68,10 @@ module Program =
     let workingDirectory (workingDirectory: string) (context: ExecContext) =
         { context with
             config.WorkingDirectory = Some workingDirectory }
+
+    let windowStyle (windowStyle: WindowStyle) (context: ExecContext) =
+        { context with
+            config.WindowStyle = Some windowStyle }
 
     let verb (verb: string) (context: ExecContext) =
         { context with config.Verb = Some verb }

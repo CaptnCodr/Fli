@@ -124,6 +124,15 @@ cli {
 |> Command.execute
 ```
 
+For Windows applications it's possible to set their visibility. There are four possible values: `Hidden`, `Maximized`, `Minimized` and `Normal`. The default is `Hidden`.
+```fsharp
+cli {
+        Exec @"C:\Windows\regedit.exe"
+        WindowStyle Normal
+}
+|> Command.execute
+```
+
 #### `Command.execute`
 `Command.execute` returns record: `type Output = { Id: int; Text: string option; ExitCode: int; Error: string option }`
 which has getter methods to get only one value:
@@ -236,6 +245,7 @@ cli {
 | `Input`                | `string`                   |
 | `Output`               | `Outputs` (see below)      |
 | `WorkingDirectory`     | `string`                   |
+| `WindowStyle`          | `Fli.WindowStyle`          |
 | `EnvironmentVariable`  | `string * string`          |
 | `EnvironmentVariables` | `(string * string) list`   |
 | `Encoding`             | `System.Text.Encoding`     |
@@ -252,6 +262,7 @@ cli {
 | `Username`             | `string`                                                 |
 | `Credentials`          | `string * string * string`                               |
 | `WorkingDirectory`     | `string`                                                 |
+| `WindowStyle`          | `Fli.WindowStyle`                                        |
 | `EnvironmentVariable`  | `string * string`                                        |
 | `EnvironmentVariables` | `(string * string) list`                                 |
 | `Encoding`             | `System.Text.Encoding`                                   |
@@ -269,6 +280,12 @@ Provided `Fli.Outputs`:
 - `File of string` a string with an absolute path of the output file.
 - `StringBuilder of StringBuilder` a StringBuilder which will be filled with the output text.
 - `Custom of Func<string, unit>` a custom function (`string -> unit`) that will be called with the output string (logging, printing etc.).
+
+Provided `Fli.WindowStyle`:
+- `Hidden` (default)
+- `Maximized`
+- `Minimized`
+- `Normal`
 
 ### Do you miss something?
 Open an [issue](https://github.com/CaptnCodr/Fli/issues) or start a [discussion](https://github.com/CaptnCodr/Fli/discussions).

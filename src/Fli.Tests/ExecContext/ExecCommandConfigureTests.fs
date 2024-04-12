@@ -28,12 +28,22 @@ let ``Check Arguments in ProcessStartInfo with Arguments`` () =
 [<Test>]
 let ``Check WorkingDirectory in ProcessStartInfo with WorkingDirectory`` () =
     cli {
-        Exec "cnd.exe"
+        Exec "cmd.exe"
         WorkingDirectory @"C:\Users"
     }
     |> Command.buildProcess
     |> _.WorkingDirectory
     |> should equal @"C:\Users"
+
+[<Test>]
+let ``Check WindowStyle in ProcessStartInfo with WorkingDirectory`` () =
+    cli {
+        Exec "cmd.exe"
+        WindowStyle Normal
+    }
+    |> Command.buildProcess
+    |> _.WindowStyle
+    |> should equal Diagnostics.ProcessWindowStyle.Normal
 
 [<Test>]
 let ``Check Verb in ProcessStartInfo with Verb`` () =
@@ -123,6 +133,7 @@ let ``Check all possible values in ProcessStartInfo for windows`` () =
                 EnvironmentVariable("Fli", "test")
                 EnvironmentVariables [ ("Fli.Test", "test") ]
                 Encoding Encoding.UTF8
+                WindowStyle Normal
             }
             |> Command.buildProcess
 
@@ -137,6 +148,7 @@ let ``Check all possible values in ProcessStartInfo for windows`` () =
         config.Environment.Contains(KeyValuePair("Fli.Test", "test")) |> should be True
         config.StandardOutputEncoding |> should equal Encoding.UTF8
         config.StandardErrorEncoding |> should equal Encoding.UTF8
+        config.WindowStyle |> should equal Diagnostics.ProcessWindowStyle.Normal
     else
         let config =
             cli {

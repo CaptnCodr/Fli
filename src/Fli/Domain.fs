@@ -17,7 +17,8 @@ module Domain =
           WorkingDirectory: string option
           EnvironmentVariables: (string * string) list option
           Encoding: Encoding option
-          CancelAfter: int option }
+          CancelAfter: int option
+          WindowStyle: WindowStyle option }
 
     and Shells =
         | CMD
@@ -32,6 +33,12 @@ module Domain =
         | StringBuilder of StringBuilder
         | Custom of Func<string, unit>
 
+    and WindowStyle =
+        | Hidden
+        | Maximized
+        | Minimized
+        | Normal
+
     type ExecConfig =
         { Program: string
           Arguments: string option
@@ -43,7 +50,8 @@ module Domain =
           Credentials: Credentials option
           EnvironmentVariables: (string * string) list option
           Encoding: Encoding option
-          CancelAfter: int option }
+          CancelAfter: int option
+          WindowStyle: WindowStyle option }
 
     and Credentials = Credentials of Domain: string * UserName: string * Password: string
 
@@ -72,7 +80,8 @@ module Domain =
               WorkingDirectory = None
               EnvironmentVariables = None
               Encoding = None
-              CancelAfter = None }
+              CancelAfter = None
+              WindowStyle = None }
           ExecConfig =
             { Program = ""
               Arguments = None
@@ -84,7 +93,8 @@ module Domain =
               Credentials = None
               EnvironmentVariables = None
               Encoding = None
-              CancelAfter = None } }
+              CancelAfter = None
+              WindowStyle = None } }
 
     type Output =
         { Id: int

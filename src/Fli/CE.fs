@@ -56,6 +56,12 @@ module CE =
         member _.WorkingDirectory(context: ICommandContext<ShellContext>, workingDirectory) =
             Cli.workingDirectory workingDirectory context.Context
 
+        /// The `WindowStyle` for newly created windows.
+        /// Hint: Hidden, Maximized, Minimized or Normal.
+        [<CustomOperation("WindowStyle")>]
+        member _.WindowStyle(context: ICommandContext<ShellContext>, windowStyle) =
+            Cli.windowStyle windowStyle context.Context
+
         /// One tupled `EnvironmentVariable`.
         [<CustomOperation("EnvironmentVariable")>]
         member _.EnvironmentVariable(context: ICommandContext<ShellContext>, environmentVariable) =
@@ -117,6 +123,12 @@ module CE =
         [<CustomOperation("WorkingDirectory")>]
         member _.WorkingDirectory(context: ICommandContext<ExecContext>, workingDirectory) =
             Program.workingDirectory workingDirectory context.Context
+
+        /// The `WindowStyle` for newly created windows.
+        /// Hint: Hidden, Maximized, Minimized or Normal.
+        [<CustomOperation("WindowStyle")>]
+        member _.WindowStyle(context: ICommandContext<ExecContext>, windowStyle) =
+            Program.windowStyle windowStyle context.Context
 
         /// `Verb` keyword that can be used to start the executable.
         [<CustomOperation("Verb")>]
