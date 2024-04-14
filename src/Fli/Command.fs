@@ -13,11 +13,17 @@ module Command =
     open System.Runtime.InteropServices
     open System.Threading
 
+    let private getAvailablePwshExe () =
+        if RuntimeInformation.IsOSPlatform(OSPlatform.Windows) then
+            "pwsh.exe"
+        else
+            "pwsh"
+
     let private shellToProcess (shell: Shells) (input: string option) =
         match shell with
         | CMD -> "cmd.exe", (if input.IsNone then "/c" else "/k")
         | PS -> "powershell.exe", "-Command"
-        | PWSH -> "pwsh.exe", "-Command"
+        | PWSH -> getAvailablePwshExe (), "-Command"
         | WSL -> "wsl.exe", "--"
         | SH -> "sh", "-c"
         | BASH -> "bash", "-c"
