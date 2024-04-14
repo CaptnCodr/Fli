@@ -19,7 +19,9 @@ module Command =
         | PS -> "powershell.exe", "-Command"
         | PWSH -> "pwsh.exe", "-Command"
         | WSL -> "wsl.exe", "--"
+        | SH -> "sh", "-c"
         | BASH -> "bash", "-c"
+        | ZSH -> "zsh", "-c"
         | CUSTOM(shell, flag) -> shell, flag
 
     let private toOption =
