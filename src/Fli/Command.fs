@@ -202,9 +202,16 @@ module Command =
         cts.Token
 
     let private quoteBashCommand (context: ShellContext) =
-        match context.config.Shell with
-        | Shells.BASH -> context.config.Command |> Option.defaultValue "" |> (fun s -> $"\"{s}\"")
-        | _ -> context.config.Command |> Option.defaultValue ""
+        let noQuoteNeeded = [|
+            Shells.CMD
+            Shells.PWSH
+            Shells.PS
+            Shells.WSL
+        |]
+
+        match Array.contains context.config.Shell noQuoteNeeded with
+        | true -> context.config.Command |> Option.defaultValue ""
+        | false -> context.config.Command |> Option.defaultValue "" |> (fun s -> $"\"{s}\"")
 
     let private getProcessWindowStyle (windowStyle: WindowStyle) =
         match windowStyle with
