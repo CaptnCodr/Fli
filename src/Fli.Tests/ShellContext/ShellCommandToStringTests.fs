@@ -3,6 +3,7 @@
 open NUnit.Framework
 open FsUnit
 open Fli
+open System
 
 
 [<Test>]
@@ -35,12 +36,20 @@ let ``PS command toString returns full line`` () =
 
 [<Test>]
 let ``PWSH command toString returns full line`` () =
-    cli {
-        Shell PWSH
-        Command "Write-Host Hello World!"
-    }
-    |> Command.toString
-    |> should equal "pwsh.exe -Command Write-Host Hello World!"
+    if OperatingSystem.IsWindows() then
+        cli {
+            Shell PWSH
+            Command "Write-Host Hello World!"
+        }
+        |> Command.toString
+        |> should equal "pwsh.exe -Command Write-Host Hello World!"
+    else
+        cli {
+            Shell PWSH
+            Command "Write-Host Hello World!"
+        }
+        |> Command.toString
+        |> should equal "pwsh -Command Write-Host Hello World!"
 
 [<Test>]
 let ``WSL command toString returns full line`` () =
