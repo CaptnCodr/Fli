@@ -188,10 +188,36 @@ let ``Hello World with PWSH`` () =
         Assert.Pass()
 
 [<Test>]
+let ``Hello World with SH`` () =
+    if OperatingSystem.IsWindows() |> not then
+        cli {
+            Shell SH
+            Command "echo Hello World!"
+        }
+        |> Command.execute
+        |> Output.toText
+        |> should equal "Hello World!"
+    else
+        Assert.Pass()
+
+[<Test>]
 let ``Hello World with BASH`` () =
     if OperatingSystem.IsWindows() |> not then
         cli {
             Shell BASH
+            Command "echo Hello World!"
+        }
+        |> Command.execute
+        |> Output.toText
+        |> should equal "Hello World!"
+    else
+        Assert.Pass()
+
+[<Test>]
+let ``Hello World with ZSH`` () =
+    if OperatingSystem.IsMacOS() then
+        cli {
+            Shell ZSH
             Command "echo Hello World!"
         }
         |> Command.execute
