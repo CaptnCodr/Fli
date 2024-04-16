@@ -243,7 +243,7 @@ cli {
 | `Shell`                | `Fli.Shells`               |
 | `Command`              | `string`                   |
 | `Input`                | `string`                   |
-| `Output`               | `Outputs` (see below)      |
+| `Output`               | `Fli.Outputs`              |
 | `WorkingDirectory`     | `string`                   |
 | `WindowStyle`          | `Fli.WindowStyle`          |
 | `EnvironmentVariable`  | `string * string`          |
@@ -257,7 +257,7 @@ cli {
 | `Exec`                 | `string`                                                 |
 | `Arguments`            | `string` / `string seq` / `string list` / `string array` |
 | `Input`                | `string`                                                 |
-| `Output`               | `Outputs` (see below)                                    |
+| `Output`               | `Fli.Outputs`                                            |
 | `Verb`                 | `string`                                                 |
 | `Username`             | `string`                                                 |
 | `Credentials`          | `string * string * string`                               |

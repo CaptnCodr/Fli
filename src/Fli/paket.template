@@ -6,11 +6,12 @@ owners
 authors
     Constantin Tews
 version
-    1.110.0.0
+    1.111.0.0
 readme
     README.md
 releaseNotes
-    - Add WindowStyle to CE. (https://github.com/CaptnCodr/Fli/pull/67)
+    - Add SH and ZSH
+    - Add Linux's PWSH, always quote default shell (https://github.com/CaptnCodr/Fli/pull/68)
     (All release notes: https://github.com/CaptnCodr/Fli/blob/main/RELEASE_NOTES.md)
 projectUrl
     https://github.com/CaptnCodr/Fli

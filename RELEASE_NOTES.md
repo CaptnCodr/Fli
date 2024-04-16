@@ -1,3 +1,7 @@
+v1.111.0.0 - Apr 16, 2024
+- Add SH and ZSH
+- Add Linux's PWSH, always quote default shell (https://github.com/CaptnCodr/Fli/pull/68)
+
 v1.110.0.0 - Apr 12, 2024
 - Add WindowStyle to CE. (https://github.com/CaptnCodr/Fli/pull/67)
 
