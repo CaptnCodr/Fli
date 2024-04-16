@@ -273,7 +273,9 @@ Currently provided `Fli.Shells`:
 - `PS` runs `powershell.exe -Command ...`
 - `PWSH` runs `pwsh.exe -Command ...`
 - `WSL` runs `wsl.exe -- ...`
+- `SH` runs `sh -c ...`
 - `BASH` runs `bash -c ...`
+- `ZSH` runs `zsh -c ...`
 - `CUSTOM (shell: string * flag: string)` runs the specified `shell` with the specified starting argument (`flag`)
 
 Provided `Fli.Outputs`:

@@ -25,7 +25,9 @@ module Domain =
         | PS
         | PWSH
         | WSL
+        | SH
         | BASH
+        | ZSH
         | CUSTOM of shell: string * flag: string
 
     and Outputs =

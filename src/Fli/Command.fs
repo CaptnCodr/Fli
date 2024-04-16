@@ -13,13 +13,21 @@ module Command =
     open System.Runtime.InteropServices
     open System.Threading
 
+    let private getAvailablePwshExe () =
+        if RuntimeInformation.IsOSPlatform(OSPlatform.Windows) then
+            "pwsh.exe"
+        else
+            "pwsh"
+
     let private shellToProcess (shell: Shells) (input: string option) =
         match shell with
         | CMD -> "cmd.exe", (if input.IsNone then "/c" else "/k")
         | PS -> "powershell.exe", "-Command"
-        | PWSH -> "pwsh.exe", "-Command"
+        | PWSH -> getAvailablePwshExe (), "-Command"
         | WSL -> "wsl.exe", "--"
+        | SH -> "sh", "-c"
         | BASH -> "bash", "-c"
+        | ZSH -> "zsh", "-c"
         | CUSTOM(shell, flag) -> shell, flag
 
     let private toOption =
@@ -200,9 +208,16 @@ module Command =
         cts.Token
 
     let private quoteBashCommand (context: ShellContext) =
-        match context.config.Shell with
-        | Shells.BASH -> context.config.Command |> Option.defaultValue "" |> (fun s -> $"\"{s}\"")
-        | _ -> context.config.Command |> Option.defaultValue ""
+        let noQuoteNeeded = [|
+            Shells.CMD
+            Shells.PWSH
+            Shells.PS
+            Shells.WSL
+        |]
+
+        match Array.contains context.config.Shell noQuoteNeeded with
+        | true -> context.config.Command |> Option.defaultValue ""
+        | false -> context.config.Command |> Option.defaultValue "" |> (fun s -> $"\"{s}\"")
 
     let private getProcessWindowStyle (windowStyle: WindowStyle) =
         match windowStyle with
