@@ -82,3 +82,14 @@ let ``Hello World with executing program async`` () =
 
         output |> Output.toText |> should equal "Hello World!"
     }
+
+[<Test>]
+[<Platform("Linux,Unix,MacOsX")>]
+let ``Passing data to a progrma on stdin`` () =
+    cli {
+        Exec "cat"
+        Input "Test"
+    }
+    |> Command.execute
+    |> Output.toText
+    |> should equal "Test"
