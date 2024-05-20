@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Library</OutputType>
@@ -6,13 +6,18 @@
     <IsPackable>false</IsPackable>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="ExecContext\ExecCommandConfigureTests.fs" />
-    <Compile Include="ExecContext\ExecCommandExecuteTests.fs" />
+    <Compile Include="ExecContext/ExecCommandConfigureWindowsTests.fs" />
+    <Compile Include="ExecContext/ExecCommandConfigureUnixTests.fs" />
+    <Compile Include="ExecContext\ExecCommandExecuteWindowsTests.fs" />
+    <Compile Include="ExecContext\ExecCommandExecuteUnixTests.fs" />
     <Compile Include="ExecContext\ExecCommandToStringTests.fs" />
     <Compile Include="ExecContext\ExecConfigTests.fs" />
-    <Compile Include="ShellContext\ShellCommandConfigureTests.fs" />
-    <Compile Include="ShellContext\ShellCommandExecuteTests.fs" />
-    <Compile Include="ShellContext\ShellCommandToStringTests.fs" />
+    <Compile Include="ShellContext/ShellCommandConfigureWindowsTests.fs" />
+    <Compile Include="ShellContext/ShellCommandConfigureUnixTests.fs" />
+    <Compile Include="ShellContext\ShellCommandExecuteWindowsTests.fs" />
+    <Compile Include="ShellContext\ShellCommandExecuteUnixTests.fs" />
+    <Compile Include="ShellContext\ShellCommandToStringWindowsTests.fs" />
+    <Compile Include="ShellContext\ShellCommandToStringUnixTests.fs" />
     <Compile Include="ShellContext\ShellConfigTests.fs" />
     <None Include="paket.references" />
   </ItemGroup>
