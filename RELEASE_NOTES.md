@@ -1,3 +1,6 @@
+v1.111.1.0 - May 24, 2024
+- Ensure StandardIn is always redirected when there is `Input`. (https://github.com/CaptnCodr/Fli/pull/71)
+
 v1.111.0.0 - Apr 16, 2024
 - Add SH and ZSH
 - Add Linux's PWSH, always quote default shell (https://github.com/CaptnCodr/Fli/pull/68)

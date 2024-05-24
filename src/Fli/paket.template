@@ -6,12 +6,11 @@ owners
 authors
     Constantin Tews
 version
-    1.111.0.0
+    1.111.1.0
 readme
     README.md
 releaseNotes
-    - Add SH and ZSH
-    - Add Linux's PWSH, always quote default shell (https://github.com/CaptnCodr/Fli/pull/68)
+    - Ensure StandardIn is always redirected when there is `Input`. (https://github.com/CaptnCodr/Fli/pull/71)
     (All release notes: https://github.com/CaptnCodr/Fli/blob/main/RELEASE_NOTES.md)
 projectUrl
     https://github.com/CaptnCodr/Fli
