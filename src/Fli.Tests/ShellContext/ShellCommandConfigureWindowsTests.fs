@@ -1,4 +1,4 @@
-﻿module Fli.Tests.ShellContext.ShellCommandConfigureTests
+﻿module Fli.Tests.ShellContext.ShellCommandConfigureWindowsTests
 
 open Fli
 open NUnit.Framework
@@ -8,6 +8,7 @@ open System.Text
 
 
 [<Test>]
+[<Platform("Win")>]
 let ``Check FileName in ProcessStartInfo with CMD Shell`` () =
     cli { Shell CMD }
     |> Command.buildProcess
@@ -15,6 +16,7 @@ let ``Check FileName in ProcessStartInfo with CMD Shell`` () =
     |> should equal "cmd.exe"
 
 [<Test>]
+[<Platform("Win")>]
 let ``Check Argument in ProcessStartInfo with Command`` () =
     cli {
         Shell PS
@@ -25,6 +27,7 @@ let ``Check Argument in ProcessStartInfo with Command`` () =
     |> should equal "-Command echo Hello World!"
 
 [<Test>]
+[<Platform("Win")>]
 let ``Check WorkingDirectory in ProcessStartInfo with WorkingDirectory`` () =
     cli {
         Shell CMD
@@ -35,6 +38,7 @@ let ``Check WorkingDirectory in ProcessStartInfo with WorkingDirectory`` () =
     |> should equal @"C:\Users"
 
 [<Test>]
+[<Platform("Win")>]
 let ``Check Environment in ProcessStartInfo with single environment variable`` () =
     cli {
         Shell CMD
@@ -45,6 +49,7 @@ let ``Check Environment in ProcessStartInfo with single environment variable`` (
     |> should be True
 
 [<Test>]
+[<Platform("Win")>]
 let ``Check Environment in ProcessStartInfo with multiple environment variables`` () =
     let config =
         cli {
@@ -57,6 +62,7 @@ let ``Check Environment in ProcessStartInfo with multiple environment variables`
     config.Environment.Contains(KeyValuePair("Fli.Test", "test")) |> should be True
 
 [<Test>]
+[<Platform("Win")>]
 let ``Check StandardOutputEncoding & StandardErrorEncoding with setting Encoding`` () =
     let config =
         cli {
@@ -69,10 +75,11 @@ let ``Check StandardOutputEncoding & StandardErrorEncoding with setting Encoding
     config.StandardErrorEncoding |> should equal Encoding.UTF8
 
 [<Test>]
+[<Platform("Win")>]
 let ``Check all possible values in ProcessStartInfo`` () =
     let config =
         cli {
-            Shell BASH
+            Shell CMD
             Command "echo Hello World! €"
             Input "echo TestInput"
             WorkingDirectory @"C:\Users"
@@ -82,8 +89,8 @@ let ``Check all possible values in ProcessStartInfo`` () =
         }
         |> Command.buildProcess
 
-    config.FileName |> should equal "bash"
-    config.Arguments |> should equal "-c \"echo Hello World! €\""
+    config.FileName |> should equal "cmd.exe"
+    config.Arguments |> should equal "/k echo Hello World! €"
     config.WorkingDirectory |> should equal @"C:\Users"
     config.Environment.Contains(KeyValuePair("Fli", "test")) |> should be True
     config.Environment.Contains(KeyValuePair("Fli.Test", "test")) |> should be True

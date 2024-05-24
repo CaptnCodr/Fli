@@ -1,4 +1,4 @@
-﻿module Fli.Tests.ShellContext.ShellCommandToStringTests
+﻿module Fli.Tests.ShellContext.ShellCommandToStringWindowsTests
 
 open NUnit.Framework
 open FsUnit
@@ -7,6 +7,7 @@ open System
 
 
 [<Test>]
+[<Platform("Win")>]
 let ``CMD command toString returns full line`` () =
     cli {
         Shell CMD
@@ -16,6 +17,7 @@ let ``CMD command toString returns full line`` () =
     |> should equal "cmd.exe /c echo Hello World!"
 
 [<Test>]
+[<Platform("Win")>]
 let ``CMD command toString returns full line in interactive mode`` () =
     cli {
         Shell CMD
@@ -26,6 +28,7 @@ let ``CMD command toString returns full line in interactive mode`` () =
     |> should equal "cmd.exe /k echo Hello World!"
 
 [<Test>]
+[<Platform("Win")>]
 let ``PS command toString returns full line`` () =
     cli {
         Shell PS
@@ -35,23 +38,17 @@ let ``PS command toString returns full line`` () =
     |> should equal "powershell.exe -Command Write-Host Hello World!"
 
 [<Test>]
+[<Platform("Win")>]
 let ``PWSH command toString returns full line`` () =
-    if OperatingSystem.IsWindows() then
-        cli {
-            Shell PWSH
-            Command "Write-Host Hello World!"
-        }
-        |> Command.toString
-        |> should equal "pwsh.exe -Command Write-Host Hello World!"
-    else
-        cli {
-            Shell PWSH
-            Command "Write-Host Hello World!"
-        }
-        |> Command.toString
-        |> should equal "pwsh -Command Write-Host Hello World!"
+    cli {
+        Shell PWSH
+        Command "Write-Host Hello World!"
+    }
+    |> Command.toString
+    |> should equal "pwsh.exe -Command Write-Host Hello World!"
 
 [<Test>]
+[<Platform("Win")>]
 let ``WSL command toString returns full line`` () =
     cli {
         Shell WSL
@@ -59,12 +56,3 @@ let ``WSL command toString returns full line`` () =
     }
     |> Command.toString
     |> should equal "wsl.exe -- echo Hello World!"
-
-[<Test>]
-let ``BASH command toString returns full line`` () =
-    cli {
-        Shell BASH
-        Command "echo Hello World!"
-    }
-    |> Command.toString
-    |> should equal "bash -c \"echo Hello World!\""

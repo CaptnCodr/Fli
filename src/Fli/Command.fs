@@ -242,12 +242,11 @@ module Command =
             checkVerb context.config.Verb context.config.Program
 
             let arguments = (context.config.Arguments |> Option.defaultValue "")
-
-            let openDefault =
-                if arguments = "" && context.config.EnvironmentVariables.IsNone then
-                    true
-                else
-                    false
+                
+            let openDefault = 
+                context.config.Arguments.IsNone 
+                && context.config.EnvironmentVariables.IsNone
+                && context.config.Input.IsNone
 
             (createProcess context.config.Program arguments openDefault)
                 .With(Verb = (context.config.Verb |> Option.defaultValue null))
