@@ -280,7 +280,7 @@ Currently provided `Fli.Shells`:
 - `ZSH` runs `zsh -c ...`
 - `CUSTOM (shell: string * flag: string)` runs the specified `shell` with the specified starting argument (`flag`)
 
-Provided `Fli.Outputs`:~~~~
+Provided `Fli.Outputs`:
 - `File of string` a string with an absolute path of the output file.
 - `StringBuilder of StringBuilder` a StringBuilder which will be filled with the output text.
 - `Custom of Func<string, unit>` a custom function (`string -> unit`) that will be called with the output string (logging, printing etc.).
