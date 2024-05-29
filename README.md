@@ -103,9 +103,11 @@ Add environment variables for the executing program:
 cli {
     Exec "git"
     EnvironmentVariables [("GIT_AUTHOR_NAME", "Jon Doe"); ("GIT_AUTHOR_EMAIL", "jon.doe@domain.com")]
+    Output ""
 }
 |> Command.execute
 ```
+Hint: `Output ""` will be ignored. This is for conditional cases, e.g.: `Output (if true then logFilePath else "")`.
 
 Add credentials to program:
 ```fsharp
@@ -127,8 +129,8 @@ cli {
 For Windows applications it's possible to set their visibility. There are four possible values: `Hidden`, `Maximized`, `Minimized` and `Normal`. The default is `Hidden`.
 ```fsharp
 cli {
-        Exec @"C:\Windows\regedit.exe"
-        WindowStyle Normal
+    Exec @"C:\Windows\regedit.exe"
+    WindowStyle Normal
 }
 |> Command.execute
 ```
@@ -278,7 +280,7 @@ Currently provided `Fli.Shells`:
 - `ZSH` runs `zsh -c ...`
 - `CUSTOM (shell: string * flag: string)` runs the specified `shell` with the specified starting argument (`flag`)
 
-Provided `Fli.Outputs`:
+Provided `Fli.Outputs`:~~~~
 - `File of string` a string with an absolute path of the output file.
 - `StringBuilder of StringBuilder` a StringBuilder which will be filled with the output text.
 - `Custom of Func<string, unit>` a custom function (`string -> unit`) that will be called with the output string (logging, printing etc.).
