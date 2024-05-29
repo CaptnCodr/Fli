@@ -37,6 +37,22 @@ let ``Check Output config for CMD`` () =
     |> should equal (Some(File @"C:\Users\test.txt"))
 
 [<Test>]
+let ``Empty string in Output ends up as None`` () =
+    cli {
+        Shell CMD
+        Output ""
+    }
+    |> _.config.Output |> should be (ofCase <@ None @>)
+
+[<Test>]
+let ``Nullable file path in Output ends up as None`` () =
+    cli {
+        Shell CMD
+        Output (File(null))
+    }
+    |> _.config.Output |> should be (ofCase <@ None @>)
+
+[<Test>]
 let ``Check WorkingDirectory config`` () =
     cli {
         Shell BASH

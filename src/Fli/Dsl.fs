@@ -1,6 +1,7 @@
 ﻿namespace Fli
 
 open Domain
+open Helpers
 
 module Cli =
 
@@ -18,8 +19,12 @@ module Cli =
             config.Input = Some input }
 
     let output (output: Outputs) (context: ShellContext) =
-        { context with
-            config.Output = Some output }
+        let outputsOption =
+            match output with
+            | File path -> path |> toOptionWithDefault output
+            | _ -> Some output
+
+        { context with config.Output = outputsOption }
 
     let workingDirectory (workingDirectory: string) (context: ShellContext) =
         { context with
@@ -62,8 +67,12 @@ module Program =
             config.Input = Some input }
 
     let output (output: Outputs) (context: ExecContext) =
-        { context with
-            config.Output = Some output }
+        let outputsOption =
+            match output with
+            | File path -> path |> toOptionWithDefault output
+            | _ -> Some output
+
+        { context with config.Output = outputsOption }
 
     let workingDirectory (workingDirectory: string) (context: ExecContext) =
         { context with
