@@ -24,3 +24,15 @@ module Helpers =
             secureString
         finally
             gcHandle.Free()
+
+    let toOption =
+        function
+        | null
+        | "" -> None
+        | s -> Some s
+
+    let toOptionWithDefault defaultValue value =
+        match value with
+        | null
+        | "" -> None
+        | _ -> Some defaultValue

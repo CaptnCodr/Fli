@@ -12,7 +12,7 @@ open System.Text
 let ``Check FileName in ProcessStartInfo Exec program`` () =
     cli { Exec "bash" }
     |> Command.buildProcess
-    |> (fun p -> p.FileName)
+    |> _.FileName
     |> should equal "bash"
 
 [<Test>]

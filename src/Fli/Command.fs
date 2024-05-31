@@ -14,10 +14,9 @@ module Command =
     open System.Threading
 
     let private getAvailablePwshExe () =
-        if RuntimeInformation.IsOSPlatform(OSPlatform.Windows) then
-            "pwsh.exe"
-        else
-            "pwsh"
+        match RuntimeInformation.IsOSPlatform(OSPlatform.Windows) with
+        | true -> "pwsh.exe"
+        | false -> "pwsh"
 
     let private shellToProcess (shell: Shells) (input: string option) =
         match shell with
@@ -30,30 +29,24 @@ module Command =
         | ZSH -> "zsh", "-c"
         | CUSTOM(shell, flag) -> shell, flag
 
-    let private toOption =
-        function
-        | null
-        | "" -> None
-        | _ as s -> Some s
-
     let private createProcess executable argumentString openDefault =
         ProcessStartInfo(
             FileName = executable,
             Arguments = argumentString,
             CreateNoWindow = true,
             UseShellExecute = openDefault,
-            RedirectStandardInput = not (openDefault),
-            RedirectStandardOutput = not (openDefault),
-            RedirectStandardError = not (openDefault)
+            RedirectStandardInput = not openDefault,
+            RedirectStandardOutput = not openDefault,
+            RedirectStandardError = not openDefault
         )
 
     let private trim (s: string) = s.TrimEnd([| '\r'; '\n' |])
 
     let returnOr (sb: StringBuilder) (output: string) =
         match (sb.ToString(), output) with
-        | (t, _) when t.Length > 0 -> t
-        | (_, o) when o.Length > 0 -> o
-        | (_, _) -> ""
+        | t, _ when t.Length > 0 -> t
+        | _, o when o.Length > 0 -> o
+        | _, _ -> ""
 
 #if NET
     let private startProcessAsync
@@ -133,7 +126,7 @@ module Command =
 
     let private checkVerb (verb: string option) (executable: string) =
         match verb with
-        | Some(v) ->
+        | Some v ->
             let verbs = ProcessStartInfo(executable).Verbs
 
             if not (verbs |> Array.contains v) then
@@ -144,7 +137,7 @@ module Command =
 
     let private addEnvironmentVariables (variables: (string * string) list option) (psi: ProcessStartInfo) =
         if psi.UseShellExecute |> not then
-            ((variables |> Option.defaultValue [] |> List.iter (psi.Environment.Add)), psi)
+            ((variables |> Option.defaultValue [] |> List.iter psi.Environment.Add), psi)
             |> snd
         else
             psi
@@ -163,7 +156,7 @@ module Command =
 
     let private writeInput (input: string option) (encoding: Encoding option) (p: Process) =
         match input with
-        | Some(inputText) ->
+        | Some inputText ->
             try
                 use sw = p.StandardInput
                 sw.WriteLine(inputText, encoding)
@@ -176,7 +169,7 @@ module Command =
     let private writeInputAsync (input: string option) (p: Process) =
         async {
             match input with
-            | Some(inputText) ->
+            | Some inputText ->
                 try
                     use sw = p.StandardInput
                     do! inputText |> sw.WriteLineAsync |> Async.AwaitTask
@@ -195,7 +188,6 @@ module Command =
             | Outputs.File(file) -> File.WriteAllText(file, output)
             | Outputs.StringBuilder(stringBuilder) -> output |> stringBuilder.Append |> ignore
             | Outputs.Custom(func) -> func.Invoke(output)
-
         | None -> ()
 
     let private setupCancellationToken (cancelAfter: int option) =
@@ -228,7 +220,7 @@ module Command =
 
     type Command =
         static member internal buildProcess(context: ShellContext) =
-            let (proc, flag) = (context.config.Shell, context.config.Input) ||> shellToProcess
+            let proc, flag = (context.config.Shell, context.config.Input) ||> shellToProcess
             let command = context |> quoteBashCommand
 
             (createProcess proc $"""{flag} {command}""" false)
@@ -242,7 +234,7 @@ module Command =
             checkVerb context.config.Verb context.config.Program
 
             let arguments = (context.config.Arguments |> Option.defaultValue "")
-                
+
             let openDefault = 
                 context.config.Arguments.IsNone 
                 && context.config.EnvironmentVariables.IsNone
@@ -260,7 +252,7 @@ module Command =
 
         /// Stringifies shell + opening flag and given command.
         static member toString(context: ShellContext) =
-            let (proc, flag) = (context.config.Shell, context.config.Input) ||> shellToProcess
+            let proc, flag = (context.config.Shell, context.config.Input) ||> shellToProcess
             let command = context |> quoteBashCommand
             $"""{proc} {flag} {command}"""
 

@@ -12,7 +12,7 @@ open System.Text
 let ``Check FileName in ProcessStartInfo with CMD Shell`` () =
     cli { Shell CMD }
     |> Command.buildProcess
-    |> (fun p -> p.FileName)
+    |> _.FileName
     |> should equal "cmd.exe"
 
 [<Test>]

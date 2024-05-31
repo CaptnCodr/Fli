@@ -8,7 +8,7 @@ module CE =
 
     type ICommandContext<'a> with
 
-        member this.Yield(_) = this
+        member this.Yield _ = this
 
     type StartingContext =
         { config: Config option }
@@ -35,6 +35,11 @@ module CE =
         /// `Input` string(s) that can be used to interact with the shell.
         [<CustomOperation("Input")>]
         member _.Input(context: ICommandContext<ShellContext>, input) = Cli.input input context.Context
+
+        /// Extra `Output` that is being executed immediately after getting output from execution.
+        [<CustomOperation("Output")>]
+        member _.Output(context: ICommandContext<ShellContext>, output: Outputs) =
+            Cli.output output context.Context
 
         /// Extra `Output` that is being executed immediately after getting output from execution.
         [<CustomOperation("Output")>]
@@ -93,7 +98,7 @@ module CE =
         [<CustomOperation("Arguments")>]
         member _.Arguments(context: ICommandContext<ExecContext>, arguments) =
             let matchArguments arguments =
-                match box (arguments) with
+                match box arguments with
                 | :? string as s -> s
                 | :? seq<string> as s -> s |> Seq.map string |> String.concat " "
                 | _ -> failwith "Cannot convert arguments to a string!"
@@ -103,6 +108,11 @@ module CE =
         /// `Input` string(s) that can be used to interact with the executable.
         [<CustomOperation("Input")>]
         member _.Input(context: ICommandContext<ExecContext>, input) = Program.input input context.Context
+
+        /// Extra `Output` that is being executed immediately after getting output from execution.
+        [<CustomOperation("Output")>]
+        member _.Output(context: ICommandContext<ExecContext>, output: Outputs) =
+            Program.output output context.Context
 
         /// Extra `Output` that is being executed immediately after getting output from execution.
         [<CustomOperation("Output")>]
@@ -143,7 +153,7 @@ module CE =
         /// Hint: `Domain` and `Password` are available for Windows systems only.
         [<CustomOperation("Credentials")>]
         member _.Credentials(context: ICommandContext<ExecContext>, credentials) =
-            let (domain, user, pw) = credentials in Program.credentials (Credentials(domain, user, pw)) context.Context
+            let domain, user, pw = credentials in Program.credentials (Credentials(domain, user, pw)) context.Context
 
         /// One tupled `EnvironmentVariable`.
         [<CustomOperation("EnvironmentVariable")>]

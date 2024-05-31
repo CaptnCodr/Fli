@@ -46,6 +46,22 @@ let ``Check Output config for executing program`` () =
     |> should equal (Some(File @"C:\Users\test.txt"))
 
 [<Test>]
+let ``Empty string in Output ends up as None`` () =
+    cli {
+        Exec "cmd.exe"
+        Output ""
+    }
+    |> _.config.Output |> should be (ofCase <@ None @>)
+
+[<Test>]
+let ``Nullable file path in Output ends up as None`` () =
+    cli {
+        Exec "cmd.exe"
+        Output (File(null))
+    }
+    |> _.config.Output |> should be (ofCase <@ None @>)
+
+[<Test>]
 let ``Check working directory config for executing program`` () =
     cli {
         Exec "cmd.exe"
@@ -55,7 +71,7 @@ let ``Check working directory config for executing program`` () =
     |> should equal (Some @"C:\Users")
 
 [<Test>]
-let ``Check windowstyle config for executing program`` () =
+let ``Check WindowStyle config for executing program`` () =
     cli {
         Exec "cmd.exe"
         WindowStyle Normal }

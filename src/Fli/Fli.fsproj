@@ -21,10 +21,10 @@
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="Domain.fs" />
     <Compile Include="Output.fs" />
+    <Compile Include="Helpers.fs" />
     <Compile Include="Dsl.fs" />
     <Compile Include="CE.fs" />
     <Compile Include="Extensions.fs" />
-    <Compile Include="Helpers.fs" />
     <Compile Include="Command.fs" />
     <None Include="paket.references" />
     <None Include="paket.template" />
