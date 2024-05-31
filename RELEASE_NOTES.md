@@ -1,3 +1,6 @@
+v1.111.10.0 - May 31, 2024
+- Empty file output will not write to file. (https://github.com/CaptnCodr/Fli/pull/72)
+
 v1.111.1.0 - May 24, 2024
 - Ensure StandardIn is always redirected when there is `Input`. (https://github.com/CaptnCodr/Fli/pull/71)
 

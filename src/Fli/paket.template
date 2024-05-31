@@ -6,11 +6,11 @@ owners
 authors
     Constantin Tews
 version
-    1.111.1.0
+    1.111.10.0
 readme
     README.md
 releaseNotes
-    - Ensure StandardIn is always redirected when there is `Input`. (https://github.com/CaptnCodr/Fli/pull/71)
+    - Empty file output will not write to file. (https://github.com/CaptnCodr/Fli/pull/72)
     (All release notes: https://github.com/CaptnCodr/Fli/blob/main/RELEASE_NOTES.md)
 projectUrl
     https://github.com/CaptnCodr/Fli
