@@ -53,7 +53,7 @@ an example with `git`:
 ```fsharp
 cli {
     Exec "git"
-    Arguments ["commit"; "-m"; "Fixing issue #1337."]
+    Arguments ["commit"; "-m"; "\"Fixing issue #1337.\""]
 }
 |> Command.execute
 ```
@@ -220,7 +220,7 @@ cli { ... }
 ```
 
 #### `Command.toString`
-`Command.toString` concatenates only the the executing shell/program + the given commands/arguments:
+`Command.toString` concatenates only the executing shell/program + the given commands/arguments:
 ```fsharp
 cli {
     Shell PS
@@ -271,7 +271,7 @@ cli {
 | `CancelAfter`          | `int`                                                    |
 
 Currently provided `Fli.Shells`:
-- `CMD` runs `cmd.exe /c ...` or `cmd.exe /k ...` (depends if `Input` is provided or not)
+- `CMD` runs either `cmd.exe /c ...` or `cmd.exe /k ...` (if `Input` is provided)
 - `PS` runs `powershell.exe -Command ...`
 - `PWSH` runs `pwsh.exe -Command ...`
 - `WSL` runs `wsl.exe -- ...`
