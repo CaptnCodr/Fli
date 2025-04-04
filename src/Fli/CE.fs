@@ -1,7 +1,5 @@
 ﻿namespace Fli
 
-open System.Text
-
 [<AutoOpen>]
 module CE =
 
@@ -98,10 +96,13 @@ module CE =
         /// `Arguments` that will be passed into the executable.
         [<CustomOperation("Arguments")>]
         member _.Arguments(context: ICommandContext<ExecContext>, arguments) =
-            match box arguments with
-            | :? string as s -> Program.arguments (Arguments(Some s)) context.Context
-            | :? seq<string> as s -> Program.arguments (ArgumentList(Some(s |> Array.ofSeq))) context.Context
-            | _ -> failwith "Cannot convert arguments to a string!"
+            let matchArguments arguments =
+                match box arguments with
+                | :? string as s -> s |> Some |> Arguments
+                | :? seq<string> as s -> s |> Array.ofSeq |> Some |> ArgumentList
+                | _ -> failwith "Cannot convert arguments to a string!"
+
+            Program.arguments (matchArguments arguments) context.Context
 
         /// `Input` string(s) that can be used to interact with the executable.
         [<CustomOperation("Input")>]
