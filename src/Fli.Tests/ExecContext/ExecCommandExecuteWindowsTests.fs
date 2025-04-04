@@ -19,6 +19,7 @@ let ``Hello World with executing program`` () =
     |> should equal "Hello World!"
 
 [<Test>]
+[<Platform("Win")>]
 let ``Print "Test" properly with ArgumentList`` () =
     cli {
         Exec "pwsh.exe"
