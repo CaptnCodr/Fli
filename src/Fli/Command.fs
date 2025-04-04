@@ -35,18 +35,10 @@ module Command =
             let args = (a |> Option.defaultValue "")
             ProcessStartInfo(executable, args)
         | Some(ArgumentList list) ->
-            let escapeString (str: string) =
-                if str.Contains("\"") then
-                    str.Replace("\"", "\"\"") |> fun s -> $"\"{s}\""
-                else
-                    str
-
-            let args = (list |> Option.defaultValue [||])
 #if NET
-            ProcessStartInfo(executable, args)
+            ProcessStartInfo(executable, (list |> Option.defaultValue [||]))
 #else
-            let implodedArray = (args |> Seq.map escapeString |> String.concat " ")
-            ProcessStartInfo(executable, implodedArray)
+            ProcessStartInfo(executable, ArgumentList(list).toString())
 #endif
         | None -> ProcessStartInfo(executable, "")
 
