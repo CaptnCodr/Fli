@@ -10,10 +10,7 @@ open System.Text
 [<Test>]
 [<Platform("Linux,Unix,MacOsX")>]
 let ``Check FileName in ProcessStartInfo Exec program`` () =
-    cli { Exec "bash" }
-    |> Command.buildProcess
-    |> _.FileName
-    |> should equal "bash"
+    cli { Exec "bash" } |> Command.buildProcess |> _.FileName |> should equal "bash"
 
 [<Test>]
 [<Platform("Linux,Unix,MacOsX")>]

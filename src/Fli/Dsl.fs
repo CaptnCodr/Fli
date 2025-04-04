@@ -24,7 +24,8 @@ module Cli =
             | File path -> path |> toOptionWithDefault output
             | _ -> Some output
 
-        { context with config.Output = outputsOption }
+        { context with
+            config.Output = outputsOption }
 
     let workingDirectory (workingDirectory: string) (context: ShellContext) =
         { context with
@@ -58,7 +59,7 @@ module Program =
             { config.ExecConfig with
                 Program = program } }
 
-    let arguments (arguments: string) (context: ExecContext) =
+    let arguments (arguments: Arguments) (context: ExecContext) =
         { context with
             config.Arguments = Some arguments }
 
@@ -72,7 +73,8 @@ module Program =
             | File path -> path |> toOptionWithDefault output
             | _ -> Some output
 
-        { context with config.Output = outputsOption }
+        { context with
+            config.Output = outputsOption }
 
     let workingDirectory (workingDirectory: string) (context: ExecContext) =
         { context with

@@ -1,5 +1,7 @@
 ﻿namespace Fli
 
+open System.Text
+
 [<AutoOpen>]
 module CE =
 
@@ -38,8 +40,7 @@ module CE =
 
         /// Extra `Output` that is being executed immediately after getting output from execution.
         [<CustomOperation("Output")>]
-        member _.Output(context: ICommandContext<ShellContext>, output: Outputs) =
-            Cli.output output context.Context
+        member _.Output(context: ICommandContext<ShellContext>, output: Outputs) = Cli.output output context.Context
 
         /// Extra `Output` that is being executed immediately after getting output from execution.
         [<CustomOperation("Output")>]
@@ -97,13 +98,10 @@ module CE =
         /// `Arguments` that will be passed into the executable.
         [<CustomOperation("Arguments")>]
         member _.Arguments(context: ICommandContext<ExecContext>, arguments) =
-            let matchArguments arguments =
-                match box arguments with
-                | :? string as s -> s
-                | :? seq<string> as s -> s |> Seq.map string |> String.concat " "
-                | _ -> failwith "Cannot convert arguments to a string!"
-
-            Program.arguments (matchArguments arguments) context.Context
+            match box arguments with
+            | :? string as s -> Program.arguments (Arguments(Some s)) context.Context
+            | :? seq<string> as s -> Program.arguments (ArgumentList(Some(s |> Array.ofSeq))) context.Context
+            | _ -> failwith "Cannot convert arguments to a string!"
 
         /// `Input` string(s) that can be used to interact with the executable.
         [<CustomOperation("Input")>]
@@ -111,8 +109,7 @@ module CE =
 
         /// Extra `Output` that is being executed immediately after getting output from execution.
         [<CustomOperation("Output")>]
-        member _.Output(context: ICommandContext<ExecContext>, output: Outputs) =
-            Program.output output context.Context
+        member _.Output(context: ICommandContext<ExecContext>, output: Outputs) = Program.output output context.Context
 
         /// Extra `Output` that is being executed immediately after getting output from execution.
         [<CustomOperation("Output")>]

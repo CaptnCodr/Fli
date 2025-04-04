@@ -19,6 +19,16 @@ let ``Hello World with executing program`` () =
     |> should equal "Hello World!"
 
 [<Test>]
+let ``Print "Test" properly with ArgumentList`` () =
+    cli {
+        Exec "pwsh.exe"
+        Arguments [ "/C"; "Write-Host \"Test\"" ]
+    }
+    |> Command.execute
+    |> Output.toText
+    |> should equal "Test"
+
+[<Test>]
 [<Platform("Win")>]
 let ``Get process Id`` () =
     cli {

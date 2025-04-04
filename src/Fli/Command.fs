@@ -29,16 +29,35 @@ module Command =
         | ZSH -> "zsh", "-c"
         | CUSTOM(shell, flag) -> shell, flag
 
-    let private createProcess executable argumentString openDefault =
-        ProcessStartInfo(
-            FileName = executable,
-            Arguments = argumentString,
-            CreateNoWindow = true,
-            UseShellExecute = openDefault,
-            RedirectStandardInput = not openDefault,
-            RedirectStandardOutput = not openDefault,
-            RedirectStandardError = not openDefault
-        )
+    let private getArguments arguments executable =
+        match arguments with
+        | Some(Arguments a) ->
+            let args = (a |> Option.defaultValue "")
+            ProcessStartInfo(executable, args)
+        | Some(ArgumentList list) ->
+            let escapeString (str: string) =
+                if str.Contains("\"") then
+                    str.Replace("\"", "\"\"") |> fun s -> $"\"{s}\""
+                else
+                    str
+
+            let args = (list |> Option.defaultValue [||])
+#if NET
+            ProcessStartInfo(executable, args)
+#else
+            let implodedArray = (args |> Seq.map escapeString |> String.concat " ")
+            ProcessStartInfo(executable, implodedArray)
+#endif
+        | None -> ProcessStartInfo(executable)
+
+    let private createProcess executable arguments openDefault =
+        let p = getArguments arguments executable
+        p.CreateNoWindow <- true
+        p.UseShellExecute <- openDefault
+        p.RedirectStandardInput <- not openDefault
+        p.RedirectStandardOutput <- not openDefault
+        p.RedirectStandardError <- not openDefault
+        p
 
     let private trim (s: string) = s.TrimEnd([| '\r'; '\n' |])
 
@@ -200,12 +219,7 @@ module Command =
         cts.Token
 
     let private quoteBashCommand (context: ShellContext) =
-        let noQuoteNeeded = [|
-            Shells.CMD
-            Shells.PWSH
-            Shells.PS
-            Shells.WSL
-        |]
+        let noQuoteNeeded = [| Shells.CMD; Shells.PWSH; Shells.PS; Shells.WSL |]
 
         match Array.contains context.config.Shell noQuoteNeeded with
         | true -> context.config.Command |> Option.defaultValue ""
@@ -222,8 +236,9 @@ module Command =
         static member internal buildProcess(context: ShellContext) =
             let proc, flag = (context.config.Shell, context.config.Input) ||> shellToProcess
             let command = context |> quoteBashCommand
+            let args = Arguments(Some $"""{flag} {command}""")
 
-            (createProcess proc $"""{flag} {command}""" false)
+            (createProcess proc (Some args) false)
                 .With(WorkingDirectory = (context.config.WorkingDirectory |> Option.defaultValue ""))
                 .With(StandardOutputEncoding = (context.config.Encoding |> Option.defaultValue null))
                 .With(StandardErrorEncoding = (context.config.Encoding |> Option.defaultValue null))
@@ -233,14 +248,12 @@ module Command =
         static member internal buildProcess(context: ExecContext) =
             checkVerb context.config.Verb context.config.Program
 
-            let arguments = (context.config.Arguments |> Option.defaultValue "")
-
-            let openDefault = 
-                context.config.Arguments.IsNone 
+            let openDefault =
+                context.config.Arguments.IsNone
                 && context.config.EnvironmentVariables.IsNone
                 && context.config.Input.IsNone
 
-            (createProcess context.config.Program arguments openDefault)
+            (createProcess context.config.Program context.config.Arguments openDefault)
                 .With(Verb = (context.config.Verb |> Option.defaultValue null))
                 .With(WorkingDirectory = (context.config.WorkingDirectory |> Option.defaultValue ""))
                 .With(UserName = (context.config.UserName |> Option.defaultValue ""))
@@ -258,7 +271,13 @@ module Command =
 
         /// Stringifies executable + arguments.
         static member toString(context: ExecContext) =
-            $"""{context.config.Program} {context.config.Arguments |> Option.defaultValue ""}"""
+            let args =
+                if context.config.Arguments.IsSome then
+                    context.config.Arguments.Value.toString ()
+                else
+                    ""
+
+            $"""{context.config.Program} {args}"""
 
         /// Executes the given context as a new process.
         static member execute(context: ShellContext) =
