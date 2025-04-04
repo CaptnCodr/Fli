@@ -48,16 +48,16 @@ module Command =
             let implodedArray = (args |> Seq.map escapeString |> String.concat " ")
             ProcessStartInfo(executable, implodedArray)
 #endif
-        | None -> ProcessStartInfo(executable)
+        | None -> ProcessStartInfo(executable, "")
 
     let private createProcess executable arguments openDefault =
-        let p = getArguments arguments executable
-        p.CreateNoWindow <- true
-        p.UseShellExecute <- openDefault
-        p.RedirectStandardInput <- not openDefault
-        p.RedirectStandardOutput <- not openDefault
-        p.RedirectStandardError <- not openDefault
-        p
+        let processInfo = getArguments arguments executable
+        processInfo.CreateNoWindow <- true
+        processInfo.UseShellExecute <- openDefault
+        processInfo.RedirectStandardInput <- not openDefault
+        processInfo.RedirectStandardOutput <- not openDefault
+        processInfo.RedirectStandardError <- not openDefault
+        processInfo
 
     let private trim (s: string) = s.TrimEnd([| '\r'; '\n' |])
 
