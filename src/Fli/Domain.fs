@@ -43,7 +43,7 @@ module Domain =
 
     type ExecConfig =
         { Program: string
-          Arguments: string option
+          Arguments: Arguments option
           Input: string option
           Output: Outputs option
           WorkingDirectory: string option
@@ -56,6 +56,23 @@ module Domain =
           WindowStyle: WindowStyle option }
 
     and Credentials = Credentials of Domain: string * UserName: string * Password: string
+
+    and Arguments =
+        | Arguments of string option
+        | ArgumentList of string array option
+
+        member x.toString() =
+            match x with
+            | Arguments(Some s) -> s
+            | ArgumentList(Some s) ->
+                let escapeString (str: string) =
+                    if str.Contains("\"") then
+                        str.Replace("\"", "\"\"") |> fun s -> $"\"{s}\""
+                    else
+                        str
+
+                s |> Seq.map escapeString |> String.concat " "
+            | _ -> ""
 
     type Config =
         { ShellConfig: ShellConfig

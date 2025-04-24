@@ -26,6 +26,25 @@ let ``Check Arguments in ProcessStartInfo with Arguments`` () =
     |> _.Arguments
     |> should equal "-c echo Hello World!"
 
+#if NET
+[<Test>]
+[<Platform("Win")>]
+let ``Check Arguments in ProcessStartInfo with ArgumentList`` () =
+    cli {
+        Exec "cmd.exe"
+        Arguments [ "-c"; "echo Hello World!" ]
+    }
+    |> Command.buildProcess
+    |> _.ArgumentList
+    :> seq<_>
+    |> should
+        equal
+        (seq {
+            "-c"
+            "echo Hello World!"
+        })
+#endif
+
 [<Test>]
 [<Platform("Win")>]
 let ``Check WorkingDirectory in ProcessStartInfo with WorkingDirectory`` () =
@@ -153,4 +172,4 @@ let ``Check all possible values in ProcessStartInfo for windows`` () =
     config.Environment.Contains(KeyValuePair("Fli.Test", "test")) |> should be True
     config.StandardOutputEncoding |> should equal Encoding.UTF8
     config.StandardErrorEncoding |> should equal Encoding.UTF8
-    config.WindowStyle |> should equal Diagnostics.ProcessWindowStyle.Normal  
+    config.WindowStyle |> should equal Diagnostics.ProcessWindowStyle.Normal

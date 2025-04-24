@@ -16,7 +16,7 @@ let ``Check arguments config for executing program`` () =
         Arguments "echo Hello World!"
     }
     |> _.config.Arguments
-    |> should equal (Some "echo Hello World!")
+    |> should equal (Some(Arguments(Some "echo Hello World!")))
 
 [<Test>]
 let ``Check arguments list config for executing program`` () =
@@ -25,7 +25,7 @@ let ``Check arguments list config for executing program`` () =
         Arguments [ "echo"; "Hello World!" ]
     }
     |> _.config.Arguments
-    |> should equal (Some "echo Hello World!")
+    |> should equal (Some(ArgumentList(Some [| "echo"; "Hello World!" |])))
 
 [<Test>]
 let ``Check Input config for executing program`` () =
@@ -51,15 +51,17 @@ let ``Empty string in Output ends up as None`` () =
         Exec "cmd.exe"
         Output ""
     }
-    |> _.config.Output |> should be (ofCase <@ None @>)
+    |> _.config.Output
+    |> should be (ofCase <@ None @>)
 
 [<Test>]
 let ``Nullable file path in Output ends up as None`` () =
     cli {
         Exec "cmd.exe"
-        Output (File(null))
+        Output(File(null))
     }
-    |> _.config.Output |> should be (ofCase <@ None @>)
+    |> _.config.Output
+    |> should be (ofCase <@ None @>)
 
 [<Test>]
 let ``Check working directory config for executing program`` () =
@@ -74,7 +76,8 @@ let ``Check working directory config for executing program`` () =
 let ``Check WindowStyle config for executing program`` () =
     cli {
         Exec "cmd.exe"
-        WindowStyle Normal }
+        WindowStyle Normal
+    }
     |> _.config.WindowStyle
     |> should equal (Some Normal)
 

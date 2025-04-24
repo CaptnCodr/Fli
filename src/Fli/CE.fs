@@ -38,8 +38,7 @@ module CE =
 
         /// Extra `Output` that is being executed immediately after getting output from execution.
         [<CustomOperation("Output")>]
-        member _.Output(context: ICommandContext<ShellContext>, output: Outputs) =
-            Cli.output output context.Context
+        member _.Output(context: ICommandContext<ShellContext>, output: Outputs) = Cli.output output context.Context
 
         /// Extra `Output` that is being executed immediately after getting output from execution.
         [<CustomOperation("Output")>]
@@ -99,8 +98,8 @@ module CE =
         member _.Arguments(context: ICommandContext<ExecContext>, arguments) =
             let matchArguments arguments =
                 match box arguments with
-                | :? string as s -> s
-                | :? seq<string> as s -> s |> Seq.map string |> String.concat " "
+                | :? string as s -> s |> Some |> Arguments
+                | :? seq<string> as s -> s |> Array.ofSeq |> Some |> ArgumentList
                 | _ -> failwith "Cannot convert arguments to a string!"
 
             Program.arguments (matchArguments arguments) context.Context
@@ -111,8 +110,7 @@ module CE =
 
         /// Extra `Output` that is being executed immediately after getting output from execution.
         [<CustomOperation("Output")>]
-        member _.Output(context: ICommandContext<ExecContext>, output: Outputs) =
-            Program.output output context.Context
+        member _.Output(context: ICommandContext<ExecContext>, output: Outputs) = Program.output output context.Context
 
         /// Extra `Output` that is being executed immediately after getting output from execution.
         [<CustomOperation("Output")>]
