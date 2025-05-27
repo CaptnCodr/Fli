@@ -294,5 +294,17 @@ Provided `Fli.WindowStyle`:
 ### Do you miss something?
 Open an [issue](https://github.com/CaptnCodr/Fli/issues) or start a [discussion](https://github.com/CaptnCodr/Fli/discussions).
 
+### Contributing
+After cloning this repository, there are some steps to start:
+1. `dotnet tool restore`
+2. `dotnet paket restore`
+3. `dotnet restore`
+4. `dotnet paket install`
+5. `dotnet build`
+
+After that, you can start coding, build and test.
+
+Every contribution is welcome. :)
+
 ### Inspiration
 Use CE's for CLI commands came in mind while using [FsHttp](https://github.com/fsprojects/FsHttp).
