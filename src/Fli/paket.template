@@ -6,11 +6,12 @@ owners
 authors
     Constantin Tews
 version
-    1.111.10.0
+    1.111.11.0
 readme
     README.md
 releaseNotes
-    - Empty file output will not write to file. (https://github.com/CaptnCodr/Fli/pull/72)
+    - Improve ArgumentList in `Exec.Arguments`, this will split arguments more precise especially for python commands. (https://github.com/CaptnCodr/Fli/pull/76)
+    - Improve documentations.
     (All release notes: https://github.com/CaptnCodr/Fli/blob/main/RELEASE_NOTES.md)
 projectUrl
     https://github.com/CaptnCodr/Fli
@@ -23,7 +24,7 @@ licenseUrl
 requireLicenseAcceptance
     false
 copyright
-    Copyright 2022-2024
+    Copyright 2022-2025
 tags
     fsharp cli shell process computation-expression
 description
@@ -31,8 +32,6 @@ description
 summary
     F# library to run CLI commands and processes in F# (CE) style.
 files
-    /bin/Release/net6.0/Fli.* ==> lib/net6.0
-    /bin/Release/net7.0/Fli.* ==> lib/net7.0
     /bin/Release/net8.0/Fli.* ==> lib/net8.0
     /bin/Release/netstandard2.0/Fli.* ==> lib/netstandard2.0
     /bin/Release/netstandard2.1/Fli.* ==> lib/netstandard2.1

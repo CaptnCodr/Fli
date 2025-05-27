@@ -1,3 +1,7 @@
+v1.111.11.0 - May 27, 2025
+- Improve ArgumentList in `Exec.Arguments`, this will split arguments more precise especially for python commands. (https://github.com/CaptnCodr/Fli/pull/76)
+- Improve documentations.
+
 v1.111.10.0 - May 31, 2024
 - Empty file output will not write to file. (https://github.com/CaptnCodr/Fli/pull/72)
 

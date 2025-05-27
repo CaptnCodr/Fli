@@ -6,7 +6,7 @@
     <TargetFrameworks>netstandard2.0;netstandard2.1;net8.0</TargetFrameworks>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Configurations>Debug;Release</Configurations>
-    <Version>1.111.10.0</Version>
+    <Version>1.111.11.0</Version>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -15,7 +15,7 @@
   <PropertyGroup>
     <Authors>Constantin Tews</Authors>
     <Description>An F# library to run CLI commands and processes in F# (CE) style.</Description>
-    <Copyright>Copyright © 2022-2024</Copyright>
+    <Copyright>Copyright © 2022-2025</Copyright>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
