@@ -14,6 +14,7 @@ module Domain =
           Command: string option
           Input: string option
           Output: Outputs option
+          Stream: Outputs option
           WorkingDirectory: string option
           EnvironmentVariables: (string * string) list option
           Encoding: Encoding option
@@ -46,6 +47,7 @@ module Domain =
           Arguments: Arguments option
           Input: string option
           Output: Outputs option
+          Stream: Outputs option
           WorkingDirectory: string option
           Verb: string option
           UserName: string option
@@ -96,6 +98,7 @@ module Domain =
               Command = None
               Input = None
               Output = None
+              Stream = None
               WorkingDirectory = None
               EnvironmentVariables = None
               Encoding = None
@@ -106,6 +109,7 @@ module Domain =
               Arguments = None
               Input = None
               Output = None
+              Stream = None
               WorkingDirectory = None
               Verb = None
               UserName = None
