@@ -76,7 +76,7 @@ cli {
 ```
 (Hint: if file extension is not assigned to any installed program, it will throw a `System.NullReferenceException`)
 
-Write output to a specific file:
+Write output or stream to a specific file:
 ```fsharp
 cli {
     Exec "dotnet"
@@ -84,9 +84,16 @@ cli {
     Output @"absolute\path\to\dotnet-sdks.txt"
 }
 |> Command.execute
+
+cli {
+    Exec "dotnet"
+    Arguments "--list-sdks"
+    Stream @"absolute\path\to\dotnet-sdks.txt"
+}
+|> Command.execute
 ```
 
-Write output to a function (logging, printing, etc.):
+Write output or stream to a function (logging, printing, etc.):
 ```fsharp
 let log (output: string) = Debug.Log($"CLI log: {output}")
 
@@ -94,6 +101,13 @@ cli {
     Exec "dotnet"
     Arguments "--list-sdks"
     Output log
+}
+|> Command.execute
+
+cli {
+    Exec "dotnet"
+    Arguments "--list-sdks"
+    Stream log
 }
 |> Command.execute
 ```
