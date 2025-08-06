@@ -55,25 +55,6 @@ module CE =
         member _.Output(context: ICommandContext<ShellContext>, func: string -> unit) =
             Cli.output (Custom func) context.Context
 
-        /// Extra `Stream` that is being executed immediately after getting output from execution.
-        [<CustomOperation("Stream")>]
-        member _.Stream(context: ICommandContext<ShellContext>, output: Outputs) = Cli.stream output context.Context
-
-        /// Extra `Stream` that is being executed immediately after getting output from execution.
-        [<CustomOperation("Stream")>]
-        member _.Stream(context: ICommandContext<ShellContext>, filePath: string) =
-            Cli.stream (File filePath) context.Context
-
-        /// Extra `Stream` that is being executed immediately after getting output from execution.
-        [<CustomOperation("Stream")>]
-        member _.Stream(context: ICommandContext<ShellContext>, stringBuilder: StringBuilder) =
-            Cli.stream (StringBuilder stringBuilder) context.Context
-
-        /// Extra `Stream` that is being executed immediately after getting output from execution.
-        [<CustomOperation("Stream")>]
-        member _.Stream(context: ICommandContext<ShellContext>, func: string -> unit) =
-            Cli.stream (Custom func) context.Context
-
         /// Current executing `working directory`.
         [<CustomOperation("WorkingDirectory")>]
         member _.WorkingDirectory(context: ICommandContext<ShellContext>, workingDirectory) =
@@ -145,24 +126,6 @@ module CE =
         [<CustomOperation("Output")>]
         member _.Output(context: ICommandContext<ExecContext>, func: string -> unit) =
             Program.output (Custom func) context.Context
-
-        [<CustomOperation("Stream")>]
-        member _.Stream(context: ICommandContext<ExecContext>, output: Outputs) = Program.stream output context.Context
-
-        /// Extra `Output` that is being executed immediately after getting output from execution.
-        [<CustomOperation("Stream")>]
-        member _.Stream(context: ICommandContext<ExecContext>, filePath: string) =
-            Program.stream (File filePath) context.Context
-
-        /// Extra `Output` that is being executed immediately after getting output from execution.
-        [<CustomOperation("Stream")>]
-        member _.Stream(context: ICommandContext<ExecContext>, stringBuilder: StringBuilder) =
-            Program.stream (StringBuilder stringBuilder) context.Context
-
-        /// Extra `Output` that is being executed immediately after getting output from execution.
-        [<CustomOperation("Stream")>]
-        member _.Stream(context: ICommandContext<ExecContext>, func: string -> unit) =
-            Program.stream (Custom func) context.Context
 
         /// Current executing `working directory`.
         [<CustomOperation("WorkingDirectory")>]

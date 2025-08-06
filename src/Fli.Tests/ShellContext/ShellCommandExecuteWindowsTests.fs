@@ -84,21 +84,6 @@ let ``Get output in StringBuilder`` () =
 
 [<Test>]
 [<Platform("Win")>]
-let ``Get stream in StringBuilder`` () =
-    let sb = StringBuilder()
-
-    cli {
-        Shell CMD
-        Command "echo Test"
-        Stream sb
-    }
-    |> Command.execute
-    |> ignore
-
-    sb.ToString() |> should equal "Test"
-
-[<Test>]
-[<Platform("Win")>]
 let ``CMD returning non zero process id`` () =
     cli {
         Shell CMD

@@ -27,15 +27,6 @@ module Cli =
         { context with
             config.Output = outputsOption }
 
-    let stream (output: Outputs) (context: ShellContext) =
-        let outputsOption =
-            match output with
-            | File path -> path |> toOptionWithDefault output
-            | _ -> Some output
-
-        { context with
-            config.Stream = outputsOption }
-
     let workingDirectory (workingDirectory: string) (context: ShellContext) =
         { context with
             config.WorkingDirectory = Some workingDirectory }
@@ -84,15 +75,6 @@ module Program =
 
         { context with
             config.Output = outputsOption }
-
-    let stream (output: Outputs) (context: ExecContext) =
-        let outputsOption =
-            match output with
-            | File path -> path |> toOptionWithDefault output
-            | _ -> Some output
-
-        { context with
-            config.Stream = outputsOption }
 
     let workingDirectory (workingDirectory: string) (context: ExecContext) =
         { context with

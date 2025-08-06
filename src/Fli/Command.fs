@@ -109,26 +109,21 @@ module Command =
         |> Async.AwaitTask
 #endif
 
-    let private startProcess (inputFunc: Process -> unit) (outputFunc: string -> unit) (streamFunc: string -> unit) (isNotStreaming: bool) psi =
+    let private startProcess (inputFunc: Process -> unit) (outputFunc: string -> unit) psi =
         let proc = Process.Start(startInfo = psi)
         proc |> inputFunc
 
-        let mutable text =
-            if psi.UseShellExecute |> not && isNotStreaming then
+        let text =
+            if psi.UseShellExecute |> not then
                 proc.StandardOutput.ReadToEnd()
             else
-                proc.BeginOutputReadLine()
                 ""
 
-        let mutable error =
-            if psi.UseShellExecute |> not && isNotStreaming then
+        let error =
+            if psi.UseShellExecute |> not then
                 proc.StandardError.ReadToEnd()
             else
-                proc.BeginErrorReadLine()
                 ""
-
-        proc.OutputDataReceived.Add(fun args -> text <- text + args.Data ; streamFunc args.Data)
-        proc.ErrorDataReceived.Add(fun args -> error <- error + args.Data ; streamFunc args.Data)
 
         proc.WaitForExit()
 
@@ -202,15 +197,6 @@ module Command =
         | Some(o) ->
             match o with
             | Outputs.File(file) -> File.WriteAllText(file, output)
-            | Outputs.StringBuilder(stringBuilder) -> output |> stringBuilder.Append |> ignore
-            | Outputs.Custom(func) -> func.Invoke(output)
-        | None -> ()
-
-    let private streamOutput (outputType: Outputs option) (output: string): unit =
-        match outputType with
-        | Some(o) ->
-            match o with
-            | Outputs.File(file) -> File.AppendAllText(file, output)
             | Outputs.StringBuilder(stringBuilder) -> output |> stringBuilder.Append |> ignore
             | Outputs.Custom(func) -> func.Invoke(output)
         | None -> ()
@@ -292,8 +278,6 @@ module Command =
             |> startProcess
                 (writeInput context.config.Input context.config.Encoding)
                 (writeOutput context.config.Output)
-                (streamOutput context.config.Stream)
-                (context.config.Stream.IsNone)
 
         /// Executes the given context as a new process.
         static member execute(context: ExecContext) =
@@ -302,8 +286,6 @@ module Command =
             |> startProcess
                 (writeInput context.config.Input context.config.Encoding)
                 (writeOutput context.config.Output)
-                (streamOutput context.config.Stream)
-                (context.config.Stream.IsNone)
 
 #if NET
         /// Executes the given context as a new process asynchronously.
