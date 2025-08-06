@@ -98,6 +98,25 @@ cli {
 |> Command.execute
 ```
 
+Write output to a stream:
+```fsharp
+// using a console stream
+cli {
+    Exec "dotnet"
+    Arguments "--list-sdks"
+    Output (new StreamWriter(Console.OpenStandardOutput()))
+}
+|> Command.execute
+
+// using a file stream
+cli {
+    Exec "dotnet"
+    Arguments "--list-sdks"
+    Output (new StreamWriter(new FileStream("test.txt", FileMode.OpenOrCreate)))
+}
+|> Command.execute
+```
+
 Add environment variables for the executing program:
 ```fsharp
 cli {
