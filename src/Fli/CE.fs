@@ -55,23 +55,23 @@ module CE =
         member _.Output(context: ICommandContext<ShellContext>, func: string -> unit) =
             Cli.output (Custom func) context.Context
 
-        /// Extra `Output` that is being executed immediately after getting output from execution.
+        /// Extra `Stream` that is being executed immediately after getting output from execution.
         [<CustomOperation("Stream")>]
         member _.Stream(context: ICommandContext<ShellContext>, output: Outputs) = Cli.stream output context.Context
 
-        /// Extra `Output` that is being executed immediately after getting output from execution.
+        /// Extra `Stream` that is being executed immediately after getting output from execution.
         [<CustomOperation("Stream")>]
         member _.Stream(context: ICommandContext<ShellContext>, filePath: string) =
             Cli.stream (File filePath) context.Context
 
-        /// Extra `Output` that is being executed immediately after getting output from execution.
+        /// Extra `Stream` that is being executed immediately after getting output from execution.
         [<CustomOperation("Stream")>]
         member _.Stream(context: ICommandContext<ShellContext>, stringBuilder: StringBuilder) =
             Cli.stream (StringBuilder stringBuilder) context.Context
 
-        /// Extra `Output` that is being executed immediately after getting output from execution.
+        /// Extra `Stream` that is being executed immediately after getting output from execution.
         [<CustomOperation("Stream")>]
-        member _.Strem(context: ICommandContext<ShellContext>, func: string -> unit) =
+        member _.Stream(context: ICommandContext<ShellContext>, func: string -> unit) =
             Cli.stream (Custom func) context.Context
 
         /// Current executing `working directory`.
