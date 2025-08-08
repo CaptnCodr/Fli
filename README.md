@@ -303,6 +303,7 @@ Provided `Fli.Outputs`:
 - `File of string` a string with an absolute path of the output file.
 - `StringBuilder of StringBuilder` a StringBuilder which will be filled with the output text.
 - `Custom of Func<string, unit>` a custom function (`string -> unit`) that will be called with the output string (logging, printing etc.).
+- `Stream of TextWriter` a stream that will redirect the output text to the designated target (file, console etc.).
 
 Provided `Fli.WindowStyle`:
 - `Hidden` (default)
