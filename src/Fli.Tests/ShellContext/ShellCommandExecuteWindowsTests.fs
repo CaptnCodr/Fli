@@ -112,8 +112,8 @@ let ``Use from to recreate a valid Output when using stream`` () =
         |> Command.execute
 
     output
-    |> _.Text
-    |> should equal None
+    |> Output.toText
+    |> should equal ""
 
     output
     |> Output.from (sb.ToString())
