@@ -100,6 +100,28 @@ let ``Get new stream in StringBuilder`` () =
 
 [<Test>]
 [<Platform("Win")>]
+let ``Use from to recreate a valid Output when using stream`` () =
+    let sb = StringBuilder()
+
+    let output =
+        cli {
+            Shell CMD
+            Command "echo Test"
+            Output (new StringWriter(sb))
+        }
+        |> Command.execute
+
+    output
+    |> _.Text
+    |> should equal None
+
+    output
+    |> Output.from (sb.ToString())
+    |> Output.toText
+    |> should contain "Test"
+
+[<Test>]
+[<Platform("Win")>]
 let ``CMD returning non zero process id`` () =
     cli {
         Shell CMD
