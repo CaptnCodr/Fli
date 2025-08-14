@@ -127,8 +127,8 @@ module Command =
                 proc.BeginErrorReadLine()
                 ""
 
-        proc.OutputDataReceived.Add(fun args -> text <- text + args.Data ; outputFunc args.Data)
-        proc.ErrorDataReceived.Add(fun args -> error <- error + args.Data ; outputFunc args.Data)
+        proc.OutputDataReceived.Add(fun args -> outputFunc args.Data)
+        proc.ErrorDataReceived.Add(fun args -> outputFunc args.Data)
 
         proc.WaitForExit()
 
