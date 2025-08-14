@@ -116,6 +116,17 @@ cli {
 }
 |> Command.execute
 ```
+Hint: Using `Output (new StreamWriter(...))` will redirect the output text to your desired target and not save it into `Output.Text` nor `Output.Error` but in order to fix that you can use `Output.from`:
+```fsharp
+let sb = StringBuilder()
+cli {
+    Exec "dotnet"
+    Arguments "--list-sdks"
+    Output (new StringWriter(sb))
+}
+|> Command.execute
+|> Output.from (sb.ToString())
+```
 
 Add environment variables for the executing program:
 ```fsharp
