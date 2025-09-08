@@ -4,6 +4,7 @@ open NUnit.Framework
 open FsUnit
 open Fli
 open System
+open System.IO
 open System.Text
 open System.Diagnostics
 
@@ -81,6 +82,43 @@ let ``Get output in StringBuilder`` () =
     |> ignore
 
     sb.ToString() |> should equal "Test\r\n"
+
+[<Test>]
+[<Platform("Win")>]
+let ``Get new stream in StringBuilder`` () =
+    let sb = StringBuilder()
+
+    cli {
+        Shell CMD
+        Command "echo Test"
+        Output (new StringWriter(sb))
+    }
+    |> Command.execute
+    |> ignore
+
+    sb.ToString() |> should contain "Test\r\n"
+
+[<Test>]
+[<Platform("Win")>]
+let ``Use from to recreate a valid Output when using stream`` () =
+    let sb = StringBuilder()
+
+    let output =
+        cli {
+            Shell CMD
+            Command "echo Test"
+            Output (new StringWriter(sb))
+        }
+        |> Command.execute
+
+    output
+    |> Output.toText
+    |> should equal ""
+
+    output
+    |> Output.from (sb.ToString())
+    |> Output.toText
+    |> should contain "Test"
 
 [<Test>]
 [<Platform("Win")>]

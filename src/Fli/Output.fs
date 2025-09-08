@@ -35,3 +35,17 @@ module Output =
 
     /// Throws exception if exit code is not 0.
     let throwIfErrored = throw (fun o -> o.ExitCode <> 0)
+
+    let from (str: string) (output: Output): Output =
+        if output.Text = None |> not || output.Error = None |> not then
+            output
+        elif output.ExitCode = 0 then
+            { Id = output.Id
+              Text = Some(str)
+              ExitCode = output.ExitCode
+              Error = None }
+        else
+            { Id = output.Id
+              Text = None
+              ExitCode = output.ExitCode
+              Error = Some(str) }

@@ -4,6 +4,7 @@
 module CE =
 
     open System.Text
+    open System.IO
     open Domain
 
     type ICommandContext<'a> with
@@ -54,6 +55,11 @@ module CE =
         [<CustomOperation("Output")>]
         member _.Output(context: ICommandContext<ShellContext>, func: string -> unit) =
             Cli.output (Custom func) context.Context
+
+        /// Extra `Output` that is being executed immediately after getting output from execution.
+        [<CustomOperation("Output")>]
+        member _.Output(context: ICommandContext<ShellContext>, stream: TextWriter) =
+            Cli.output (Stream stream) context.Context
 
         /// Current executing `working directory`.
         [<CustomOperation("WorkingDirectory")>]
@@ -126,6 +132,11 @@ module CE =
         [<CustomOperation("Output")>]
         member _.Output(context: ICommandContext<ExecContext>, func: string -> unit) =
             Program.output (Custom func) context.Context
+
+        /// Extra `Output` that is being executed immediately after getting output from execution.
+        [<CustomOperation("Output")>]
+        member _.Output(context: ICommandContext<ExecContext>, stream: TextWriter) =
+            Program.output (Stream stream) context.Context
 
         /// Current executing `working directory`.
         [<CustomOperation("WorkingDirectory")>]

@@ -4,6 +4,7 @@
 module Domain =
 
     open System
+    open System.IO
     open System.Text
 
     type ICommandContext<'a> =
@@ -34,6 +35,7 @@ module Domain =
         | File of string
         | StringBuilder of StringBuilder
         | Custom of Func<string, unit>
+        | Stream of TextWriter
 
     and WindowStyle =
         | Hidden

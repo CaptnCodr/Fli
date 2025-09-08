@@ -98,6 +98,36 @@ cli {
 |> Command.execute
 ```
 
+Write output to a stream:
+```fsharp
+// using a console stream
+cli {
+    Exec "dotnet"
+    Arguments "--list-sdks"
+    Output (new StreamWriter(Console.OpenStandardOutput()))
+}
+|> Command.execute
+
+// using a file stream
+cli {
+    Exec "dotnet"
+    Arguments "--list-sdks"
+    Output (new StreamWriter(new FileStream("test.txt", FileMode.OpenOrCreate)))
+}
+|> Command.execute
+```
+Hint: Using `Output (new StreamWriter(...))` will redirect the output text to your desired target and not save it into `Output.Text` nor `Output.Error` but in order to fix that you can use `Output.from`:
+```fsharp
+let sb = StringBuilder()
+cli {
+    Exec "dotnet"
+    Arguments "--list-sdks"
+    Output (new StringWriter(sb))
+}
+|> Command.execute
+|> Output.from (sb.ToString())
+```
+
 Add environment variables for the executing program:
 ```fsharp
 cli {
@@ -284,6 +314,7 @@ Provided `Fli.Outputs`:
 - `File of string` a string with an absolute path of the output file.
 - `StringBuilder of StringBuilder` a StringBuilder which will be filled with the output text.
 - `Custom of Func<string, unit>` a custom function (`string -> unit`) that will be called with the output string (logging, printing etc.).
+- `Stream of TextWriter` a stream that will redirect the output text to the designated target (file, console etc.).
 
 Provided `Fli.WindowStyle`:
 - `Hidden` (default)

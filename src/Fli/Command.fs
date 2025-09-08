@@ -109,25 +109,31 @@ module Command =
         |> Async.AwaitTask
 #endif
 
-    let private startProcess (inputFunc: Process -> unit) (outputFunc: string -> unit) psi =
+    let private startProcess (inputFunc: Process -> unit) (outputFunc: string -> unit) (isStreaming: bool) psi =
         let proc = Process.Start(startInfo = psi)
         proc |> inputFunc
 
-        let text =
-            if psi.UseShellExecute |> not then
+        let mutable text =
+            if psi.UseShellExecute |> not && isStreaming |> not then
                 proc.StandardOutput.ReadToEnd()
             else
+                proc.BeginOutputReadLine()
                 ""
 
-        let error =
-            if psi.UseShellExecute |> not then
+        let mutable error =
+            if psi.UseShellExecute |> not && isStreaming |> not then
                 proc.StandardError.ReadToEnd()
             else
+                proc.BeginErrorReadLine()
                 ""
+
+        proc.OutputDataReceived.Add(fun args -> outputFunc args.Data)
+        proc.ErrorDataReceived.Add(fun args -> outputFunc args.Data)
 
         proc.WaitForExit()
 
-        text |> outputFunc
+        if isStreaming |> not then
+            text |> outputFunc
 
         { Id = proc.Id
           Text = text |> trim |> toOption
@@ -199,6 +205,7 @@ module Command =
             | Outputs.File(file) -> File.WriteAllText(file, output)
             | Outputs.StringBuilder(stringBuilder) -> output |> stringBuilder.Append |> ignore
             | Outputs.Custom(func) -> func.Invoke(output)
+            | Outputs.Stream(stream) -> stream.WriteLine(output) ; stream.Flush()
         | None -> ()
 
     let private setupCancellationToken (cancelAfter: int option) =
@@ -273,19 +280,31 @@ module Command =
 
         /// Executes the given context as a new process.
         static member execute(context: ShellContext) =
+            let isStreaming: bool = 
+                match context.config.Output with 
+                | Some s -> match s with Outputs.Stream(s) -> true | _ -> false
+                | _ -> false
+
             context
             |> Command.buildProcess
             |> startProcess
                 (writeInput context.config.Input context.config.Encoding)
                 (writeOutput context.config.Output)
+                isStreaming
 
         /// Executes the given context as a new process.
         static member execute(context: ExecContext) =
+            let isStreaming: bool = 
+                match context.config.Output with 
+                | Some s -> match s with Outputs.Stream(s) -> true | _ -> false
+                | _ -> false
+
             context
             |> Command.buildProcess
             |> startProcess
                 (writeInput context.config.Input context.config.Encoding)
                 (writeOutput context.config.Output)
+                isStreaming
 
 #if NET
         /// Executes the given context as a new process asynchronously.
