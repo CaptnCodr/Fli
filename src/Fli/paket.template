@@ -33,6 +33,7 @@ summary
     F# library to run CLI commands and processes in F# (CE) style.
 files
     /bin/Release/net8.0/Fli.* ==> lib/net8.0
+    /bin/Release/net9.0/Fli.* ==> lib/net9.0
     /bin/Release/netstandard2.0/Fli.* ==> lib/netstandard2.0
     /bin/Release/netstandard2.1/Fli.* ==> lib/netstandard2.1
     ../install.ps1 ==> tools
