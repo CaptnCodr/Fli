@@ -280,11 +280,7 @@ module Command =
 
         /// Executes the given context as a new process.
         static member execute(context: ShellContext) =
-            let isStreaming: bool = 
-                match context.config.Output with 
-                | Some s -> match s with Outputs.Stream(s) -> true | _ -> false
-                | _ -> false
-
+            let isStreaming: bool = match context.config.Output with Some s -> s.IsStream | _ -> false
             context
             |> Command.buildProcess
             |> startProcess
@@ -294,11 +290,7 @@ module Command =
 
         /// Executes the given context as a new process.
         static member execute(context: ExecContext) =
-            let isStreaming: bool = 
-                match context.config.Output with 
-                | Some s -> match s with Outputs.Stream(s) -> true | _ -> false
-                | _ -> false
-
+            let isStreaming: bool = match context.config.Output with Some s -> s.IsStream | _ -> false
             context
             |> Command.buildProcess
             |> startProcess
