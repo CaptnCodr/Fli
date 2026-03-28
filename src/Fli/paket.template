@@ -6,12 +6,13 @@ owners
 authors
     Constantin Tews
 version
-    1.111.11.0
+    1.1000.0.0
 readme
     README.md
 releaseNotes
-    - Improve ArgumentList in `Exec.Arguments`, this will split arguments more precise especially for python commands. (https://github.com/CaptnCodr/Fli/pull/76)
-    - Improve documentations.
+    - Meet `Output.Stream` option to write outputs to stream (e.g. logging, printing etc.). (https://github.com/CaptnCodr/Fli/pull/80)
+    - Some code improvements.
+    - Dependency updates.
     (All release notes: https://github.com/CaptnCodr/Fli/blob/main/RELEASE_NOTES.md)
 projectUrl
     https://github.com/CaptnCodr/Fli

@@ -1,3 +1,8 @@
+v1.1000.0.0 - Mar 28, 2026
+- Meet `Output.Stream` option to write outputs to stream (e.g. logging, printing etc.). (https://github.com/CaptnCodr/Fli/pull/80)
+- Some code improvements.
+- Dependency updates.
+
 v1.111.11.0 - May 27, 2025
 - Improve ArgumentList in `Exec.Arguments`, this will split arguments more precise especially for python commands. (https://github.com/CaptnCodr/Fli/pull/76)
 - Improve documentations.
