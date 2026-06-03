@@ -93,3 +93,15 @@ let ``Passing data to a progrma on stdin`` () =
     |> Command.execute
     |> Output.toText
     |> should equal "Test"
+    
+
+[<Test>]
+[<Platform("Linux,Unix,MacOsX")>]
+let ``Test function`` () =
+    cli {
+        Exec "cat"
+        Input "{"
+    }
+    |> Command.execute
+    |> Output.toText
+    |> should equal "{"

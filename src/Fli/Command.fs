@@ -171,12 +171,12 @@ module Command =
             psi
         | None -> psi
 
-    let private writeInput (input: string option) (encoding: Encoding option) (p: Process) =
+    let private writeInput (input: string option) (p: Process) =
         match input with
         | Some inputText ->
             try
                 use sw = p.StandardInput
-                sw.WriteLine(inputText, encoding)
+                inputText |> sw.WriteLine
                 sw.Flush()
                 sw.Close()
             with :? IOException as ex when ex.GetType() = typedefof<IOException> ->
@@ -242,6 +242,9 @@ module Command =
                 .With(StandardOutputEncoding = (context.config.Encoding |> Option.defaultValue null))
                 .With(StandardErrorEncoding = (context.config.Encoding |> Option.defaultValue null))
                 .With(WindowStyle = getProcessWindowStyle (context.config.WindowStyle |> Option.defaultValue Hidden))
+#if NET
+                .With(StandardInputEncoding = (context.config.Encoding |> Option.defaultValue null))
+#endif
             |> addEnvironmentVariables context.config.EnvironmentVariables
 
         static member internal buildProcess(context: ExecContext) =
@@ -259,6 +262,9 @@ module Command =
                 .With(StandardOutputEncoding = (context.config.Encoding |> Option.defaultValue null))
                 .With(StandardErrorEncoding = (context.config.Encoding |> Option.defaultValue null))
                 .With(WindowStyle = getProcessWindowStyle (context.config.WindowStyle |> Option.defaultValue Hidden))
+#if NET
+                .With(StandardInputEncoding = (context.config.Encoding |> Option.defaultValue null))
+#endif
             |> addCredentials context.config.Credentials
             |> addEnvironmentVariables context.config.EnvironmentVariables
 
@@ -284,7 +290,7 @@ module Command =
             context
             |> Command.buildProcess
             |> startProcess
-                (writeInput context.config.Input context.config.Encoding)
+                (writeInput context.config.Input)
                 (writeOutput context.config.Output)
                 isStreaming
 
@@ -294,7 +300,7 @@ module Command =
             context
             |> Command.buildProcess
             |> startProcess
-                (writeInput context.config.Input context.config.Encoding)
+                (writeInput context.config.Input)
                 (writeOutput context.config.Output)
                 isStreaming
 

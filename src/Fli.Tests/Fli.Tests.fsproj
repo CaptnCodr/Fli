@@ -8,17 +8,17 @@
   <ItemGroup>
     <Compile Include="ExecContext/ExecCommandConfigureWindowsTests.fs" />
     <Compile Include="ExecContext/ExecCommandConfigureUnixTests.fs" />
-    <Compile Include="ExecContext\ExecCommandExecuteWindowsTests.fs" />
-    <Compile Include="ExecContext\ExecCommandExecuteUnixTests.fs" />
-    <Compile Include="ExecContext\ExecCommandToStringTests.fs" />
-    <Compile Include="ExecContext\ExecConfigTests.fs" />
+    <Compile Include="ExecContext/ExecCommandExecuteWindowsTests.fs" />
+    <Compile Include="ExecContext/ExecCommandExecuteUnixTests.fs" />
+    <Compile Include="ExecContext/ExecCommandToStringTests.fs" />
+    <Compile Include="ExecContext/ExecConfigTests.fs" />
     <Compile Include="ShellContext/ShellCommandConfigureWindowsTests.fs" />
     <Compile Include="ShellContext/ShellCommandConfigureUnixTests.fs" />
-    <Compile Include="ShellContext\ShellCommandExecuteWindowsTests.fs" />
-    <Compile Include="ShellContext\ShellCommandExecuteUnixTests.fs" />
-    <Compile Include="ShellContext\ShellCommandToStringWindowsTests.fs" />
-    <Compile Include="ShellContext\ShellCommandToStringUnixTests.fs" />
-    <Compile Include="ShellContext\ShellConfigTests.fs" />
+    <Compile Include="ShellContext/ShellCommandExecuteWindowsTests.fs" />
+    <Compile Include="ShellContext/ShellCommandExecuteUnixTests.fs" />
+    <Compile Include="ShellContext/ShellCommandToStringWindowsTests.fs" />
+    <Compile Include="ShellContext/ShellCommandToStringUnixTests.fs" />
+    <Compile Include="ShellContext/ShellConfigTests.fs" />
     <None Include="paket.references" />
   </ItemGroup>
   <ItemGroup>

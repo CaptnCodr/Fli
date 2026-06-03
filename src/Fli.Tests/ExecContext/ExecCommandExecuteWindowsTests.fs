@@ -55,6 +55,19 @@ let ``print text with Input with executing program`` () =
 
 [<Test>]
 [<Platform("Win")>]
+let ``Bla test`` () =
+    cli {
+        Exec "cmd.exe"
+        Arguments "/k"
+        Input "{"
+        WorkingDirectory @"C:\"
+    }
+    |> Command.execute
+    |> Output.toText
+    |> should equal "C:\\>{\r\n\r\nC:\\>"
+
+[<Test>]
+[<Platform("Win")>]
 let ``Get output in StringBuilder`` () =
     let sb = StringBuilder()
 
@@ -107,7 +120,6 @@ let ``Hello World with executing program with Verb`` () =
     |> Command.execute
     |> Output.toText
     |> should equal "Hello World!"
-
 
 [<Test>]
 [<Platform("Win")>]
