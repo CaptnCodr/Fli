@@ -55,7 +55,7 @@ let ``print text with Input with executing program`` () =
 
 [<Test>]
 [<Platform("Win")>]
-let ``Bla test`` () =
+let ``Testing input on windows`` () =
     cli {
         Exec "cmd.exe"
         Arguments "/k"

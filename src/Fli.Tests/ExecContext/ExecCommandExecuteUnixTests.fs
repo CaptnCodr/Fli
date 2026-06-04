@@ -85,7 +85,7 @@ let ``Hello World with executing program async`` () =
 
 [<Test>]
 [<Platform("Linux,Unix,MacOsX")>]
-let ``Passing data to a progrma on stdin`` () =
+let ``Passing data to a program on stdin`` () =
     cli {
         Exec "cat"
         Input "Test"
@@ -93,11 +93,10 @@ let ``Passing data to a progrma on stdin`` () =
     |> Command.execute
     |> Output.toText
     |> should equal "Test"
-    
 
 [<Test>]
 [<Platform("Linux,Unix,MacOsX")>]
-let ``Test function`` () =
+let ``Testing input on unix systems`` () =
     cli {
         Exec "cat"
         Input "{"
