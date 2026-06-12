@@ -164,7 +164,23 @@ cli {
 }
 |> Command.execute
 ```
+___
+**NOTE** with using `Command.executeAsync`:
 
+providing `Command.executeAsync` with a `CancellationToken` will result in ignoring `CancelAfter` in the context:
+```fsharp
+let cts = new CancellationTokenSource()
+cts.CancelAfter(3000)
+
+cli {
+    Shell Pwsh
+    Command "long-process.bat"
+    CancelAfter 1000 // will be ignored
+}
+|> fun c -> Command.executeAsync (c, cts.Token)
+```
+
+___
 #### `Command.execute`
 `Command.execute` returns record: `type Output = { Id: int; Text: string option; ExitCode: int; Error: string option }`
 which has getter methods to get only one value:

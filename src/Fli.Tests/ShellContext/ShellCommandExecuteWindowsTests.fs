@@ -1,5 +1,6 @@
 module Fli.Tests.ShellContext.ShellCommandExecuteWindowsTests
 
+open System.Threading
 open NUnit.Framework
 open FsUnit
 open Fli
@@ -37,6 +38,33 @@ let ``Hello World with CMD waiting async`` () =
                     CancelAfter 3000
                 }
                 |> Command.executeAsync
+
+            ()
+        with :? AggregateException as e ->
+            e.GetType() |> should equal typeof<AggregateException>
+
+        stopwatch.Stop()
+        stopwatch.Elapsed.TotalSeconds |> should be (inRange 2.9 3.2)
+    }
+
+
+[<Test>]
+[<Platform("Win")>]
+let ``Hello World with CMD waiting async with CancellationToken`` () =
+    async {
+        let cts = new CancellationTokenSource()
+        cts.CancelAfter(3000)
+
+        let stopwatch = new Stopwatch()
+        stopwatch.Start()
+
+        try
+            let! operation =
+                cli {
+                    Shell(CUSTOM("cmd.exe", "/K"))
+                    Command "Hello World!"
+                }
+                |> fun c -> Command.executeAsync (c, cts.Token)
 
             ()
         with :? AggregateException as e ->
@@ -91,7 +119,7 @@ let ``Get new stream in StringBuilder`` () =
     cli {
         Shell CMD
         Command "echo Test"
-        Output (new StringWriter(sb))
+        Output(new StringWriter(sb))
     }
     |> Command.execute
     |> ignore
@@ -107,18 +135,13 @@ let ``Use from to recreate a valid Output when using stream`` () =
         cli {
             Shell CMD
             Command "echo Test"
-            Output (new StringWriter(sb))
+            Output(new StringWriter(sb))
         }
         |> Command.execute
 
-    output
-    |> Output.toText
-    |> should equal ""
+    output |> Output.toText |> should equal ""
 
-    output
-    |> Output.from (sb.ToString())
-    |> Output.toText
-    |> should contain "Test"
+    output |> Output.from (sb.ToString()) |> Output.toText |> should contain "Test"
 
 [<Test>]
 [<Platform("Win")>]
