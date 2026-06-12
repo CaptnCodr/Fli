@@ -1,3 +1,7 @@
+v1.1001.0.0 - Jun 12, 2026
+- Remove encoding from output. (https://github.com/CaptnCodr/Fli/pull/86)
+- Add `cancellationToken` on `executeAsync`. (https://github.com/CaptnCodr/Fli/pull/87)
+
 v1.1000.0.0 - Mar 28, 2026
 - Meet `Output.Stream` option to write outputs to stream (e.g. logging, printing etc.). (https://github.com/CaptnCodr/Fli/pull/80)
 - Some code improvements.
