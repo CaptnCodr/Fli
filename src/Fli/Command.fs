@@ -38,7 +38,7 @@ module Command =
 #if NET
             ProcessStartInfo(executable, (list |> Option.defaultValue [||]))
 #else
-            ProcessStartInfo(executable, ArgumentList(list).toString())
+            ProcessStartInfo(executable, ArgumentList(list).toString ())
 #endif
         | None -> ProcessStartInfo(executable, "")
 
@@ -74,13 +74,13 @@ module Command =
             let sbErr = StringBuilder()
 
             proc.OutputDataReceived.AddHandler(
-                new DataReceivedEventHandler(fun s e ->
+                DataReceivedEventHandler(fun s e ->
                     use o = proc.StandardOutput
                     sbStd.Append(o.ReadToEnd()) |> ignore)
             )
 
             proc.ErrorDataReceived.AddHandler(
-                new DataReceivedEventHandler(fun s e ->
+                DataReceivedEventHandler(fun s e ->
                     use o = proc.StandardError
                     sbErr.Append(o.ReadToEnd()) |> ignore)
             )
@@ -91,11 +91,11 @@ module Command =
                 ()
 
             cancellationToken.ThrowIfCancellationRequested()
-            let! stdo = proc.StandardOutput.ReadToEndAsync() |> Async.AwaitTask
-            let text = returnOr sbStd stdo
+            let! stdOut = proc.StandardOutput.ReadToEndAsync() |> Async.AwaitTask
+            let text = returnOr sbStd stdOut
 
-            let! stde = proc.StandardError.ReadToEndAsync() |> Async.AwaitTask
-            let error = returnOr sbErr stde
+            let! stdError = proc.StandardError.ReadToEndAsync() |> Async.AwaitTask
+            let error = returnOr sbErr stdError
 
             do text |> outFunc
 
@@ -205,7 +205,9 @@ module Command =
             | Outputs.File(file) -> File.WriteAllText(file, output)
             | Outputs.StringBuilder(stringBuilder) -> output |> stringBuilder.Append |> ignore
             | Outputs.Custom(func) -> func.Invoke(output)
-            | Outputs.Stream(stream) -> stream.WriteLine(output) ; stream.Flush()
+            | Outputs.Stream(stream) ->
+                stream.WriteLine(output)
+                stream.Flush()
         | None -> ()
 
     let private setupCancellationToken (cancelAfter: int option) =
@@ -286,40 +288,42 @@ module Command =
 
         /// Executes the given context as a new process.
         static member execute(context: ShellContext) =
-            let isStreaming: bool = match context.config.Output with Some s -> s.IsStream | _ -> false
+            let isStreaming: bool =
+                match context.config.Output with
+                | Some s -> s.IsStream
+                | _ -> false
+
             context
             |> Command.buildProcess
-            |> startProcess
-                (writeInput context.config.Input)
-                (writeOutput context.config.Output)
-                isStreaming
+            |> startProcess (writeInput context.config.Input) (writeOutput context.config.Output) isStreaming
 
         /// Executes the given context as a new process.
         static member execute(context: ExecContext) =
-            let isStreaming: bool = match context.config.Output with Some s -> s.IsStream | _ -> false
+            let isStreaming: bool =
+                match context.config.Output with
+                | Some s -> s.IsStream
+                | _ -> false
+
             context
             |> Command.buildProcess
-            |> startProcess
-                (writeInput context.config.Input)
-                (writeOutput context.config.Output)
-                isStreaming
+            |> startProcess (writeInput context.config.Input) (writeOutput context.config.Output) isStreaming
 
 #if NET
         /// Executes the given context as a new process asynchronously.
-        static member executeAsync(context: ShellContext) =
+        static member executeAsync(context: ShellContext, ?cancellationToken: CancellationToken) =
+            let ct =
+                defaultArg cancellationToken (setupCancellationToken context.config.CancelAfter)
+
             context
             |> Command.buildProcess
-            |> startProcessAsync
-                (writeInputAsync context.config.Input)
-                (writeOutput context.config.Output)
-                (setupCancellationToken context.config.CancelAfter)
+            |> startProcessAsync (writeInputAsync context.config.Input) (writeOutput context.config.Output) ct
 
         /// Executes the given context as a new process asynchronously.
-        static member executeAsync(context: ExecContext) =
+        static member executeAsync(context: ExecContext, ?cancellationToken: CancellationToken) =
+            let ct =
+                defaultArg cancellationToken (setupCancellationToken context.config.CancelAfter)
+
             context
             |> Command.buildProcess
-            |> startProcessAsync
-                (writeInputAsync context.config.Input)
-                (writeOutput context.config.Output)
-                (setupCancellationToken context.config.CancelAfter)
+            |> startProcessAsync (writeInputAsync context.config.Input) (writeOutput context.config.Output) ct
 #endif

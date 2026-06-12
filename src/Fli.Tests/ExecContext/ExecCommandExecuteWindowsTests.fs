@@ -1,5 +1,6 @@
 ﻿module Fli.Tests.ExecContext.ExecCommandExecuteWindowsTests
 
+open System.Threading
 open NUnit.Framework
 open FsUnit
 open Fli
