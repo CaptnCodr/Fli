@@ -138,6 +138,9 @@ let ``Check StandardOutputEncoding & StandardErrorEncoding with setting Encoding
         }
         |> Command.buildProcess
 
+#if NET
+    config.StandardInputEncoding |> should equal Encoding.UTF8
+#endif
     config.StandardOutputEncoding |> should equal Encoding.UTF8
     config.StandardErrorEncoding |> should equal Encoding.UTF8
 
@@ -170,6 +173,9 @@ let ``Check all possible values in ProcessStartInfo for windows`` () =
     config.Password |> should not' (equal "password")
     config.Environment.Contains(KeyValuePair("Fli", "test")) |> should be True
     config.Environment.Contains(KeyValuePair("Fli.Test", "test")) |> should be True
+#if NET
+    config.StandardInputEncoding |> should equal Encoding.UTF8
+#endif
     config.StandardOutputEncoding |> should equal Encoding.UTF8
     config.StandardErrorEncoding |> should equal Encoding.UTF8
     config.WindowStyle |> should equal Diagnostics.ProcessWindowStyle.Normal
